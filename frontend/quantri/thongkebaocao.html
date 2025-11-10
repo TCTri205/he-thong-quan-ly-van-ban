@@ -1,0 +1,628 @@
+﻿<!-- File: quantri/thongkebaocao.html -->
+<!DOCTYPE html>
+<html lang="vi">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>
+      Hệ thống Quản lý Văn bản &amp; Điều hành • Thống kê &amp; Báo cáo
+    </title>
+    <!-- App overrides -->
+    <link rel="stylesheet" href="../assets/css/styles.css" />
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+      /* Sidebar utilities (khớp trang dashboard) */
+    </style>
+  </head>
+  <body class="bg-slate-100 text-slate-800" data-role="quantri" data-root="..">
+    <!-- ================= HEADER ================= -->
+    <div data-include="header"></div>
+
+    <!-- ================= LAYOUT ================= -->
+    <div class="pt-14">
+      <div class="flex">
+        <!-- ====== SIDEBAR (from vanthu/dashboard.html pattern) ====== -->
+        <div data-include="sidebar"></div>
+
+        <!-- ====== MAIN ====== -->
+        <main class="w-full">
+          <div class="max-w-none px-6 lg:px-8 py-6 lg:py-7">
+            <!-- KPI Row -->
+            <section class="grid grid-cols-1 md:grid-cols-4 gap-4 lg:gap-6">
+              <article class="bg-white border border-slate-200 rounded-xl p-4">
+                <div class="flex items-center justify-between">
+                  <h3 class="text-[13px] font-semibold text-slate-600">
+                    Tổng văn bản
+                  </h3>
+                  <span class="text-blue-600">🗎</span>
+                </div>
+                <div class="mt-2">
+                  <div class="text-2xl font-bold" id="kpiTotalDocs">2,847</div>
+                  <p class="text-[12.5px] text-emerald-600 mt-1">
+                    +12.5% so với tháng trước
+                  </p>
+                </div>
+              </article>
+              <article class="bg-white border border-slate-200 rounded-xl p-4">
+                <div class="flex items-center justify-between">
+                  <h3 class="text-[13px] font-semibold text-slate-600">
+                    Người dùng hoạt động
+                  </h3>
+                  <span class="text-emerald-600">👥</span>
+                </div>
+                <div class="mt-2">
+                  <div class="text-2xl font-bold">42/47</div>
+                  <p class="text-[12.5px] text-emerald-600 mt-1">
+                    89.4% tỷ lệ hoạt động
+                  </p>
+                </div>
+              </article>
+              <article class="bg-white border border-slate-200 rounded-xl p-4">
+                <div class="flex items-center justify-between">
+                  <h3 class="text-[13px] font-semibold text-slate-600">
+                    Hiệu suất xử lý
+                  </h3>
+                  <span>📈</span>
+                </div>
+                <div class="mt-2">
+                  <div class="text-2xl font-bold">91.5%</div>
+                  <p class="text-[12.5px] text-emerald-600 mt-1">
+                    +2.3% so với tháng trước
+                  </p>
+                </div>
+              </article>
+              <article class="bg-white border border-slate-200 rounded-xl p-4">
+                <div class="flex items-center justify-between">
+                  <h3 class="text-[13px] font-semibold text-slate-600">
+                    Tỷ lệ quá hạn
+                  </h3>
+                  <span>⏱</span>
+                </div>
+                <div class="mt-2">
+                  <div class="text-2xl font-bold text-rose-600">8.5%</div>
+                  <p class="text-[12.5px] text-rose-600 mt-1">
+                    +0.8% so với tháng trước
+                  </p>
+                </div>
+              </article>
+            </section>
+
+            <!-- Filters -->
+            <section class="mt-4 lg:mt-6 flex flex-wrap items-center gap-3">
+              <div class="flex items-center gap-2">
+                <div class="relative">
+                  <span class="absolute left-3 top-2.5 text-slate-400">📅</span>
+                  <input
+                    id="dateFrom"
+                    type="date"
+                    class="h-10 pl-9 pr-3 rounded-lg border border-slate-200 text-[14px]"
+                    value="2024-01-01"
+                  />
+                </div>
+                <span class="text-slate-500 text-sm">đến</span>
+                <input
+                  id="dateTo"
+                  type="date"
+                  class="h-10 px-3 rounded-lg border border-slate-200 text-[14px]"
+                  value="2024-12-31"
+                />
+              </div>
+              <select
+                id="filterDept"
+                class="h-10 px-3 rounded-lg border border-slate-200 text-[14px]"
+              >
+                <option value="all" selected>Tất cả phòng ban</option>
+                <option>Văn phòng UBND</option>
+                <option>Phòng Tài chính</option>
+                <option>Phòng Kinh tế</option>
+                <option>Văn phòng Chủ tịch</option>
+              </select>
+              <div class="ml-auto flex items-center gap-2">
+                <button
+                  id="btnFilter"
+                  class="px-3 h-10 rounded-lg border border-slate-200 hover:bg-slate-50 text-[14px] flex items-center gap-2"
+                >
+                  <span>🔎</span> Lọc dữ liệu
+                </button>
+                <button
+                  id="btnExcel"
+                  class="px-3 h-10 rounded-lg border border-slate-200 hover:bg-slate-50 text-[14px] flex items-center gap-2"
+                >
+                  <span>📥</span> Xuất Excel
+                </button>
+                <button
+                  id="btnPdf"
+                  class="px-3 h-10 rounded-lg bg-slate-900 text-white hover:bg-slate-800 text-[14px] flex items-center gap-2"
+                >
+                  <span>🖨</span> Xuất PDF
+                </button>
+              </div>
+            </section>
+
+            <!-- Tab Nav -->
+            <section class="mt-4">
+              <div class="bg-white border border-slate-200 rounded-xl">
+                <nav
+                  class="flex text-sm border-b border-slate-100 overflow-x-auto"
+                >
+                  <button
+                    data-tab="tab-overview"
+                    class="tab-btn px-4 py-3 font-medium text-blue-700 border-b-2 border-blue-600"
+                  >
+                    Tổng quan
+                  </button>
+                  <button
+                    data-tab="tab-docs"
+                    class="tab-btn px-4 py-3 text-slate-600 hover:text-slate-800"
+                  >
+                    Văn bản
+                  </button>
+                  <button
+                    data-tab="tab-perf"
+                    class="tab-btn px-4 py-3 text-slate-600 hover:text-slate-800"
+                  >
+                    Hiệu suất
+                  </button>
+                  <button
+                    data-tab="tab-users"
+                    class="tab-btn px-4 py-3 text-slate-600 hover:text-slate-800"
+                  >
+                    Người dùng
+                  </button>
+                  <button
+                    data-tab="tab-activity"
+                    class="tab-btn px-4 py-3 text-slate-600 hover:text-slate-800"
+                  >
+                    Hoạt động
+                  </button>
+                </nav>
+
+                <!-- =============== PANELS =============== -->
+                <div class="p-4 lg:p-5 space-y-6">
+                  <!-- Overview -->
+                  <div
+                    id="tab-overview"
+                    class="tab-panel grid grid-cols-1 lg:grid-cols-2 gap-6"
+                  >
+                    <article
+                      class="bg-white border border-slate-200 rounded-xl p-4"
+                    >
+                      <header class="mb-3">
+                        <h3 class="text-[15px] font-semibold">
+                          Lượng truy cập trong ngày
+                        </h3>
+                      </header>
+                      <canvas id="chAccessDay" height="120"></canvas>
+                    </article>
+                    <article
+                      class="bg-white border border-slate-200 rounded-xl p-4"
+                    >
+                      <header class="mb-3">
+                        <h3 class="text-[15px] font-semibold">
+                          Thống kê tổng quát
+                        </h3>
+                      </header>
+                      <ul class="text-[14px] space-y-2">
+                        <li class="flex justify-between">
+                          <span>Số phiên đăng nhập hôm nay</span
+                          ><strong id="sumLogin">127</strong>
+                        </li>
+                        <li class="flex justify-between">
+                          <span>Thời gian truy cập trung bình</span
+                          ><strong>2h 34m</strong>
+                        </li>
+                        <li class="flex justify-between">
+                          <span>Văn bản xử lý hôm nay</span><strong>89</strong>
+                        </li>
+                        <li class="flex justify-between">
+                          <span>Cuộc họp đã diễn ra</span><strong>5</strong>
+                        </li>
+                        <li class="flex justify-between">
+                          <span>Thông báo đã gửi</span><strong>23</strong>
+                        </li>
+                      </ul>
+                    </article>
+                    <article
+                      class="bg-white border border-slate-200 rounded-xl p-4 lg:col-span-2"
+                    >
+                      <header class="mb-3 flex items-center justify-between">
+                        <h3 class="text-[15px] font-semibold">
+                          Hoạt động theo ngày trong tuần
+                        </h3>
+                        <div class="text-[12.5px] text-slate-500">
+                          ĐVT: lượt
+                        </div>
+                      </header>
+                      <canvas id="chWeekBars" height="110"></canvas>
+                    </article>
+                  </div>
+
+                  <!-- Documents -->
+                  <div id="tab-docs" class="tab-panel hidden space-y-6">
+                    <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                      <article
+                        class="bg-white border border-slate-200 rounded-xl p-4"
+                      >
+                        <header class="mb-3">
+                          <h3 class="text-[15px] font-semibold">
+                            Phân loại theo độ ưu tiên
+                          </h3>
+                        </header>
+                        <canvas id="chPriority" height="120"></canvas>
+                      </article>
+                      <article
+                        class="bg-white border border-slate-200 rounded-xl p-4"
+                      >
+                        <header class="mb-3">
+                          <h3 class="text-[15px] font-semibold">
+                            Hoạt động trong ngày
+                          </h3>
+                        </header>
+                        <canvas id="chDayLine" height="120"></canvas>
+                      </article>
+                    </div>
+                    <article
+                      class="bg-white border border-slate-200 rounded-xl"
+                    >
+                      <header class="px-4 py-3 border-b border-slate-100">
+                        <h3 class="text-[15px] font-semibold">
+                          Thống kê chi tiết theo loại văn bản
+                        </h3>
+                      </header>
+                      <div class="overflow-x-auto">
+                        <table class="min-w-full text-sm">
+                          <thead class="bg-slate-50 text-slate-600">
+                            <tr>
+                              <th class="text-left px-4 py-2">Loại văn bản</th>
+                              <th class="text-right px-4 py-2">Số lượng</th>
+                              <th class="text-right px-4 py-2">Đã xử lý</th>
+                              <th class="text-right px-4 py-2">Tỷ lệ (%)</th>
+                              <th class="text-right px-4 py-2">Thời gian TB</th>
+                            </tr>
+                          </thead>
+                          <tbody class="divide-y divide-slate-100">
+                            <tr>
+                              <td class="px-4 py-2">Thông báo</td>
+                              <td class="px-4 py-2 text-right">567</td>
+                              <td class="px-4 py-2 text-right">534</td>
+                              <td class="px-4 py-2 text-right text-emerald-600">
+                                94.2%
+                              </td>
+                              <td class="px-4 py-2 text-right">1.2 ngày</td>
+                            </tr>
+                            <tr>
+                              <td class="px-4 py-2">Quyết định</td>
+                              <td class="px-4 py-2 text-right">234</td>
+                              <td class="px-4 py-2 text-right">212</td>
+                              <td class="px-4 py-2 text-right text-emerald-600">
+                                90.6%
+                              </td>
+                              <td class="px-4 py-2 text-right">2.8 ngày</td>
+                            </tr>
+                            <tr>
+                              <td class="px-4 py-2">Báo cáo</td>
+                              <td class="px-4 py-2 text-right">345</td>
+                              <td class="px-4 py-2 text-right">298</td>
+                              <td class="px-4 py-2 text-right text-orange-600">
+                                86.4%
+                              </td>
+                              <td class="px-4 py-2 text-right">3.5 ngày</td>
+                            </tr>
+                            <tr>
+                              <td class="px-4 py-2">Công văn</td>
+                              <td class="px-4 py-2 text-right">456</td>
+                              <td class="px-4 py-2 text-right">423</td>
+                              <td class="px-4 py-2 text-right text-emerald-600">
+                                92.8%
+                              </td>
+                              <td class="px-4 py-2 text-right">1.8 ngày</td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                    </article>
+                  </div>
+
+                  <!-- Performance -->
+                  <div id="tab-perf" class="tab-panel hidden space-y-6">
+                    <article
+                      class="bg-white border border-slate-200 rounded-xl p-4"
+                    >
+                      <header class="mb-3">
+                        <h3 class="text-[15px] font-semibold">
+                          Hiệu suất theo phòng ban
+                        </h3>
+                      </header>
+                      <canvas id="chPerfDept" height="120"></canvas>
+                    </article>
+                    <article
+                      class="bg-white border border-slate-200 rounded-xl"
+                    >
+                      <header class="px-4 py-3 border-b border-slate-100">
+                        <h3 class="text-[15px] font-semibold">
+                          Chi tiết hiệu suất theo phòng ban
+                        </h3>
+                      </header>
+                      <div class="overflow-x-auto">
+                        <table class="min-w-full text-sm">
+                          <thead class="bg-slate-50 text-slate-600">
+                            <tr>
+                              <th class="text-left px-4 py-2">Phòng ban</th>
+                              <th class="text-right px-4 py-2">Số văn bản</th>
+                              <th class="text-right px-4 py-2">
+                                Hiệu suất (%)
+                              </th>
+                              <th class="text-right px-4 py-2">
+                                Thời gian TB (ngày)
+                              </th>
+                              <th class="text-right px-4 py-2">Xếp hạng</th>
+                            </tr>
+                          </thead>
+                          <tbody class="divide-y divide-slate-100">
+                            <tr>
+                              <td class="px-4 py-2">Văn phòng UBND</td>
+                              <td class="px-4 py-2 text-right">567</td>
+                              <td class="px-4 py-2 text-right text-emerald-600">
+                                94.2%
+                              </td>
+                              <td class="px-4 py-2 text-right">2.3</td>
+                              <td class="px-4 py-2 text-right">🥇</td>
+                            </tr>
+                            <tr>
+                              <td class="px-4 py-2">Phòng Kinh tế</td>
+                              <td class="px-4 py-2 text-right">423</td>
+                              <td class="px-4 py-2 text-right text-orange-600">
+                                89.1%
+                              </td>
+                              <td class="px-4 py-2 text-right">3.1</td>
+                              <td class="px-4 py-2 text-right">#2</td>
+                            </tr>
+                            <tr>
+                              <td class="px-4 py-2">Phòng Tài chính</td>
+                              <td class="px-4 py-2 text-right">312</td>
+                              <td class="px-4 py-2 text-right text-emerald-600">
+                                92.8%
+                              </td>
+                              <td class="px-4 py-2 text-right">2.7</td>
+                              <td class="px-4 py-2 text-right">#3</td>
+                            </tr>
+                            <tr>
+                              <td class="px-4 py-2">Phòng QL đô thị</td>
+                              <td class="px-4 py-2 text-right">289</td>
+                              <td class="px-4 py-2 text-right text-orange-600">
+                                87.4%
+                              </td>
+                              <td class="px-4 py-2 text-right">3.4</td>
+                              <td class="px-4 py-2 text-right">#4</td>
+                            </tr>
+                            <tr>
+                              <td class="px-4 py-2">Phòng Tài nguyên</td>
+                              <td class="px-4 py-2 text-right">234</td>
+                              <td class="px-4 py-2 text-right text-orange-600">
+                                85.6%
+                              </td>
+                              <td class="px-4 py-2 text-right">3.8</td>
+                              <td class="px-4 py-2 text-right">#5</td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                    </article>
+                  </div>
+
+                  <!-- Users -->
+                  <div id="tab-users" class="tab-panel hidden space-y-6">
+                    <article
+                      class="bg-white border border-slate-200 rounded-xl"
+                    >
+                      <header class="px-4 py-3 border-b border-slate-100">
+                        <h3 class="text-[15px] font-semibold">
+                          Top người dùng hiệu suất cao
+                        </h3>
+                      </header>
+                      <div class="overflow-x-auto">
+                        <table class="min-w-full text-sm">
+                          <thead class="bg-slate-50 text-slate-600">
+                            <tr>
+                              <th class="text-left px-4 py-2">Người dùng</th>
+                              <th class="text-left px-4 py-2">Vai trò</th>
+                              <th class="text-right px-4 py-2">Đã xử lý</th>
+                              <th class="text-right px-4 py-2">
+                                Hiệu suất (%)
+                              </th>
+                              <th class="text-right px-4 py-2">Thời gian TB</th>
+                              <th class="text-right px-4 py-2">Xếp hạng</th>
+                            </tr>
+                          </thead>
+                          <tbody class="divide-y divide-slate-100">
+                            <tr>
+                              <td class="px-4 py-2">Nguyễn Văn A</td>
+                              <td class="px-4 py-2">
+                                <span
+                                  class="px-2 py-0.5 rounded-full bg-blue-50 text-blue-700 text-xs font-semibold"
+                                  >Chuyên viên</span
+                                >
+                              </td>
+                              <td class="px-4 py-2 text-right">89</td>
+                              <td class="px-4 py-2 text-right text-emerald-600">
+                                96.2%
+                              </td>
+                              <td class="px-4 py-2 text-right">1.8 ngày</td>
+                              <td class="px-4 py-2 text-right">🥇</td>
+                            </tr>
+                            <tr>
+                              <td class="px-4 py-2">Trần Thị B</td>
+                              <td class="px-4 py-2">
+                                <span
+                                  class="px-2 py-0.5 rounded-full bg-violet-50 text-violet-700 text-xs font-semibold"
+                                  >Lãnh đạo</span
+                                >
+                              </td>
+                              <td class="px-4 py-2 text-right">76</td>
+                              <td class="px-4 py-2 text-right text-orange-600">
+                                94.7%
+                              </td>
+                              <td class="px-4 py-2 text-right">2.1 ngày</td>
+                              <td class="px-4 py-2 text-right">#2</td>
+                            </tr>
+                            <tr>
+                              <td class="px-4 py-2">Lê Văn C</td>
+                              <td class="px-4 py-2">
+                                <span
+                                  class="px-2 py-0.5 rounded-full bg-slate-100 text-slate-700 text-xs font-semibold"
+                                  >Văn thư</span
+                                >
+                              </td>
+                              <td class="px-4 py-2 text-right">92</td>
+                              <td class="px-4 py-2 text-right text-orange-600">
+                                93.4%
+                              </td>
+                              <td class="px-4 py-2 text-right">2.3 ngày</td>
+                              <td class="px-4 py-2 text-right">#3</td>
+                            </tr>
+                            <tr>
+                              <td class="px-4 py-2">Phạm Thị D</td>
+                              <td class="px-4 py-2">
+                                <span
+                                  class="px-2 py-0.5 rounded-full bg-blue-50 text-blue-700 text-xs font-semibold"
+                                  >Chuyên viên</span
+                                >
+                              </td>
+                              <td class="px-4 py-2 text-right">67</td>
+                              <td class="px-4 py-2 text-right text-orange-600">
+                                91.8%
+                              </td>
+                              <td class="px-4 py-2 text-right">2.6 ngày</td>
+                              <td class="px-4 py-2 text-right">#4</td>
+                            </tr>
+                            <tr>
+                              <td class="px-4 py-2">Hoàng Văn E</td>
+                              <td class="px-4 py-2">
+                                <span
+                                  class="px-2 py-0.5 rounded-full bg-blue-50 text-blue-700 text-xs font-semibold"
+                                  >Chuyên viên</span
+                                >
+                              </td>
+                              <td class="px-4 py-2 text-right">84</td>
+                              <td class="px-4 py-2 text-right text-orange-600">
+                                90.1%
+                              </td>
+                              <td class="px-4 py-2 text-right">2.9 ngày</td>
+                              <td class="px-4 py-2 text-right">#5</td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                    </article>
+
+                    <div class="grid grid-cols-1 lg:grid-cols-3 gap-4">
+                      <div
+                        class="bg-white border border-slate-200 rounded-xl p-4 text-center"
+                      >
+                        <div class="text-3xl">👥</div>
+                        <div class="text-sm text-slate-500">
+                          Người dùng hoạt động
+                        </div>
+                        <div class="text-2xl font-semibold mt-1">42</div>
+                      </div>
+                      <div
+                        class="bg-white border border-slate-200 rounded-xl p-4 text-center"
+                      >
+                        <div class="text-3xl">💚</div>
+                        <div class="text-sm text-slate-500">
+                          Hiệu suất trung bình
+                        </div>
+                        <div class="text-2xl font-semibold mt-1">91.5%</div>
+                      </div>
+                      <div
+                        class="bg-white border border-slate-200 rounded-xl p-4 text-center"
+                      >
+                        <div class="text-3xl">🎯</div>
+                        <div class="text-sm text-slate-500">Đạt chỉ tiêu</div>
+                        <div class="text-2xl font-semibold mt-1">38/42</div>
+                      </div>
+                    </div>
+                  </div>
+
+                  <!-- Activity -->
+                  <div id="tab-activity" class="tab-panel hidden space-y-6">
+                    <!-- Line chart -->
+                    <article
+                      class="bg-white border border-slate-200 rounded-xl p-4"
+                    >
+                      <header class="mb-3">
+                        <h3 class="text-[15px] font-semibold">
+                          Lượng truy cập trong ngày
+                        </h3>
+                      </header>
+                      <canvas id="chAccessDay2" height="120"></canvas>
+                    </article>
+                    <!-- Bars + Summary -->
+                    <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                      <article
+                        class="bg-white border border-slate-200 rounded-xl p-4 lg:col-span-2"
+                      >
+                        <header class="mb-3">
+                          <h3 class="text-[15px] font-semibold">
+                            Hoạt động theo ngày trong tuần
+                          </h3>
+                        </header>
+                        <canvas id="chWeekBars2" height="110"></canvas>
+                      </article>
+                      <article
+                        class="bg-white border border-slate-200 rounded-xl p-4"
+                      >
+                        <header class="mb-3">
+                          <h3 class="text-[15px] font-semibold">
+                            Thống kê tổng quát
+                          </h3>
+                        </header>
+                        <ul class="text-[14px] space-y-2">
+                          <li class="flex justify-between">
+                            <span>Số phiên đăng nhập hôm nay</span
+                            ><strong>127</strong>
+                          </li>
+                          <li class="flex justify-between">
+                            <span>Thời gian truy cập trung bình</span
+                            ><strong>2h 34m</strong>
+                          </li>
+                          <li class="flex justify-between">
+                            <span>Văn bản xử lý hôm nay</span
+                            ><strong>89</strong>
+                          </li>
+                          <li class="flex justify-between">
+                            <span>Cuộc họp đã diễn ra</span><strong>5</strong>
+                          </li>
+                          <li class="flex justify-between">
+                            <span>Thông báo đã gửi</span><strong>23</strong>
+                          </li>
+                        </ul>
+                      </article>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </section>
+          </div>
+        </main>
+      </div>
+    </div>
+
+    <!-- ================= FOOTER ================= -->
+    <footer
+      class="border-t border-slate-200 bg-white text-center text-[12.5px] text-slate-500 py-3"
+    >
+      © UBND Phường Thanh Khê Đông — Phiên bản 1.0
+    </footer>
+
+    <!-- App script -->
+    <script src="../assets/js/quantri.js" defer></script>
+    
+
+    <!-- ===========================
+      FOOTER
+  ============================ -->
+    <div data-include="footer"></div>
+  </body>
+</html>

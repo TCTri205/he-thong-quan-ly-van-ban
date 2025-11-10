@@ -1,0 +1,2164 @@
+﻿<!-- File: quantri/danhmuchethong.html -->
+<!DOCTYPE html>
+<html lang="vi">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Hệ thống Quản lý Văn bản &amp; Điều hành • Danh mục hệ thống</title>
+    <!-- App theme overrides -->
+    <link rel="stylesheet" href="../assets/css/styles.css" />
+    <style>
+      /* Tái sử dụng phong cách chung để đồng bộ với các màn khác */
+      .btn {
+        height: 36px;
+        padding: 0 12px;
+        border: 1px solid #e2e8f0;
+        border-radius: 10px;
+        font-size: 13px;
+      }
+      .btn:hover {
+        background: #f8fafc;
+      }
+      .btn-primary {
+        background: #2563eb;
+        color: #fff;
+        border-color: #2563eb;
+      }
+      .btn-primary:hover {
+        background: #1d4ed8;
+      }
+      .seg-btn {
+        height: 40px;
+        border-radius: 10px;
+        padding: 0 14px;
+        font-weight: 600;
+        white-space: nowrap;
+      }
+      .seg-btn.is-active {
+        background: #2563eb;
+        color: #fff;
+      }
+      .badge {
+        display: inline-flex;
+        align-items: center;
+        border-radius: 9999px;
+        padding: 2px 8px;
+        font-size: 12px;
+      }
+      .badge--dark {
+        background: #0f172a;
+        color: #fff;
+      }
+    </style>
+  </head>
+  <body class="bg-slate-100 text-slate-800" data-role="quantri" data-root="..">
+    <!-- ===========================
+      HEADER (đồng nhất hệ thống)
+  ============================ -->
+    <div data-include="header"></div>
+
+    <!-- ===========================
+      LAYOUT
+  ============================ -->
+    <div class="pt-14">
+      <div class="flex">
+        <!-- ===== Sidebar ===== -->
+        <div data-include="sidebar"></div>
+
+        <!-- ===== Main ===== -->
+        <main class="w-full">
+          <div class="max-w-none px-6 lg:px-8 py-6 lg:py-7">
+            <h1 class="text-[15px] font-semibold mb-3">
+              Quản lý danh mục và cấu hình hệ thống
+            </h1>
+
+            <!-- TOP KPIs -->
+            <section
+              class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4"
+            >
+              <!-- Loại văn bản -->
+              <div
+                class="bg-white border border-slate-200 rounded-xl p-4 flex items-center justify-between"
+              >
+                <div>
+                  <p class="text-[13px] text-slate-600 font-semibold">
+                    Loại văn bản
+                  </p>
+                  <p class="mt-2 text-3xl font-bold">8</p>
+                </div>
+                <div
+                  class="w-10 h-10 rounded-lg bg-blue-50 grid place-items-center"
+                >
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    class="w-6 h-6 text-blue-600"
+                    viewBox="0 0 24 24"
+                    fill="currentColor"
+                  >
+                    <path
+                      d="M6 2h9l5 5v13a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2m8 1.5V8h4.5z"
+                    />
+                  </svg>
+                </div>
+              </div>
+              <!-- Trạng thái -->
+              <div
+                class="bg-white border border-slate-200 rounded-xl p-4 flex items-center justify-between"
+              >
+                <div>
+                  <p class="text-[13px] text-slate-600 font-semibold">
+                    Trạng thái
+                  </p>
+                  <p class="mt-2 text-3xl font-bold">5</p>
+                </div>
+                <div
+                  class="w-10 h-10 rounded-lg bg-emerald-50 grid place-items-center"
+                >
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    class="w-6 h-6 text-emerald-600"
+                    viewBox="0 0 24 24"
+                    fill="currentColor"
+                  >
+                    <path
+                      d="M12 2a10 10 0 1 0 10 10A10.012 10.012 0 0 0 12 2m-1 15-5-5 1.41-1.41L11 13.17l6.59-6.59L19 8Z"
+                    />
+                  </svg>
+                </div>
+              </div>
+              <!-- Mức ưu tiên -->
+              <div
+                class="bg-white border border-slate-200 rounded-xl p-4 flex items-center justify-between"
+              >
+                <div>
+                  <p class="text-[13px] text-slate-600 font-semibold">
+                    Mức ưu tiên
+                  </p>
+                  <p class="mt-2 text-3xl font-bold">3</p>
+                </div>
+                <div
+                  class="w-10 h-10 rounded-lg bg-amber-50 grid place-items-center"
+                >
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    class="w-6 h-6 text-amber-600"
+                    viewBox="0 0 24 24"
+                    fill="currentColor"
+                  >
+                    <path d="M19 13H5v-2h14Z" />
+                  </svg>
+                </div>
+              </div>
+              <!-- Phòng ban -->
+              <div
+                class="bg-white border border-slate-200 rounded-xl p-4 flex items-center justify-between"
+              >
+                <div>
+                  <p class="text-[13px] text-slate-600 font-semibold">
+                    Phòng ban
+                  </p>
+                  <p class="mt-2 text-3xl font-bold">4</p>
+                </div>
+                <div
+                  class="w-10 h-10 rounded-lg bg-violet-50 grid place-items-center"
+                >
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    class="w-6 h-6 text-violet-600"
+                    viewBox="0 0 24 24"
+                    fill="currentColor"
+                  >
+                    <path d="M3 4h18v2H3m0 6h18v2H3m0 6h18v2H3" />
+                  </svg>
+                </div>
+              </div>
+              <!-- Cơ quan -->
+              <div
+                class="bg-white border border-slate-200 rounded-xl p-4 flex items-center justify-between"
+              >
+                <div>
+                  <p class="text-[13px] text-slate-600 font-semibold">
+                    Cơ quan
+                  </p>
+                  <p class="mt-2 text-3xl font-bold">4</p>
+                </div>
+                <div
+                  class="w-10 h-10 rounded-lg bg-fuchsia-50 grid place-items-center"
+                >
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    class="w-6 h-6 text-fuchsia-600"
+                    viewBox="0 0 24 24"
+                    fill="currentColor"
+                  >
+                    <path
+                      d="M2 21V3h20v18Zm2-2h16V5H4Zm2-2h5v-5H6Zm7 0h5v-2h-5Zm0-3h5v-2h-5Z"
+                    />
+                  </svg>
+                </div>
+              </div>
+            </section>
+
+            <!-- SEARCH -->
+            <section
+              class="mt-4 bg-white border border-slate-200 rounded-xl p-4"
+            >
+              <h3 class="text-[13px] font-semibold text-slate-600 mb-2">
+                Tìm kiếm danh mục
+              </h3>
+              <label class="relative block max-w-2xl">
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  class="pointer-events-none absolute left-3 top-2.5 h-5 w-5 text-slate-400"
+                  viewBox="0 0 20 20"
+                  fill="currentColor"
+                >
+                  <path
+                    fill-rule="evenodd"
+                    d="M12.9 14.32a8 8 0 1 1 1.414-1.414l3.387 3.386a1 1 0 0 1-1.414 1.415l-3.387-3.387ZM14 8a6 6 0 1 0-12 0 6 6 0 0 0 12 0Z"
+                    clip-rule="evenodd"
+                  />
+                </svg>
+                <input
+                  id="dm-search"
+                  class="w-full h-10 pl-10 pr-4 rounded-lg border border-slate-200 focus:outline-none focus:ring-2 focus:ring-blue-600/20 focus:border-blue-500 text-[14px]"
+                  placeholder="Tìm kiếm trong danh mục…"
+                />
+              </label>
+            </section>
+
+            <!-- SEGMENTED FILTER BAR -->
+            <section class="mt-4">
+              <div
+                class="bg-white border border-slate-200 rounded-xl p-1 flex items-center gap-1 text-[13px] overflow-x-auto"
+              >
+                <button class="seg-btn is-active" data-tab="types">
+                  Loại văn bản
+                </button>
+                <button class="seg-btn" data-tab="fields">Lĩnh vực</button>
+                <button class="seg-btn" data-tab="statuses">
+                  Trạng thái văn bản
+                </button>
+                <button class="seg-btn" data-tab="urgency">Độ khẩn</button>
+                <button class="seg-btn" data-tab="security">Độ mật</button>
+                <button class="seg-btn" data-tab="issuelevels">
+                  Mức phát hành
+                </button>
+                <button class="seg-btn" data-tab="caseTypes">Loại hồ sơ</button>
+                <button class="seg-btn" data-tab="caseStatuses">
+                  Trạng thái hồ sơ
+                </button>
+                <button class="seg-btn" data-tab="attachments">
+                  Loại tệp đính kèm
+                </button>
+                <button class="seg-btn" data-tab="departments">
+                  Phòng ban
+                </button>
+                <button class="seg-btn" data-tab="agencies">
+                  Cơ quan ngoài
+                </button>
+              </div>
+            </section>
+
+            <!-- ========== TAB: LĨNH VỰC ========== -->
+            <section
+              id="tab-fields"
+              class="mt-4 bg-white border border-slate-200 rounded-xl hidden"
+            >
+              <header
+                class="px-4 py-3 border-b border-slate-100 flex items-center justify-between"
+              >
+                <h3 class="text-[15px] font-semibold">Danh mục lĩnh vực</h3>
+                <button
+                  class="h-9 rounded-lg bg-blue-600 text-white text-[13px] px-3 hover:bg-blue-600/90"
+                >
+                  + Thêm lĩnh vực
+                </button>
+              </header>
+              <div class="overflow-x-auto">
+                <table class="min-w-full text-[13px]">
+                  <thead class="bg-slate-50 text-slate-600">
+                    <tr>
+                      <th class="px-4 py-3 text-left font-semibold">
+                        Mã lĩnh vực
+                      </th>
+                      <th class="px-4 py-3 text-left font-semibold">
+                        Tên lĩnh vực
+                      </th>
+                      <th class="px-4 py-3 text-left font-semibold">Mô tả</th>
+                      <th class="px-4 py-3 text-left font-semibold">
+                        Văn bản đang quản lý
+                      </th>
+                      <th class="px-4 py-3 text-left font-semibold">
+                        Cập nhật
+                      </th>
+                      <th class="px-4 py-3 text-left font-semibold">
+                        Thao tác
+                      </th>
+                    </tr>
+                  </thead>
+                  <tbody class="divide-y divide-slate-100">
+                    <tr class="hover:bg-slate-50/60">
+                      <td
+                        class="px-4 py-3 font-mono text-[12px] text-slate-600"
+                      >
+                        LV-HC
+                      </td>
+                      <td class="px-4 py-3">Hành chính - Tổng hợp</td>
+                      <td class="px-4 py-3">
+                        Các văn bản điều hành, tổ chức nội bộ, cải cách hành
+                        chính
+                      </td>
+                      <td class="px-4 py-3">
+                        <span
+                          class="inline-flex items-center rounded-full bg-slate-100 text-slate-700 px-2 py-0.5 text-[12px]"
+                          >128</span
+                        >
+                      </td>
+                      <td class="px-4 py-3 text-slate-500">10/01/2024 09:20</td>
+                      <td class="px-4 py-3">
+                        <div class="flex items-center gap-2">
+                          <button
+                            class="w-8 h-8 grid place-items-center rounded-full hover:bg-slate-100"
+                            title="Xem chi tiết"
+                          >
+                            👁
+                          </button>
+                          <button
+                            class="w-8 h-8 grid place-items-center rounded-full hover:bg-emerald-50 text-emerald-600"
+                            title="Sửa"
+                          >
+                            ✔
+                          </button>
+                          <button
+                            class="w-8 h-8 grid place-items-center rounded-full hover:bg-rose-50 text-rose-600"
+                            title="Xóa"
+                          >
+                            🗂
+                          </button>
+                        </div>
+                      </td>
+                    </tr>
+                    <tr class="hover:bg-slate-50/60">
+                      <td
+                        class="px-4 py-3 font-mono text-[12px] text-slate-600"
+                      >
+                        LV-TN
+                      </td>
+                      <td class="px-4 py-3">Tài nguyên - Môi trường</td>
+                      <td class="px-4 py-3">
+                        Quản lý đất đai, xây dựng, môi trường và đô thị
+                      </td>
+                      <td class="px-4 py-3">
+                        <span
+                          class="inline-flex items-center rounded-full bg-slate-100 text-slate-700 px-2 py-0.5 text-[12px]"
+                          >64</span
+                        >
+                      </td>
+                      <td class="px-4 py-3 text-slate-500">05/01/2024 15:45</td>
+                      <td class="px-4 py-3">
+                        <div class="flex items-center gap-2">
+                          <button
+                            class="w-8 h-8 grid place-items-center rounded-full hover:bg-slate-100"
+                            title="Xem chi tiết"
+                          >
+                            👁
+                          </button>
+                          <button
+                            class="w-8 h-8 grid place-items-center rounded-full hover:bg-emerald-50 text-emerald-600"
+                            title="Sửa"
+                          >
+                            ✔
+                          </button>
+                          <button
+                            class="w-8 h-8 grid place-items-center rounded-full hover:bg-rose-50 text-rose-600"
+                            title="Xóa"
+                          >
+                            🗂
+                          </button>
+                        </div>
+                      </td>
+                    </tr>
+                    <tr class="hover:bg-slate-50/60">
+                      <td
+                        class="px-4 py-3 font-mono text-[12px] text-slate-600"
+                      >
+                        LV-KT
+                      </td>
+                      <td class="px-4 py-3">Kinh tế - Hạ tầng</td>
+                      <td class="px-4 py-3">
+                        Quản lý thương mại, dịch vụ, đầu tư công, dự án xây dựng
+                      </td>
+                      <td class="px-4 py-3">
+                        <span
+                          class="inline-flex items-center rounded-full bg-slate-100 text-slate-700 px-2 py-0.5 text-[12px]"
+                          >41</span
+                        >
+                      </td>
+                      <td class="px-4 py-3 text-slate-500">28/12/2023 10:12</td>
+                      <td class="px-4 py-3">
+                        <div class="flex items-center gap-2">
+                          <button
+                            class="w-8 h-8 grid place-items-center rounded-full hover:bg-slate-100"
+                            title="Xem chi tiết"
+                          >
+                            👁
+                          </button>
+                          <button
+                            class="w-8 h-8 grid place-items-center rounded-full hover:bg-emerald-50 text-emerald-600"
+                            title="Sửa"
+                          >
+                            ✔
+                          </button>
+                          <button
+                            class="w-8 h-8 grid place-items-center rounded-full hover:bg-rose-50 text-rose-600"
+                            title="Xóa"
+                          >
+                            🗂
+                          </button>
+                        </div>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </section>
+
+            <!-- ========== TAB: LOẠI VĂN BẢN ========== -->
+            <section
+              id="tab-types"
+              class="mt-4 bg-white border border-slate-200 rounded-xl"
+            >
+              <header
+                class="px-4 py-3 border-b border-slate-100 flex items-center justify-between"
+              >
+                <h3 class="text-[15px] font-semibold">Danh mục loại văn bản</h3>
+                <div class="flex items-center gap-2">
+                  <a
+                    href="danhmuchethong-detail.html"
+                    class="h-9 rounded-lg border border-slate-200 px-3 text-[13px] hover:bg-slate-50 text-slate-700"
+                    >Xem chi tiết</a
+                  >
+                  <button
+                    id="btn-add-type"
+                    class="h-9 rounded-lg bg-blue-600 text-white text-[13px] px-3 hover:bg-blue-600/90"
+                  >
+                    + Thêm mới
+                  </button>
+                </div>
+              </header>
+              <div class="overflow-x-auto">
+                <table class="min-w-full text-[13px]">
+                  <thead class="bg-slate-50 text-slate-600">
+                    <tr>
+                      <th class="px-4 py-3 text-left font-semibold">Mã loại</th>
+                      <th class="px-4 py-3 text-left font-semibold">
+                        Tên loại văn bản
+                      </th>
+                      <th class="px-4 py-3 text-left font-semibold">Mô tả</th>
+                      <th class="px-4 py-3 text-left font-semibold">
+                        Số lượng
+                      </th>
+                      <th class="px-4 py-3 text-left font-semibold">
+                        Trạng thái
+                      </th>
+                      <th class="px-4 py-3 text-left font-semibold">
+                        Thao tác
+                      </th>
+                    </tr>
+                  </thead>
+                  <tbody id="tb-types" class="divide-y divide-slate-100">
+                    <tr class="hover:bg-slate-50/60">
+                      <td
+                        class="px-4 py-3 font-mono text-[12px] text-slate-600"
+                      >
+                        VB-TB
+                      </td>
+                      <td class="px-4 py-3">Thông báo</td>
+                      <td class="px-4 py-3">Văn bản thông báo chung</td>
+                      <td class="px-4 py-3">
+                        <span
+                          class="inline-flex items-center rounded-full bg-slate-100 text-slate-700 px-2 py-0.5 text-[12px]"
+                          >9</span
+                        >
+                      </td>
+                      <td class="px-4 py-3">
+                        <span class="badge badge--dark">Đang sử dụng</span>
+                      </td>
+                      <td class="px-4 py-3">
+                        <div class="flex items-center gap-2">
+                          <button
+                            class="w-8 h-8 grid place-items-center rounded-full hover:bg-slate-100"
+                            title="Xem"
+                          >
+                            👁
+                          </button>
+                          <button
+                            class="w-8 h-8 grid place-items-center rounded-full hover:bg-emerald-50 text-emerald-600"
+                            title="Sửa"
+                          >
+                            ✔
+                          </button>
+                          <button
+                            class="w-8 h-8 grid place-items-center rounded-full hover:bg-rose-50 text-rose-600"
+                            title="Xóa"
+                          >
+                            🗂
+                          </button>
+                        </div>
+                      </td>
+                    </tr>
+                    <tr class="hover:bg-slate-50/60">
+                      <td
+                        class="px-4 py-3 font-mono text-[12px] text-slate-600"
+                      >
+                        VB-BC
+                      </td>
+                      <td class="px-4 py-3">Báo cáo</td>
+                      <td class="px-4 py-3">Báo cáo định kỳ và đột xuất</td>
+                      <td class="px-4 py-3">
+                        <span
+                          class="inline-flex items-center rounded-full bg-slate-100 text-slate-700 px-2 py-0.5 text-[12px]"
+                          >5</span
+                        >
+                      </td>
+                      <td class="px-4 py-3">
+                        <span class="badge badge--dark">Đang sử dụng</span>
+                      </td>
+                      <td class="px-4 py-3">
+                        <div class="flex items-center gap-2">
+                          <button
+                            class="w-8 h-8 grid place-items-center rounded-full hover:bg-slate-100"
+                            title="Xem"
+                          >
+                            👁
+                          </button>
+                          <button
+                            class="w-8 h-8 grid place-items-center rounded-full hover:bg-emerald-50 text-emerald-600"
+                            title="Sửa"
+                          >
+                            ✔
+                          </button>
+                          <button
+                            class="w-8 h-8 grid place-items-center rounded-full hover:bg-rose-50 text-rose-600"
+                            title="Xóa"
+                          >
+                            🗂
+                          </button>
+                        </div>
+                      </td>
+                    </tr>
+                    <tr class="hover:bg-slate-50/60">
+                      <td
+                        class="px-4 py-3 font-mono text-[12px] text-slate-600"
+                      >
+                        VB-CV
+                      </td>
+                      <td class="px-4 py-3">Công văn</td>
+                      <td class="px-4 py-3">Công văn hành chính</td>
+                      <td class="px-4 py-3">
+                        <span
+                          class="inline-flex items-center rounded-full bg-slate-100 text-slate-700 px-2 py-0.5 text-[12px]"
+                          >6</span
+                        >
+                      </td>
+                      <td class="px-4 py-3">
+                        <span class="badge badge--dark">Đang sử dụng</span>
+                      </td>
+                      <td class="px-4 py-3">
+                        <div class="flex items-center gap-2">
+                          <button
+                            class="w-8 h-8 grid place-items-center rounded-full hover:bg-slate-100"
+                            title="Xem"
+                          >
+                            👁
+                          </button>
+                          <button
+                            class="w-8 h-8 grid place-items-center rounded-full hover:bg-emerald-50 text-emerald-600"
+                            title="Sửa"
+                          >
+                            ✔
+                          </button>
+                          <button
+                            class="w-8 h-8 grid place-items-center rounded-full hover:bg-rose-50 text-rose-600"
+                            title="Xóa"
+                          >
+                            🗂
+                          </button>
+                        </div>
+                      </td>
+                    </tr>
+                    <tr class="hover:bg-slate-50/60">
+                      <td
+                        class="px-4 py-3 font-mono text-[12px] text-slate-600"
+                      >
+                        VB-QD
+                      </td>
+                      <td class="px-4 py-3">Quyết định</td>
+                      <td class="px-4 py-3">Quyết định của lãnh đạo</td>
+                      <td class="px-4 py-3">
+                        <span
+                          class="inline-flex items-center rounded-full bg-slate-100 text-slate-700 px-2 py-0.5 text-[12px]"
+                          >4</span
+                        >
+                      </td>
+                      <td class="px-4 py-3">
+                        <span class="badge badge--dark">Đang sử dụng</span>
+                      </td>
+                      <td class="px-4 py-3">
+                        <div class="flex items-center gap-2">
+                          <button
+                            class="w-8 h-8 grid place-items-center rounded-full hover:bg-slate-100"
+                            title="Xem"
+                          >
+                            👁
+                          </button>
+                          <button
+                            class="w-8 h-8 grid place-items-center rounded-full hover:bg-emerald-50 text-emerald-600"
+                            title="Sửa"
+                          >
+                            ✔
+                          </button>
+                          <button
+                            class="w-8 h-8 grid place-items-center rounded-full hover:bg-rose-50 text-rose-600"
+                            title="Xóa"
+                          >
+                            🗂
+                          </button>
+                        </div>
+                      </td>
+                    </tr>
+                    <tr class="hover:bg-slate-50/60">
+                      <td
+                        class="px-4 py-3 font-mono text-[12px] text-slate-600"
+                      >
+                        VB-CT
+                      </td>
+                      <td class="px-4 py-3">Chỉ thị</td>
+                      <td class="px-4 py-3">Chỉ thị chỉ đạo thực hiện</td>
+                      <td class="px-4 py-3">
+                        <span
+                          class="inline-flex items-center rounded-full bg-slate-100 text-slate-700 px-2 py-0.5 text-[12px]"
+                          >3</span
+                        >
+                      </td>
+                      <td class="px-4 py-3">
+                        <span class="badge badge--dark">Đang sử dụng</span>
+                      </td>
+                      <td class="px-4 py-3">
+                        <div class="flex items-center gap-2">
+                          <button
+                            class="w-8 h-8 grid place-items-center rounded-full hover:bg-slate-100"
+                            title="Xem"
+                          >
+                            👁
+                          </button>
+                          <button
+                            class="w-8 h-8 grid place-items-center rounded-full hover:bg-emerald-50 text-emerald-600"
+                            title="Sửa"
+                          >
+                            ✔
+                          </button>
+                          <button
+                            class="w-8 h-8 grid place-items-center rounded-full hover:bg-rose-50 text-rose-600"
+                            title="Xóa"
+                          >
+                            🗂
+                          </button>
+                        </div>
+                      </td>
+                    </tr>
+                    <tr class="hover:bg-slate-50/60">
+                      <td
+                        class="px-4 py-3 font-mono text-[12px] text-slate-600"
+                      >
+                        VB-ND
+                      </td>
+                      <td class="px-4 py-3">Nghị định</td>
+                      <td class="px-4 py-3">Nghị định của Chính phủ</td>
+                      <td class="px-4 py-3">
+                        <span
+                          class="inline-flex items-center rounded-full bg-slate-100 text-slate-700 px-2 py-0.5 text-[12px]"
+                          >2</span
+                        >
+                      </td>
+                      <td class="px-4 py-3">
+                        <span class="badge badge--dark">Đang sử dụng</span>
+                      </td>
+                      <td class="px-4 py-3">
+                        <div class="flex items-center gap-2">
+                          <button
+                            class="w-8 h-8 grid place-items-center rounded-full hover:bg-slate-100"
+                            title="Xem"
+                          >
+                            👁
+                          </button>
+                          <button
+                            class="w-8 h-8 grid place-items-center rounded-full hover:bg-emerald-50 text-emerald-600"
+                            title="Sửa"
+                          >
+                            ✔
+                          </button>
+                          <button
+                            class="w-8 h-8 grid place-items-center rounded-full hover:bg-rose-50 text-rose-600"
+                            title="Xóa"
+                          >
+                            🗂
+                          </button>
+                        </div>
+                      </td>
+                    </tr>
+                    <tr class="hover:bg-slate-50/60">
+                      <td
+                        class="px-4 py-3 font-mono text-[12px] text-slate-600"
+                      >
+                        VB-TT
+                      </td>
+                      <td class="px-4 py-3">Thông tư</td>
+                      <td class="px-4 py-3">Thông tư hướng dẫn thực hiện</td>
+                      <td class="px-4 py-3">
+                        <span
+                          class="inline-flex items-center rounded-full bg-slate-100 text-slate-700 px-2 py-0.5 text-[12px]"
+                          >2</span
+                        >
+                      </td>
+                      <td class="px-4 py-3">
+                        <span class="badge badge--dark">Đang sử dụng</span>
+                      </td>
+                      <td class="px-4 py-3">
+                        <div class="flex items-center gap-2">
+                          <button
+                            class="w-8 h-8 grid place-items-center rounded-full hover:bg-slate-100"
+                            title="Xem"
+                          >
+                            👁
+                          </button>
+                          <button
+                            class="w-8 h-8 grid place-items-center rounded-full hover:bg-emerald-50 text-emerald-600"
+                            title="Sửa"
+                          >
+                            ✔
+                          </button>
+                          <button
+                            class="w-8 h-8 grid place-items-center rounded-full hover:bg-rose-50 text-rose-600"
+                            title="Xóa"
+                          >
+                            🗂
+                          </button>
+                        </div>
+                      </td>
+                    </tr>
+                    <tr class="hover:bg-slate-50/60">
+                      <td
+                        class="px-4 py-3 font-mono text-[12px] text-slate-600"
+                      >
+                        VB-KH
+                      </td>
+                      <td class="px-4 py-3">Văn bản khác</td>
+                      <td class="px-4 py-3">Các loại văn bản khác</td>
+                      <td class="px-4 py-3">
+                        <span
+                          class="inline-flex items-center rounded-full bg-slate-100 text-slate-700 px-2 py-0.5 text-[12px]"
+                          >6</span
+                        >
+                      </td>
+                      <td class="px-4 py-3">
+                        <span class="badge badge--dark">Đang sử dụng</span>
+                      </td>
+                      <td class="px-4 py-3">
+                        <div class="flex items-center gap-2">
+                          <button
+                            class="w-8 h-8 grid place-items-center rounded-full hover:bg-slate-100"
+                            title="Xem"
+                          >
+                            👁
+                          </button>
+                          <button
+                            class="w-8 h-8 grid place-items-center rounded-full hover:bg-emerald-50 text-emerald-600"
+                            title="Sửa"
+                          >
+                            ✔
+                          </button>
+                          <button
+                            class="w-8 h-8 grid place-items-center rounded-full hover:bg-rose-50 text-rose-600"
+                            title="Xóa"
+                          >
+                            🗂
+                          </button>
+                        </div>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </section>
+
+            <!-- ========== TAB: TRẠNG THÁI VĂN BẢN ========== -->
+            <section
+              id="tab-statuses"
+              class="mt-4 bg-white border border-slate-200 rounded-xl hidden"
+            >
+              <header
+                class="px-4 py-3 border-b border-slate-100 flex items-center justify-between"
+              >
+                <h3 class="text-[15px] font-semibold">
+                  Danh mục trạng thái văn bản
+                </h3>
+                <button
+                  id="btn-add-status"
+                  class="h-9 rounded-lg bg-blue-600 text-white text-[13px] px-3 hover:bg-blue-600/90"
+                >
+                  + Thêm mới
+                </button>
+              </header>
+              <div class="overflow-x-auto">
+                <table class="min-w-full text-[13px]">
+                  <thead class="bg-slate-50 text-slate-600">
+                    <tr>
+                      <th class="px-4 py-3 text-left font-semibold">
+                        Trạng thái
+                      </th>
+                      <th class="px-4 py-3 text-left font-semibold">Mô tả</th>
+                      <th class="px-4 py-3 text-left font-semibold">
+                        Màu hiển thị
+                      </th>
+                      <th class="px-4 py-3 text-left font-semibold">
+                        Hoạt động
+                      </th>
+                      <th class="px-4 py-3 text-left font-semibold">
+                        Thao tác
+                      </th>
+                    </tr>
+                  </thead>
+                  <tbody id="tb-statuses" class="divide-y divide-slate-100">
+                    <tr class="hover:bg-slate-50/60">
+                      <td class="px-4 py-3">Chưa xử lý</td>
+                      <td class="px-4 py-3">Văn bản mới tiếp nhận</td>
+                      <td class="px-4 py-3">
+                        <span
+                          class="inline-block w-2 h-2 rounded-full bg-rose-500 align-middle mr-1.5"
+                        ></span
+                        >Đỏ hồng
+                      </td>
+                      <td class="px-4 py-3">
+                        <span class="badge badge--dark">Đang dùng</span>
+                      </td>
+                      <td class="px-4 py-3">
+                        <div class="flex items-center gap-2">
+                          <button
+                            class="w-8 h-8 grid place-items-center rounded-full hover:bg-slate-100"
+                          >
+                            👁
+                          </button>
+                          <button
+                            class="w-8 h-8 grid place-items-center rounded-full hover:bg-emerald-50 text-emerald-600"
+                          >
+                            ✔
+                          </button>
+                          <button
+                            class="w-8 h-8 grid place-items-center rounded-full hover:bg-rose-50 text-rose-600"
+                          >
+                            🗂
+                          </button>
+                        </div>
+                      </td>
+                    </tr>
+                    <tr class="hover:bg-slate-50/60">
+                      <td class="px-4 py-3">Đang xử lý</td>
+                      <td class="px-4 py-3">Văn bản đang được xử lý</td>
+                      <td class="px-4 py-3">
+                        <span
+                          class="inline-block w-2 h-2 rounded-full bg-blue-500 align-middle mr-1.5"
+                        ></span
+                        >Xanh dương
+                      </td>
+                      <td class="px-4 py-3">
+                        <span class="badge badge--dark">Đang dùng</span>
+                      </td>
+                      <td class="px-4 py-3">
+                        <div class="flex items-center gap-2">
+                          <button
+                            class="w-8 h-8 grid place-items-center rounded-full hover:bg-slate-100"
+                          >
+                            👁
+                          </button>
+                          <button
+                            class="w-8 h-8 grid place-items-center rounded-full hover:bg-emerald-50 text-emerald-600"
+                          >
+                            ✔
+                          </button>
+                          <button
+                            class="w-8 h-8 grid place-items-center rounded-full hover:bg-rose-50 text-rose-600"
+                          >
+                            🗂
+                          </button>
+                        </div>
+                      </td>
+                    </tr>
+                    <tr class="hover:bg-slate-50/60">
+                      <td class="px-4 py-3">Đã xử lý</td>
+                      <td class="px-4 py-3">Văn bản đã hoàn thành</td>
+                      <td class="px-4 py-3">
+                        <span
+                          class="inline-block w-2 h-2 rounded-full bg-emerald-600 align-middle mr-1.5"
+                        ></span
+                        >Xanh lục
+                      </td>
+                      <td class="px-4 py-3">
+                        <span class="badge badge--dark">Đang dùng</span>
+                      </td>
+                      <td class="px-4 py-3">
+                        <div class="flex items-center gap-2">
+                          <button
+                            class="w-8 h-8 grid place-items-center rounded-full hover:bg-slate-100"
+                          >
+                            👁
+                          </button>
+                          <button
+                            class="w-8 h-8 grid place-items-center rounded-full hover:bg-emerald-50 text-emerald-600"
+                          >
+                            ✔
+                          </button>
+                          <button
+                            class="w-8 h-8 grid place-items-center rounded-full hover:bg-rose-50 text-rose-600"
+                          >
+                            🗂
+                          </button>
+                        </div>
+                      </td>
+                    </tr>
+                    <tr class="hover:bg-slate-50/60">
+                      <td class="px-4 py-3">Chờ duyệt</td>
+                      <td class="px-4 py-3">Văn bản chờ phê duyệt</td>
+                      <td class="px-4 py-3">
+                        <span
+                          class="inline-block w-2 h-2 rounded-full bg-amber-500 align-middle mr-1.5"
+                        ></span
+                        >Hổ phách
+                      </td>
+                      <td class="px-4 py-3">
+                        <span class="badge badge--dark">Đang dùng</span>
+                      </td>
+                      <td class="px-4 py-3">
+                        <div class="flex items-center gap-2">
+                          <button
+                            class="w-8 h-8 grid place-items-center rounded-full hover:bg-slate-100"
+                          >
+                            👁
+                          </button>
+                          <button
+                            class="w-8 h-8 grid place-items-center rounded-full hover:bg-emerald-50 text-emerald-600"
+                          >
+                            ✔
+                          </button>
+                          <button
+                            class="w-8 h-8 grid place-items-center rounded-full hover:bg-rose-50 text-rose-600"
+                          >
+                            🗂
+                          </button>
+                        </div>
+                      </td>
+                    </tr>
+                    <tr class="hover:bg-slate-50/60">
+                      <td class="px-4 py-3">Đã phát hành</td>
+                      <td class="px-4 py-3">Văn bản đã được phát hành</td>
+                      <td class="px-4 py-3">
+                        <span
+                          class="inline-block w-2 h-2 rounded-full bg-slate-400 align-middle mr-1.5"
+                        ></span
+                        >Xám
+                      </td>
+                      <td class="px-4 py-3">
+                        <span class="badge badge--dark">Đang dùng</span>
+                      </td>
+                      <td class="px-4 py-3">
+                        <div class="flex items-center gap-2">
+                          <button
+                            class="w-8 h-8 grid place-items-center rounded-full hover:bg-slate-100"
+                          >
+                            👁
+                          </button>
+                          <button
+                            class="w-8 h-8 grid place-items-center rounded-full hover:bg-emerald-50 text-emerald-600"
+                          >
+                            ✔
+                          </button>
+                          <button
+                            class="w-8 h-8 grid place-items-center rounded-full hover:bg-rose-50 text-rose-600"
+                          >
+                            🗂
+                          </button>
+                        </div>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </section>
+
+            <!-- ========== TAB: ĐỘ KHẨN ========== -->
+            <section
+              id="tab-urgency"
+              class="mt-4 bg-white border border-slate-200 rounded-xl hidden"
+            >
+              <header
+                class="px-4 py-3 border-b border-slate-100 flex items-center justify-between"
+              >
+                <h3 class="text-[15px] font-semibold">Danh mục độ khẩn</h3>
+                <button
+                  class="h-9 rounded-lg bg-blue-600 text-white text-[13px] px-3 hover:bg-blue-600/90"
+                >
+                  + Thêm độ khẩn
+                </button>
+              </header>
+              <div class="overflow-x-auto">
+                <table class="min-w-full text-[13px]">
+                  <thead class="bg-slate-50 text-slate-600">
+                    <tr>
+                      <th class="px-4 py-3 text-left font-semibold">
+                        Mã độ khẩn
+                      </th>
+                      <th class="px-4 py-3 text-left font-semibold">
+                        Tên độ khẩn
+                      </th>
+                      <th class="px-4 py-3 text-left font-semibold">Mô tả</th>
+                      <th class="px-4 py-3 text-left font-semibold">
+                        SLA đề xuất
+                      </th>
+                      <th class="px-4 py-3 text-left font-semibold">
+                        Thao tác
+                      </th>
+                    </tr>
+                  </thead>
+                  <tbody class="divide-y divide-slate-100">
+                    <tr class="hover:bg-slate-50/60">
+                      <td class="px-4 py-3 font-mono text-[12px] text-rose-600">
+                        URG-EMER
+                      </td>
+                      <td class="px-4 py-3">Hỏa tốc</td>
+                      <td class="px-4 py-3">
+                        Xử lý và phát hành trong vòng 04 giờ kể từ khi tiếp nhận
+                      </td>
+                      <td class="px-4 py-3">
+                        <span
+                          class="inline-flex items-center rounded-full bg-rose-100 text-rose-700 px-2 py-0.5 text-[12px]"
+                          >&lt; 4h</span
+                        >
+                      </td>
+                      <td class="px-4 py-3">
+                        <div class="flex items-center gap-2">
+                          <button
+                            class="w-8 h-8 grid place-items-center rounded-full hover:bg-slate-100"
+                          >
+                            👁
+                          </button>
+                          <button
+                            class="w-8 h-8 grid place-items-center rounded-full hover:bg-emerald-50 text-emerald-600"
+                          >
+                            ✔
+                          </button>
+                          <button
+                            class="w-8 h-8 grid place-items-center rounded-full hover:bg-rose-50 text-rose-600"
+                          >
+                            🗂
+                          </button>
+                        </div>
+                      </td>
+                    </tr>
+                    <tr class="hover:bg-slate-50/60">
+                      <td
+                        class="px-4 py-3 font-mono text-[12px] text-amber-600"
+                      >
+                        URG-HIGH
+                      </td>
+                      <td class="px-4 py-3">Khẩn</td>
+                      <td class="px-4 py-3">
+                        Ưu tiên xử lý trong ngày, nhắc tự động sau 2 giờ
+                      </td>
+                      <td class="px-4 py-3">
+                        <span
+                          class="inline-flex items-center rounded-full bg-amber-100 text-amber-700 px-2 py-0.5 text-[12px]"
+                          >&lt;= 8h</span
+                        >
+                      </td>
+                      <td class="px-4 py-3">
+                        <div class="flex items-center gap-2">
+                          <button
+                            class="w-8 h-8 grid place-items-center rounded-full hover:bg-slate-100"
+                          >
+                            👁
+                          </button>
+                          <button
+                            class="w-8 h-8 grid place-items-center rounded-full hover:bg-emerald-50 text-emerald-600"
+                          >
+                            ✔
+                          </button>
+                          <button
+                            class="w-8 h-8 grid place-items-center rounded-full hover:bg-rose-50 text-rose-600"
+                          >
+                            🗂
+                          </button>
+                        </div>
+                      </td>
+                    </tr>
+                    <tr class="hover:bg-slate-50/60">
+                      <td
+                        class="px-4 py-3 font-mono text-[12px] text-slate-600"
+                      >
+                        URG-NORM
+                      </td>
+                      <td class="px-4 py-3">Thường</td>
+                      <td class="px-4 py-3">
+                        Xử lý theo kế hoạch, nhắc việc trước hạn 01 ngày
+                      </td>
+                      <td class="px-4 py-3">
+                        <span
+                          class="inline-flex items-center rounded-full bg-slate-100 text-slate-700 px-2 py-0.5 text-[12px]"
+                          >1-3 ngày</span
+                        >
+                      </td>
+                      <td class="px-4 py-3">
+                        <div class="flex items-center gap-2">
+                          <button
+                            class="w-8 h-8 grid place-items-center rounded-full hover:bg-slate-100"
+                          >
+                            👁
+                          </button>
+                          <button
+                            class="w-8 h-8 grid place-items-center rounded-full hover:bg-emerald-50 text-emerald-600"
+                          >
+                            ✔
+                          </button>
+                          <button
+                            class="w-8 h-8 grid place-items-center rounded-full hover:bg-rose-50 text-rose-600"
+                          >
+                            🗂
+                          </button>
+                        </div>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </section>
+
+            <!-- ========== TAB: ĐỘ MẬT ========== -->
+            <section
+              id="tab-security"
+              class="mt-4 bg-white border border-slate-200 rounded-xl hidden"
+            >
+              <header
+                class="px-4 py-3 border-b border-slate-100 flex items-center justify-between"
+              >
+                <h3 class="text-[15px] font-semibold">Danh mục độ mật</h3>
+                <button
+                  class="h-9 rounded-lg bg-blue-600 text-white text-[13px] px-3 hover:bg-blue-600/90"
+                >
+                  + Thêm độ mật
+                </button>
+              </header>
+              <div class="overflow-x-auto">
+                <table class="min-w-full text-[13px]">
+                  <thead class="bg-slate-50 text-slate-600">
+                    <tr>
+                      <th class="px-4 py-3 text-left font-semibold">
+                        Mã độ mật
+                      </th>
+                      <th class="px-4 py-3 text-left font-semibold">
+                        Tên độ mật
+                      </th>
+                      <th class="px-4 py-3 text-left font-semibold">
+                        Phạm vi truy cập
+                      </th>
+                      <th class="px-4 py-3 text-left font-semibold">
+                        Thao tác
+                      </th>
+                    </tr>
+                  </thead>
+                  <tbody class="divide-y divide-slate-100">
+                    <tr class="hover:bg-slate-50/60">
+                      <td class="px-4 py-3 font-mono text-[12px] text-rose-600">
+                        SEC-TS
+                      </td>
+                      <td class="px-4 py-3">Tuyệt mật</td>
+                      <td class="px-4 py-3">
+                        Chỉ Lãnh đạo và Quản trị có thể xem, yêu cầu ghi nhận
+                        truy vết
+                      </td>
+                      <td class="px-4 py-3">
+                        <div class="flex items-center gap-2">
+                          <button
+                            class="w-8 h-8 grid place-items-center rounded-full hover:bg-slate-100"
+                          >
+                            👁
+                          </button>
+                          <button
+                            class="w-8 h-8 grid place-items-center rounded-full hover:bg-emerald-50 text-emerald-600"
+                          >
+                            ✔
+                          </button>
+                          <button
+                            class="w-8 h-8 grid place-items-center rounded-full hover:bg-rose-50 text-rose-600"
+                          >
+                            🗂
+                          </button>
+                        </div>
+                      </td>
+                    </tr>
+                    <tr class="hover:bg-slate-50/60">
+                      <td
+                        class="px-4 py-3 font-mono text-[12px] text-amber-600"
+                      >
+                        SEC-MAT
+                      </td>
+                      <td class="px-4 py-3">Mật</td>
+                      <td class="px-4 py-3">
+                        Các phòng ban liên quan và văn thư được phân quyền
+                      </td>
+                      <td class="px-4 py-3">
+                        <div class="flex items-center gap-2">
+                          <button
+                            class="w-8 h-8 grid place-items-center rounded-full hover:bg-slate-100"
+                          >
+                            👁
+                          </button>
+                          <button
+                            class="w-8 h-8 grid place-items-center rounded-full hover:bg-emerald-50 text-emerald-600"
+                          >
+                            ✔
+                          </button>
+                          <button
+                            class="w-8 h-8 grid place-items-center rounded-full hover:bg-rose-50 text-rose-600"
+                          >
+                            🗂
+                          </button>
+                        </div>
+                      </td>
+                    </tr>
+                    <tr class="hover:bg-slate-50/60">
+                      <td
+                        class="px-4 py-3 font-mono text-[12px] text-slate-600"
+                      >
+                        SEC-TH
+                      </td>
+                      <td class="px-4 py-3">Thường</td>
+                      <td class="px-4 py-3">
+                        Cho phép tất cả người dùng nội bộ đã đăng nhập
+                      </td>
+                      <td class="px-4 py-3">
+                        <div class="flex items-center gap-2">
+                          <button
+                            class="w-8 h-8 grid place-items-center rounded-full hover:bg-slate-100"
+                          >
+                            👁
+                          </button>
+                          <button
+                            class="w-8 h-8 grid place-items-center rounded-full hover:bg-emerald-50 text-emerald-600"
+                          >
+                            ✔
+                          </button>
+                          <button
+                            class="w-8 h-8 grid place-items-center rounded-full hover:bg-rose-50 text-rose-600"
+                          >
+                            🗂
+                          </button>
+                        </div>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </section>
+
+            <!-- ========== TAB: MỨC PHÁT HÀNH ========== -->
+            <section
+              id="tab-issuelevels"
+              class="mt-4 bg-white border border-slate-200 rounded-xl hidden"
+            >
+              <header
+                class="px-4 py-3 border-b border-slate-100 flex items-center justify-between"
+              >
+                <h3 class="text-[15px] font-semibold">Mức phát hành văn bản</h3>
+                <button
+                  class="h-9 rounded-lg bg-blue-600 text-white text-[13px] px-3 hover:bg-blue-600/90"
+                >
+                  + Thêm mức phát hành
+                </button>
+              </header>
+              <div class="overflow-x-auto">
+                <table class="min-w-full text-[13px]">
+                  <thead class="bg-slate-50 text-slate-600">
+                    <tr>
+                      <th class="px-4 py-3 text-left font-semibold">Mã mức</th>
+                      <th class="px-4 py-3 text-left font-semibold">
+                        Tên mức phát hành
+                      </th>
+                      <th class="px-4 py-3 text-left font-semibold">
+                        Áp dụng cho
+                      </th>
+                      <th class="px-4 py-3 text-left font-semibold">
+                        Đánh số tự động
+                      </th>
+                      <th class="px-4 py-3 text-left font-semibold">
+                        Thao tác
+                      </th>
+                    </tr>
+                  </thead>
+                  <tbody class="divide-y divide-slate-100">
+                    <tr class="hover:bg-slate-50/60">
+                      <td
+                        class="px-4 py-3 font-mono text-[12px] text-slate-600"
+                      >
+                        ISS-UBND
+                      </td>
+                      <td class="px-4 py-3">UBND Phường</td>
+                      <td class="px-4 py-3">
+                        Văn bản phát hành từ UBND Phường đến các đơn vị trực
+                        thuộc
+                      </td>
+                      <td class="px-4 py-3">Có (tiền tố: UBND)</td>
+                      <td class="px-4 py-3">
+                        <div class="flex items-center gap-2">
+                          <button
+                            class="w-8 h-8 grid place-items-center rounded-full hover:bg-slate-100"
+                          >
+                            👁
+                          </button>
+                          <button
+                            class="w-8 h-8 grid place-items-center rounded-full hover:bg-emerald-50 text-emerald-600"
+                          >
+                            ✔
+                          </button>
+                          <button
+                            class="w-8 h-8 grid place-items-center rounded-full hover:bg-rose-50 text-rose-600"
+                          >
+                            🗂
+                          </button>
+                        </div>
+                      </td>
+                    </tr>
+                    <tr class="hover:bg-slate-50/60">
+                      <td
+                        class="px-4 py-3 font-mono text-[12px] text-slate-600"
+                      >
+                        ISS-PHONG
+                      </td>
+                      <td class="px-4 py-3">Phòng chuyên môn</td>
+                      <td class="px-4 py-3">
+                        Văn bản phát hành nội bộ giữa các phòng
+                      </td>
+                      <td class="px-4 py-3">Không</td>
+                      <td class="px-4 py-3">
+                        <div class="flex items-center gap-2">
+                          <button
+                            class="w-8 h-8 grid place-items-center rounded-full hover:bg-slate-100"
+                          >
+                            👁
+                          </button>
+                          <button
+                            class="w-8 h-8 grid place-items-center rounded-full hover:bg-emerald-50 text-emerald-600"
+                          >
+                            ✔
+                          </button>
+                          <button
+                            class="w-8 h-8 grid place-items-center rounded-full hover:bg-rose-50 text-rose-600"
+                          >
+                            🗂
+                          </button>
+                        </div>
+                      </td>
+                    </tr>
+                    <tr class="hover:bg-slate-50/60">
+                      <td
+                        class="px-4 py-3 font-mono text-[12px] text-slate-600"
+                      >
+                        ISS-NN
+                      </td>
+                      <td class="px-4 py-3">Cơ quan cấp trên</td>
+                      <td class="px-4 py-3">
+                        Văn bản phát hành đi cấp Quận/TP
+                      </td>
+                      <td class="px-4 py-3">Có (tiền tố: VP)</td>
+                      <td class="px-4 py-3">
+                        <div class="flex items-center gap-2">
+                          <button
+                            class="w-8 h-8 grid place-items-center rounded-full hover:bg-slate-100"
+                          >
+                            👁
+                          </button>
+                          <button
+                            class="w-8 h-8 grid place-items-center rounded-full hover:bg-emerald-50 text-emerald-600"
+                          >
+                            ✔
+                          </button>
+                          <button
+                            class="w-8 h-8 grid place-items-center rounded-full hover:bg-rose-50 text-rose-600"
+                          >
+                            🗂
+                          </button>
+                        </div>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </section>
+
+            <!-- ========== TAB: LOẠI HỒ SƠ ========== -->
+            <section
+              id="tab-caseTypes"
+              class="mt-4 bg-white border border-slate-200 rounded-xl hidden"
+            >
+              <header
+                class="px-4 py-3 border-b border-slate-100 flex items-center justify-between"
+              >
+                <h3 class="text-[15px] font-semibold">Loại hồ sơ công việc</h3>
+                <button
+                  class="h-9 rounded-lg bg-blue-600 text-white text-[13px] px-3 hover:bg-blue-600/90"
+                >
+                  + Thêm loại hồ sơ
+                </button>
+              </header>
+              <div class="overflow-x-auto">
+                <table class="min-w-full text-[13px]">
+                  <thead class="bg-slate-50 text-slate-600">
+                    <tr>
+                      <th class="px-4 py-3 text-left font-semibold">
+                        Mã hồ sơ
+                      </th>
+                      <th class="px-4 py-3 text-left font-semibold">
+                        Tên loại hồ sơ
+                      </th>
+                      <th class="px-4 py-3 text-left font-semibold">Mô tả</th>
+                      <th class="px-4 py-3 text-left font-semibold">
+                        Cơ quan phụ trách
+                      </th>
+                      <th class="px-4 py-3 text-left font-semibold">
+                        Thao tác
+                      </th>
+                    </tr>
+                  </thead>
+                  <tbody class="divide-y divide-slate-100">
+                    <tr class="hover:bg-slate-50/60">
+                      <td
+                        class="px-4 py-3 font-mono text-[12px] text-slate-600"
+                      >
+                        CASE-TTHC
+                      </td>
+                      <td class="px-4 py-3">Thủ tục hành chính</td>
+                      <td class="px-4 py-3">
+                        Hồ sơ giải quyết thủ tục hành chính cho công dân
+                      </td>
+                      <td class="px-4 py-3">Bộ phận Một cửa</td>
+                      <td class="px-4 py-3">
+                        <div class="flex items-center gap-2">
+                          <button
+                            class="w-8 h-8 grid place-items-center rounded-full hover:bg-slate-100"
+                          >
+                            👁
+                          </button>
+                          <button
+                            class="w-8 h-8 grid place-items-center rounded-full hover:bg-emerald-50 text-emerald-600"
+                          >
+                            ✔
+                          </button>
+                          <button
+                            class="w-8 h-8 grid place-items-center rounded-full hover:bg-rose-50 text-rose-600"
+                          >
+                            🗂
+                          </button>
+                        </div>
+                      </td>
+                    </tr>
+                    <tr class="hover:bg-slate-50/60">
+                      <td
+                        class="px-4 py-3 font-mono text-[12px] text-slate-600"
+                      >
+                        CASE-KTXH
+                      </td>
+                      <td class="px-4 py-3">Kinh tế - Xã hội</td>
+                      <td class="px-4 py-3">
+                        Hồ sơ theo dõi các chương trình phát triển kinh tế - xã
+                        hội
+                      </td>
+                      <td class="px-4 py-3">Phòng Kinh tế</td>
+                      <td class="px-4 py-3">
+                        <div class="flex items-center gap-2">
+                          <button
+                            class="w-8 h-8 grid place-items-center rounded-full hover:bg-slate-100"
+                          >
+                            👁
+                          </button>
+                          <button
+                            class="w-8 h-8 grid place-items-center rounded-full hover:bg-emerald-50 text-emerald-600"
+                          >
+                            ✔
+                          </button>
+                          <button
+                            class="w-8 h-8 grid place-items-center rounded-full hover:bg-rose-50 text-rose-600"
+                          >
+                            🗂
+                          </button>
+                        </div>
+                      </td>
+                    </tr>
+                    <tr class="hover:bg-slate-50/60">
+                      <td
+                        class="px-4 py-3 font-mono text-[12px] text-slate-600"
+                      >
+                        CASE-GIAIQUYET
+                      </td>
+                      <td class="px-4 py-3">Giải quyết khiếu nại</td>
+                      <td class="px-4 py-3">
+                        Theo dõi tiến trình xử lý đơn thư, kiến nghị
+                      </td>
+                      <td class="px-4 py-3">Thanh tra - Tư pháp</td>
+                      <td class="px-4 py-3">
+                        <div class="flex items-center gap-2">
+                          <button
+                            class="w-8 h-8 grid place-items-center rounded-full hover:bg-slate-100"
+                          >
+                            👁
+                          </button>
+                          <button
+                            class="w-8 h-8 grid place-items-center rounded-full hover:bg-emerald-50 text-emerald-600"
+                          >
+                            ✔
+                          </button>
+                          <button
+                            class="w-8 h-8 grid place-items-center rounded-full hover:bg-rose-50 text-rose-600"
+                          >
+                            🗂
+                          </button>
+                        </div>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </section>
+
+            <!-- ========== TAB: TRẠNG THÁI HỒ SƠ ========== -->
+            <section
+              id="tab-caseStatuses"
+              class="mt-4 bg-white border border-slate-200 rounded-xl hidden"
+            >
+              <header
+                class="px-4 py-3 border-b border-slate-100 flex items-center justify-between"
+              >
+                <h3 class="text-[15px] font-semibold">Trạng thái hồ sơ</h3>
+                <button
+                  class="h-9 rounded-lg bg-blue-600 text-white text-[13px] px-3 hover:bg-blue-600/90"
+                >
+                  + Thêm trạng thái
+                </button>
+              </header>
+              <div class="overflow-x-auto">
+                <table class="min-w-full text-[13px]">
+                  <thead class="bg-slate-50 text-slate-600">
+                    <tr>
+                      <th class="px-4 py-3 text-left font-semibold">
+                        Trạng thái
+                      </th>
+                      <th class="px-4 py-3 text-left font-semibold">Mô tả</th>
+                      <th class="px-4 py-3 text-left font-semibold">
+                        Màu hiển thị
+                      </th>
+                      <th class="px-4 py-3 text-left font-semibold">
+                        Thao tác
+                      </th>
+                    </tr>
+                  </thead>
+                  <tbody class="divide-y divide-slate-100">
+                    <tr class="hover:bg-slate-50/60">
+                      <td class="px-4 py-3">Đang thực hiện</td>
+                      <td class="px-4 py-3">
+                        Hồ sơ đang được xử lý bởi chủ trì
+                      </td>
+                      <td class="px-4 py-3">
+                        <span
+                          class="inline-block w-2 h-2 rounded-full bg-blue-600 align-middle mr-1.5"
+                        ></span
+                        >Xanh dương
+                      </td>
+                      <td class="px-4 py-3">
+                        <div class="flex items-center gap-2">
+                          <button
+                            class="w-8 h-8 grid place-items-center rounded-full hover:bg-slate-100"
+                          >
+                            👁
+                          </button>
+                          <button
+                            class="w-8 h-8 grid place-items-center rounded-full hover:bg-emerald-50 text-emerald-600"
+                          >
+                            ✔
+                          </button>
+                          <button
+                            class="w-8 h-8 grid place-items-center rounded-full hover:bg-rose-50 text-rose-600"
+                          >
+                            🗂
+                          </button>
+                        </div>
+                      </td>
+                    </tr>
+                    <tr class="hover:bg-slate-50/60">
+                      <td class="px-4 py-3">Chờ phê duyệt</td>
+                      <td class="px-4 py-3">
+                        Đang chờ lãnh đạo duyệt kết quả xử lý
+                      </td>
+                      <td class="px-4 py-3">
+                        <span
+                          class="inline-block w-2 h-2 rounded-full bg-amber-500 align-middle mr-1.5"
+                        ></span
+                        >Hổ phách
+                      </td>
+                      <td class="px-4 py-3">
+                        <div class="flex items-center gap-2">
+                          <button
+                            class="w-8 h-8 grid place-items-center rounded-full hover:bg-slate-100"
+                          >
+                            👁
+                          </button>
+                          <button
+                            class="w-8 h-8 grid place-items-center rounded-full hover:bg-emerald-50 text-emerald-600"
+                          >
+                            ✔
+                          </button>
+                          <button
+                            class="w-8 h-8 grid place-items-center rounded-full hover:bg-rose-50 text-rose-600"
+                          >
+                            🗂
+                          </button>
+                        </div>
+                      </td>
+                    </tr>
+                    <tr class="hover:bg-slate-50/60">
+                      <td class="px-4 py-3">Hoàn thành</td>
+                      <td class="px-4 py-3">Đã hoàn tất và lưu trữ hồ sơ</td>
+                      <td class="px-4 py-3">
+                        <span
+                          class="inline-block w-2 h-2 rounded-full bg-emerald-500 align-middle mr-1.5"
+                        ></span
+                        >Lục bảo
+                      </td>
+                      <td class="px-4 py-3">
+                        <div class="flex items-center gap-2">
+                          <button
+                            class="w-8 h-8 grid place-items-center rounded-full hover:bg-slate-100"
+                          >
+                            👁
+                          </button>
+                          <button
+                            class="w-8 h-8 grid place-items-center rounded-full hover:bg-emerald-50 text-emerald-600"
+                          >
+                            ✔
+                          </button>
+                          <button
+                            class="w-8 h-8 grid place-items-center rounded-full hover:bg-rose-50 text-rose-600"
+                          >
+                            🗂
+                          </button>
+                        </div>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </section>
+
+            <!-- ========== TAB: LOẠI TỆP ĐÍNH KÈM ========== -->
+            <section
+              id="tab-attachments"
+              class="mt-4 bg-white border border-slate-200 rounded-xl hidden"
+            >
+              <header
+                class="px-4 py-3 border-b border-slate-100 flex items-center justify-between"
+              >
+                <h3 class="text-[15px] font-semibold">Loại tệp đính kèm</h3>
+                <button
+                  class="h-9 rounded-lg bg-blue-600 text-white text-[13px] px-3 hover:bg-blue-600/90"
+                >
+                  + Thêm loại tệp
+                </button>
+              </header>
+              <div class="overflow-x-auto">
+                <table class="min-w-full text-[13px]">
+                  <thead class="bg-slate-50 text-slate-600">
+                    <tr>
+                      <th class="px-4 py-3 text-left font-semibold">
+                        Mã loại tệp
+                      </th>
+                      <th class="px-4 py-3 text-left font-semibold">
+                        Tên loại tệp
+                      </th>
+                      <th class="px-4 py-3 text-left font-semibold">Mô tả</th>
+                      <th class="px-4 py-3 text-left font-semibold">
+                        Định dạng gợi ý
+                      </th>
+                      <th class="px-4 py-3 text-left font-semibold">
+                        Thao tác
+                      </th>
+                    </tr>
+                  </thead>
+                  <tbody class="divide-y divide-slate-100">
+                    <tr class="hover:bg-slate-50/60">
+                      <td
+                        class="px-4 py-3 font-mono text-[12px] text-slate-600"
+                      >
+                        ATT-BANHANH
+                      </td>
+                      <td class="px-4 py-3">Tệp văn bản ban hành</td>
+                      <td class="px-4 py-3">Bản PDF chính thức đã ký duyệt</td>
+                      <td class="px-4 py-3">PDF (ký số)</td>
+                      <td class="px-4 py-3">
+                        <div class="flex items-center gap-2">
+                          <button
+                            class="w-8 h-8 grid place-items-center rounded-full hover:bg-slate-100"
+                          >
+                            👁
+                          </button>
+                          <button
+                            class="w-8 h-8 grid place-items-center rounded-full hover:bg-emerald-50 text-emerald-600"
+                          >
+                            ✔
+                          </button>
+                          <button
+                            class="w-8 h-8 grid place-items-center rounded-full hover:bg-rose-50 text-rose-600"
+                          >
+                            🗂
+                          </button>
+                        </div>
+                      </td>
+                    </tr>
+                    <tr class="hover:bg-slate-50/60">
+                      <td
+                        class="px-4 py-3 font-mono text-[12px] text-slate-600"
+                      >
+                        ATT-KEMTHEO
+                      </td>
+                      <td class="px-4 py-3">Tệp kèm theo</td>
+                      <td class="px-4 py-3">Tài liệu tham khảo, phụ lục</td>
+                      <td class="px-4 py-3">PDF, DOCX, XLSX</td>
+                      <td class="px-4 py-3">
+                        <div class="flex items-center gap-2">
+                          <button
+                            class="w-8 h-8 grid place-items-center rounded-full hover:bg-slate-100"
+                          >
+                            👁
+                          </button>
+                          <button
+                            class="w-8 h-8 grid place-items-center rounded-full hover:bg-emerald-50 text-emerald-600"
+                          >
+                            ✔
+                          </button>
+                          <button
+                            class="w-8 h-8 grid place-items-center rounded-full hover:bg-rose-50 text-rose-600"
+                          >
+                            🗂
+                          </button>
+                        </div>
+                      </td>
+                    </tr>
+                    <tr class="hover:bg-slate-50/60">
+                      <td
+                        class="px-4 py-3 font-mono text-[12px] text-slate-600"
+                      >
+                        ATT-SCAN
+                      </td>
+                      <td class="px-4 py-3">Bản scan</td>
+                      <td class="px-4 py-3">Hình ảnh quét tài liệu giấy</td>
+                      <td class="px-4 py-3">JPG, PNG</td>
+                      <td class="px-4 py-3">
+                        <div class="flex items-center gap-2">
+                          <button
+                            class="w-8 h-8 grid place-items-center rounded-full hover:bg-slate-100"
+                          >
+                            👁
+                          </button>
+                          <button
+                            class="w-8 h-8 grid place-items-center rounded-full hover:bg-emerald-50 text-emerald-600"
+                          >
+                            ✔
+                          </button>
+                          <button
+                            class="w-8 h-8 grid place-items-center rounded-full hover:bg-rose-50 text-rose-600"
+                          >
+                            🗂
+                          </button>
+                        </div>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </section>
+
+            <!-- ========== TAB: PHÒNG BAN ========== -->
+            <section
+              id="tab-departments"
+              class="mt-4 bg-white border border-slate-200 rounded-xl hidden"
+            >
+              <header
+                class="px-4 py-3 border-b border-slate-100 flex items-center justify-between"
+              >
+                <h3 class="text-[15px] font-semibold">Danh mục phòng ban</h3>
+                <button
+                  id="btn-add-dept"
+                  class="h-9 rounded-lg bg-blue-600 text-white text-[13px] px-3 hover:bg-blue-600/90"
+                >
+                  + Thêm mới
+                </button>
+              </header>
+              <div class="overflow-x-auto">
+                <table class="min-w-full text-[13px]">
+                  <thead class="bg-slate-50 text-slate-600">
+                    <tr>
+                      <th class="px-4 py-3 text-left font-semibold">
+                        Mã phòng ban
+                      </th>
+                      <th class="px-4 py-3 text-left font-semibold">
+                        Tên phòng ban
+                      </th>
+                      <th class="px-4 py-3 text-left font-semibold">
+                        Trưởng phòng
+                      </th>
+                      <th class="px-4 py-3 text-left font-semibold">Liên hệ</th>
+                      <th class="px-4 py-3 text-left font-semibold">
+                        Ngày tạo
+                      </th>
+                      <th class="px-4 py-3 text-left font-semibold">
+                        Thao tác
+                      </th>
+                    </tr>
+                  </thead>
+                  <tbody id="tb-departments" class="divide-y divide-slate-100">
+                    <tr class="hover:bg-slate-50/60">
+                      <td
+                        class="px-4 py-3 font-mono text-[12px] text-slate-600"
+                      >
+                        PB-HC
+                      </td>
+                      <td class="px-4 py-3">Phòng Hành chính</td>
+                      <td class="px-4 py-3">Nguyễn Văn An</td>
+                      <td class="px-4 py-3 text-[12.5px]">
+                        <div>Thư điện tử: hanhchinh@thanhkhe.gov.vn</div>
+                        <div>Điện thoại: 0236 123 456</div>
+                      </td>
+                      <td class="px-4 py-3 text-slate-500">01/05/2023</td>
+                      <td class="px-4 py-3">
+                        <div class="flex items-center gap-2">
+                          <button
+                            class="w-8 h-8 grid place-items-center rounded-full hover:bg-slate-100"
+                          >
+                            👁
+                          </button>
+                          <button
+                            class="w-8 h-8 grid place-items-center rounded-full hover:bg-emerald-50 text-emerald-600"
+                          >
+                            ✔
+                          </button>
+                          <button
+                            class="w-8 h-8 grid place-items-center rounded-full hover:bg-rose-50 text-rose-600"
+                          >
+                            🗂
+                          </button>
+                        </div>
+                      </td>
+                    </tr>
+                    <tr class="hover:bg-slate-50/60">
+                      <td
+                        class="px-4 py-3 font-mono text-[12px] text-slate-600"
+                      >
+                        PB-VP
+                      </td>
+                      <td class="px-4 py-3">Văn phòng UBND</td>
+                      <td class="px-4 py-3">Lê Văn Cường</td>
+                      <td class="px-4 py-3 text-[12.5px]">
+                        <div>Thư điện tử: vanthu@thanhkhe.gov.vn</div>
+                        <div>Điện thoại: 0236 456 789</div>
+                      </td>
+                      <td class="px-4 py-3 text-slate-500">12/03/2022</td>
+                      <td class="px-4 py-3">
+                        <div class="flex items-center gap-2">
+                          <button
+                            class="w-8 h-8 grid place-items-center rounded-full hover:bg-slate-100"
+                          >
+                            👁
+                          </button>
+                          <button
+                            class="w-8 h-8 grid place-items-center rounded-full hover:bg-emerald-50 text-emerald-600"
+                          >
+                            ✔
+                          </button>
+                          <button
+                            class="w-8 h-8 grid place-items-center rounded-full hover:bg-rose-50 text-rose-600"
+                          >
+                            🗂
+                          </button>
+                        </div>
+                      </td>
+                    </tr>
+                    <tr class="hover:bg-slate-50/60">
+                      <td
+                        class="px-4 py-3 font-mono text-[12px] text-slate-600"
+                      >
+                        PB-CT
+                      </td>
+                      <td class="px-4 py-3">Văn phòng Chủ tịch</td>
+                      <td class="px-4 py-3">Trần Thị Bình</td>
+                      <td class="px-4 py-3 text-[12.5px]">
+                        <div>Thư điện tử: lanhdao@thanhkhe.gov.vn</div>
+                        <div>Điện thoại: 0236 789 012</div>
+                      </td>
+                      <td class="px-4 py-3 text-slate-500">20/07/2021</td>
+                      <td class="px-4 py-3">
+                        <div class="flex items-center gap-2">
+                          <button
+                            class="w-8 h-8 grid place-items-center rounded-full hover:bg-slate-100"
+                          >
+                            👁
+                          </button>
+                          <button
+                            class="w-8 h-8 grid place-items-center rounded-full hover:bg-emerald-50 text-emerald-600"
+                          >
+                            ✔
+                          </button>
+                          <button
+                            class="w-8 h-8 grid place-items-center rounded-full hover:bg-rose-50 text-rose-600"
+                          >
+                            🗂
+                          </button>
+                        </div>
+                      </td>
+                    </tr>
+                    <tr class="hover:bg-slate-50/60">
+                      <td
+                        class="px-4 py-3 font-mono text-[12px] text-slate-600"
+                      >
+                        PB-IT
+                      </td>
+                      <td class="px-4 py-3">Phòng Tin học</td>
+                      <td class="px-4 py-3">Phạm Thị Dung</td>
+                      <td class="px-4 py-3 text-[12.5px]">
+                        <div>Thư điện tử: it@thanhkhe.gov.vn</div>
+                        <div>Điện thoại: 0236 234 567</div>
+                      </td>
+                      <td class="px-4 py-3 text-slate-500">15/11/2020</td>
+                      <td class="px-4 py-3">
+                        <div class="flex items-center gap-2">
+                          <button
+                            class="w-8 h-8 grid place-items-center rounded-full hover:bg-slate-100"
+                          >
+                            👁
+                          </button>
+                          <button
+                            class="w-8 h-8 grid place-items-center rounded-full hover:bg-emerald-50 text-emerald-600"
+                          >
+                            ✔
+                          </button>
+                          <button
+                            class="w-8 h-8 grid place-items-center rounded-full hover:bg-rose-50 text-rose-600"
+                          >
+                            🗂
+                          </button>
+                        </div>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </section>
+
+            <!-- ========== TAB: CƠ QUAN ========== -->
+            <section
+              id="tab-agencies"
+              class="mt-4 bg-white border border-slate-200 rounded-xl hidden"
+            >
+              <header
+                class="px-4 py-3 border-b border-slate-100 flex items-center justify-between"
+              >
+                <h3 class="text-[15px] font-semibold">Danh mục cơ quan</h3>
+                <button
+                  id="btn-add-agency"
+                  class="h-9 rounded-lg bg-blue-600 text-white text-[13px] px-3 hover:bg-blue-600/90"
+                >
+                  + Thêm mới
+                </button>
+              </header>
+              <div class="overflow-x-auto">
+                <table class="min-w-full text-[13px]">
+                  <thead class="bg-slate-50 text-slate-600">
+                    <tr>
+                      <th class="px-4 py-3 text-left font-semibold">
+                        Tên cơ quan
+                      </th>
+                      <th class="px-4 py-3 text-left font-semibold">Mô tả</th>
+                      <th class="px-4 py-3 text-left font-semibold">
+                        Phân loại
+                      </th>
+                      <th class="px-4 py-3 text-left font-semibold">
+                        Trạng thái
+                      </th>
+                      <th class="px-4 py-3 text-left font-semibold">
+                        Thao tác
+                      </th>
+                    </tr>
+                  </thead>
+                  <tbody id="tb-agencies" class="divide-y divide-slate-100">
+                    <tr class="hover:bg-slate-50/60">
+                      <td class="px-4 py-3">UBND Quận Thanh Khê</td>
+                      <td class="px-4 py-3">Cơ quan cấp trên</td>
+                      <td class="px-4 py-3">
+                        <span
+                          class="inline-flex items-center rounded-full bg-slate-100 text-slate-700 px-2.5 py-0.5 text-[12px] font-semibold"
+                          >Cấp trên</span
+                        >
+                      </td>
+                      <td class="px-4 py-3">
+                        <span class="badge badge--dark">Hoạt động</span>
+                      </td>
+                      <td class="px-4 py-3">
+                        <div class="flex items-center gap-2">
+                          <button
+                            class="w-8 h-8 grid place-items-center rounded-full hover:bg-slate-100"
+                            title="Xem"
+                          >
+                            👁
+                          </button>
+                          <button
+                            class="w-8 h-8 grid place-items-center rounded-full hover:bg-emerald-50 text-emerald-600"
+                            title="Sửa"
+                          >
+                            ✔
+                          </button>
+                          <button
+                            class="w-8 h-8 grid place-items-center rounded-full hover:bg-rose-50 text-rose-600"
+                            title="Xóa"
+                          >
+                            🗂
+                          </button>
+                        </div>
+                      </td>
+                    </tr>
+                    <tr class="hover:bg-slate-50/60">
+                      <td class="px-4 py-3">Sở Thông tin và Truyền thông</td>
+                      <td class="px-4 py-3">Sở chuyên ngành</td>
+                      <td class="px-4 py-3">
+                        <span
+                          class="inline-flex items-center rounded-full bg-slate-100 text-slate-700 px-2.5 py-0.5 text-[12px] font-semibold"
+                          >Cùng cấp</span
+                        >
+                      </td>
+                      <td class="px-4 py-3">
+                        <span class="badge badge--dark">Hoạt động</span>
+                      </td>
+                      <td class="px-4 py-3">
+                        <div class="flex items-center gap-2">
+                          <button
+                            class="w-8 h-8 grid place-items-center rounded-full hover:bg-slate-100"
+                            title="Xem"
+                          >
+                            👁
+                          </button>
+                          <button
+                            class="w-8 h-8 grid place-items-center rounded-full hover:bg-emerald-50 text-emerald-600"
+                            title="Sửa"
+                          >
+                            ✔
+                          </button>
+                          <button
+                            class="w-8 h-8 grid place-items-center rounded-full hover:bg-rose-50 text-rose-600"
+                            title="Xóa"
+                          >
+                            🗂
+                          </button>
+                        </div>
+                      </td>
+                    </tr>
+                    <tr class="hover:bg-slate-50/60">
+                      <td class="px-4 py-3">Công an Phường</td>
+                      <td class="px-4 py-3">Cơ quan an ninh</td>
+                      <td class="px-4 py-3">
+                        <span
+                          class="inline-flex items-center rounded-full bg-slate-100 text-slate-700 px-2.5 py-0.5 text-[12px] font-semibold"
+                          >Cùng cấp</span
+                        >
+                      </td>
+                      <td class="px-4 py-3">
+                        <span class="badge badge--dark">Hoạt động</span>
+                      </td>
+                      <td class="px-4 py-3">
+                        <div class="flex items-center gap-2">
+                          <button
+                            class="w-8 h-8 grid place-items-center rounded-full hover:bg-slate-100"
+                            title="Xem"
+                          >
+                            👁
+                          </button>
+                          <button
+                            class="w-8 h-8 grid place-items-center rounded-full hover:bg-emerald-50 text-emerald-600"
+                            title="Sửa"
+                          >
+                            ✔
+                          </button>
+                          <button
+                            class="w-8 h-8 grid place-items-center rounded-full hover:bg-rose-50 text-rose-600"
+                            title="Xóa"
+                          >
+                            🗂
+                          </button>
+                        </div>
+                      </td>
+                    </tr>
+                    <tr class="hover:bg-slate-50/60">
+                      <td class="px-4 py-3">Trường Tiểu học Thanh Khê</td>
+                      <td class="px-4 py-3">Đơn vị trực thuộc</td>
+                      <td class="px-4 py-3">
+                        <span
+                          class="inline-flex items-center rounded-full bg-slate-100 text-slate-700 px-2.5 py-0.5 text-[12px] font-semibold"
+                          >Cấp dưới</span
+                        >
+                      </td>
+                      <td class="px-4 py-3">
+                        <span class="badge badge--dark">Hoạt động</span>
+                      </td>
+                      <td class="px-4 py-3">
+                        <div class="flex items-center gap-2">
+                          <button
+                            class="w-8 h-8 grid place-items-center rounded-full hover:bg-slate-100"
+                            title="Xem"
+                          >
+                            👁
+                          </button>
+                          <button
+                            class="w-8 h-8 grid place-items-center rounded-full hover:bg-emerald-50 text-emerald-600"
+                            title="Sửa"
+                          >
+                            ✔
+                          </button>
+                          <button
+                            class="w-8 h-8 grid place-items-center rounded-full hover:bg-rose-50 text-rose-600"
+                            title="Xóa"
+                          >
+                            🗂
+                          </button>
+                        </div>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </section>
+          </div>
+        </main>
+      </div>
+    </div>
+
+    <!-- FOOTER -->
+    <div data-include="footer"></div>
+
+    <!-- App script -->
+    <script src="../assets/js/quantri.js" defer></script>
+    
+  </body>
+</html>

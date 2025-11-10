@@ -1,0 +1,532 @@
+﻿<!-- File: lanhdao/vanbanden.html -->
+<!DOCTYPE html>
+<html lang="vi">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Hệ thống Quản lý Văn bản &amp; Điều hành • Văn bản đến (Lãnh đạo)</title>
+    <!-- App theme overrides -->
+    <link rel="stylesheet" href="../assets/css/styles.css" />
+  </head>
+  <body class="bg-slate-100 text-slate-800" data-role="lanhdao" data-root="..">
+    <!-- ===========================
+        HEADER
+  ============================ -->
+    <div data-include="header"></div>
+
+    <!-- ===========================
+        SHELL
+  ============================ -->
+    <div class="pt-14">
+      <div class="flex">
+        <!-- ====== SIDEBAR ====== -->
+        <div data-include="sidebar"></div>
+
+        <!-- ====== MAIN ====== -->
+        <main class="w-full">
+          <div class="max-w-none px-6 lg:px-8 py-6 lg:py-7">
+            <!-- ====== KPI BAR ====== -->
+            <section class="grid grid-cols-2 md:grid-cols-4 gap-4">
+              <!-- Chờ duyệt -->
+              <article class="bg-white border border-slate-200 rounded-xl p-4">
+                <div class="flex items-center justify-between">
+                  <h3 class="text-[13px] font-semibold text-slate-600">
+                    Chờ duyệt
+                  </h3>
+                  <span
+                    class="w-7 h-7 grid place-items-center rounded-full bg-amber-50"
+                    aria-hidden="true"
+                  >
+                    <svg
+                      class="w-4 h-4 text-amber-600"
+                      viewBox="0 0 24 24"
+                      fill="currentColor"
+                    >
+                      <path d="M12 7v5l4 2" />
+                    </svg>
+                  </span>
+                </div>
+                <div class="text-3xl font-bold pt-1" id="kpiPending">0</div>
+              </article>
+
+              <!-- Đã duyệt -->
+              <article class="bg-white border border-slate-200 rounded-xl p-4">
+                <div class="flex items-center justify-between">
+                  <h3 class="text-[13px] font-semibold text-slate-600">
+                    Đã duyệt
+                  </h3>
+                  <span
+                    class="w-7 h-7 grid place-items-center rounded-full bg-emerald-50"
+                    aria-hidden="true"
+                  >
+                    <svg
+                      class="w-4 h-4 text-emerald-600"
+                      viewBox="0 0 24 24"
+                      fill="currentColor"
+                    >
+                      <path d="M9 12l2 2 4-4" />
+                    </svg>
+                  </span>
+                </div>
+                <div class="text-3xl font-bold pt-1" id="kpiApproved">0</div>
+              </article>
+
+              <!-- Đang xử lý -->
+              <article class="bg-white border border-slate-200 rounded-xl p-4">
+                <div class="flex items-center justify-between">
+                  <h3 class="text-[13px] font-semibold text-slate-600">
+                    Đang xử lý
+                  </h3>
+                  <span
+                    class="w-7 h-7 grid place-items-center rounded-full bg-blue-50"
+                    aria-hidden="true"
+                  >
+                    <svg
+                      class="w-4 h-4 text-blue-600"
+                      viewBox="0 0 24 24"
+                      fill="currentColor"
+                    >
+                      <path d="M12 6v6l4 2" />
+                    </svg>
+                  </span>
+                </div>
+                <div class="text-3xl font-bold pt-1" id="kpiProcessing">0</div>
+              </article>
+
+              <!-- Khẩn cấp -->
+              <article class="bg-white border border-slate-200 rounded-xl p-4">
+                <div class="flex items-center justify-between">
+                  <h3 class="text-[13px] font-semibold text-slate-600">
+                    Khẩn cấp
+                  </h3>
+                  <span
+                    class="w-7 h-7 grid place-items-center rounded-full bg-rose-50"
+                    aria-hidden="true"
+                  >
+                    <svg
+                      class="w-4 h-4 text-rose-600"
+                      viewBox="0 0 24 24"
+                      fill="currentColor"
+                    >
+                      <path d="M12 2L2 21h20L12 2zM12 16h.01M12 10v4" />
+                    </svg>
+                  </span>
+                </div>
+                <div class="text-3xl font-bold pt-1" id="kpiUrgent">0</div>
+              </article>
+            </section>
+
+            <!-- ====== SEARCH & FILTER ====== -->
+            <section class="mt-4">
+              <div class="bg-white border border-slate-200 rounded-xl p-3">
+                <div
+                  class="grid grid-cols-1 md:grid-cols-[1fr,auto,auto] gap-3 items-stretch"
+                >
+                  <!-- tìm kiếm -->
+                  <label class="relative">
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      class="pointer-events-none absolute left-3 top-2.5 h-5 w-5 text-slate-400"
+                      viewBox="0 0 20 20"
+                      fill="currentColor"
+                      aria-hidden="true"
+                    >
+                      <path
+                        fill-rule="evenodd"
+                        d="M8 4a4 4 0 102.83 6.83l3.44 3.44a1 1 0 001.41-1.41l-3.44-3.44A4 4 0 008 4z"
+                        clip-rule="evenodd"
+                      />
+                    </svg>
+                    <input
+                      id="searchTitle"
+                      type="text"
+                      placeholder="Tìm kiếm theo tiêu đề, số văn bản…"
+                      class="w-full h-10 pl-10 pr-4 rounded-lg border border-slate-200 focus:outline-none focus:ring-2 focus:ring-blue-600/20 focus:border-blue-500 text-[14px] placeholder-slate-400"
+                    />
+                  </label>
+
+                  <!-- filter trạng thái -->
+                  <div class="relative">
+                    <button
+                      id="btnStatusFilter"
+                      type="button"
+                      class="w-full md:w-44 h-10 px-3 rounded-lg border border-slate-200 text-[14px] flex items-center justify-between hover:bg-slate-50"
+                      aria-haspopup="listbox"
+                      aria-expanded="false"
+                    >
+                      <span id="statusLabel">Tất cả trạng thái</span>
+                      <svg
+                        class="w-4 h-4 text-slate-500"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        stroke-width="2"
+                        aria-hidden="true"
+                      >
+                        <path
+                          stroke-linecap="round"
+                          stroke-linejoin="round"
+                          d="M6 9l6 6 6-6"
+                        />
+                      </svg>
+                    </button>
+                    <div
+                      id="statusMenu"
+                      class="hidden absolute z-10 mt-1 w-full rounded-lg border border-slate-200 bg-white shadow-sm"
+                      role="listbox"
+                      aria-labelledby="btnStatusFilter"
+                    >
+                      <button
+                        data-status="all"
+                        class="filter-item block w-full rounded-md px-3 py-2 text-left text-[14px] text-slate-700 hover:bg-slate-100"
+                      >
+                        Tất cả trạng thái
+                      </button>
+                      <button
+                        data-status="pending"
+                        class="filter-item block w-full rounded-md px-3 py-2 text-left text-[14px] text-slate-700 hover:bg-slate-100"
+                      >
+                        Chờ duyệt
+                      </button>
+                      <button
+                        data-status="processing"
+                        class="filter-item block w-full rounded-md px-3 py-2 text-left text-[14px] text-slate-700 hover:bg-slate-100"
+                      >
+                        Đang xử lý
+                      </button>
+                      <button
+                        data-status="new"
+                        class="filter-item block w-full rounded-md px-3 py-2 text-left text-[14px] text-slate-700 hover:bg-slate-100"
+                      >
+                        Chưa xử lý
+                      </button>
+                      <button
+                        data-status="approved"
+                        class="filter-item block w-full rounded-md px-3 py-2 text-left text-[14px] text-slate-700 hover:bg-slate-100"
+                      >
+                        Đã duyệt
+                      </button>
+                    </div>
+                  </div>
+
+                  <!-- filter mức độ -->
+                  <div class="relative">
+                    <button
+                      id="btnLevelFilter"
+                      type="button"
+                      class="w-full md:w-44 h-10 px-3 rounded-lg border border-slate-200 text-[14px] flex items-center justify-between hover:bg-slate-50"
+                      aria-haspopup="listbox"
+                      aria-expanded="false"
+                    >
+                      <span id="levelLabel">Tất cả mức độ</span>
+                      <svg
+                        class="w-4 h-4 text-slate-500"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        stroke-width="2"
+                        aria-hidden="true"
+                      >
+                        <path
+                          stroke-linecap="round"
+                          stroke-linejoin="round"
+                          d="M6 9l6 6 6-6"
+                        />
+                      </svg>
+                    </button>
+                    <div
+                      id="levelMenu"
+                      class="hidden absolute z-10 mt-1 w-full rounded-lg border border-slate-200 bg-white shadow-sm"
+                      role="listbox"
+                      aria-labelledby="btnLevelFilter"
+                    >
+                      <button
+                        data-level="all"
+                        class="filter-item block w-full rounded-md px-3 py-2 text-left text-[14px] text-slate-700 hover:bg-slate-100"
+                      >
+                        Tất cả mức độ
+                      </button>
+                      <button
+                        data-level="urgent"
+                        class="filter-item block w-full rounded-md px-3 py-2 text-left text-[14px] text-slate-700 hover:bg-slate-100"
+                      >
+                        Khẩn
+                      </button>
+                      <button
+                        data-level="high"
+                        class="filter-item block w-full rounded-md px-3 py-2 text-left text-[14px] text-slate-700 hover:bg-slate-100"
+                      >
+                        Cao
+                      </button>
+                      <button
+                        data-level="normal"
+                        class="filter-item block w-full rounded-md px-3 py-2 text-left text-[14px] text-slate-700 hover:bg-slate-100"
+                      >
+                        Thường
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </section>
+
+            <!-- ====== LIST ====== -->
+            <section class="mt-5">
+              <header class="text-[15px] font-semibold mb-3">
+                Danh sách văn bản đến
+                <span class="text-slate-500 text-[13px]" id="totalDoc"
+                  >(0)</span
+                >
+              </header>
+
+              <div id="docList" class="space-y-3">
+                <!-- item 1 -->
+                <article
+                  class="bg-white border border-slate-200 rounded-xl"
+                  data-doc-item
+                  data-status="pending"
+                  data-level="urgent"
+                >
+                  <div class="px-4 py-3">
+                    <h3 class="font-semibold doc-title">
+                      Thông báo về việc tổ chức Đại hội Đảng bộ phường
+                    </h3>
+                    <div
+                      class="mt-1 flex flex-wrap items-center gap-2 text-[12.5px]"
+                    >
+                      <span
+                        class="inline-flex items-center gap-1 rounded-full bg-rose-50 px-2 py-0.5 text-[12px] font-semibold text-rose-600"
+                        >Khẩn</span
+                      >
+                      <span
+                        class="inline-flex items-center gap-1 rounded-full bg-amber-50 px-2 py-0.5 text-[12px] font-semibold text-amber-600"
+                        >Chờ duyệt</span
+                      >
+                      <span
+                        class="inline-flex items-center gap-1 rounded-full border border-slate-200 bg-white px-2 py-0.5 text-[12px] font-semibold text-slate-600"
+                      >
+                        <span class="opacity-70">Đã giao:</span> Nguyễn Văn An
+                      </span>
+                      <span class="text-slate-500"
+                        >Số văn bản: <b class="doc-number">001/TB-UBND</b></span
+                      >
+                      <span class="text-slate-500"
+                        >Ngày đến: <b>2024-01-15</b></span
+                      >
+                      <span class="text-slate-500"
+                        >Cơ quan gửi: <b>UBND Quận Thanh Khê</b></span
+                      >
+                      <span class="text-slate-500"
+                        >Hạn xử lý: <b>2024-01-20</b></span
+                      >
+                    </div>
+                    <p class="text-[12.5px] text-slate-500 mt-2 line-clamp-1">
+                      Thông báo về việc tổ chức Đại hội Đảng bộ phường nhiệm kỳ
+                      2025-2030. Yêu cầu chuẩn bị tài liệu và danh sách đại biểu
+                      tham dự…
+                    </p>
+                  </div>
+                  <div class="px-4 pb-3 flex items-center justify-end gap-2">
+                    <a
+                      href="vanbanden-detail.html"
+                      class="inline-flex items-center gap-2 h-9 px-3 rounded-md border border-slate-200 text-sm font-medium text-slate-700 transition-colors hover:bg-slate-50 focus:outline-none focus:ring-2 focus:ring-blue-500/20"
+                      >Chi tiết</a
+                    >
+                    <button
+                      type="button"
+                      class="inline-flex items-center gap-2 h-9 px-3 rounded-md bg-emerald-600 text-white text-sm font-medium transition-colors hover:bg-emerald-700 focus:outline-none focus:ring-2 focus:ring-emerald-500/20"
+                      title="Duyệt văn bản"
+                    >
+                      <span class="text-base leading-none">✔</span>Duyệt
+                    </button>
+                    <button
+                      type="button"
+                      class="inline-flex items-center gap-2 h-9 px-3 rounded-md bg-slate-100 text-sm font-medium text-slate-700 transition-colors hover:bg-slate-200 focus:outline-none focus:ring-2 focus:ring-blue-500/20"
+                      title="Giao việc"
+                    >
+                      Giao việc
+                    </button>
+                  </div>
+                </article>
+
+                <!-- item 2 -->
+                <article
+                  class="bg-white border border-slate-200 rounded-xl"
+                  data-doc-item
+                  data-status="processing"
+                  data-level="normal"
+                >
+                  <div class="px-4 py-3">
+                    <h3 class="font-semibold doc-title">
+                      Thông báo thực hiện chương trình xây dựng nông thôn mới
+                    </h3>
+                    <div
+                      class="mt-1 flex flex-wrap items-center gap-2 text-[12.5px]"
+                    >
+                      <span
+                        class="inline-flex items-center gap-1 rounded-full bg-slate-100 px-2 py-0.5 text-[12px] font-semibold text-slate-600"
+                        >Thường</span
+                      >
+                      <span
+                        class="inline-flex items-center gap-1 rounded-full bg-blue-50 px-2 py-0.5 text-[12px] font-semibold text-blue-600"
+                        >Đang xử lý</span
+                      >
+                      <span
+                        class="inline-flex items-center gap-1 rounded-full border border-slate-200 bg-white px-2 py-0.5 text-[12px] font-semibold text-slate-600"
+                      >
+                        <span class="opacity-70">Đã giao:</span> Nguyễn Văn An
+                      </span>
+                      <span class="text-slate-500"
+                        >Số văn bản: <b class="doc-number">007/TB-UBND</b></span
+                      >
+                      <span class="text-slate-500"
+                        >Ngày đến: <b>2024-01-28</b></span
+                      >
+                      <span class="text-slate-500"
+                        >Cơ quan gửi: <b>UBND Quận Thanh Khê</b></span
+                      >
+                      <span class="text-slate-500"
+                        >Hạn xử lý: <b>2024-02-10</b></span
+                      >
+                    </div>
+                    <p class="text-[12.5px] text-slate-500 mt-2 line-clamp-1">
+                      Thông báo triển khai các nhiệm vụ xây dựng nông thôn mới
+                      trên địa bàn…
+                    </p>
+                  </div>
+                  <div class="px-4 pb-3 flex items-center justify-end gap-2">
+                    <a
+                      href="vanbanden-detail.html"
+                      class="inline-flex items-center gap-2 h-9 px-3 rounded-md border border-slate-200 text-sm font-medium text-slate-700 transition-colors hover:bg-slate-50 focus:outline-none focus:ring-2 focus:ring-blue-500/20"
+                      >Chi tiết</a
+                    >
+                  </div>
+                </article>
+
+                <!-- item 3 -->
+                <article
+                  class="bg-white border border-slate-200 rounded-xl"
+                  data-doc-item
+                  data-status="new"
+                  data-level="urgent"
+                >
+                  <div class="px-4 py-3">
+                    <h3 class="font-semibold doc-title">
+                      Thông báo kiểm tra an toàn thực phẩm
+                    </h3>
+                    <div
+                      class="mt-1 flex flex-wrap items-center gap-2 text-[12.5px]"
+                    >
+                      <span
+                        class="inline-flex items-center gap-1 rounded-full bg-rose-50 px-2 py-0.5 text-[12px] font-semibold text-rose-600"
+                        >Khẩn</span
+                      >
+                      <span
+                        class="inline-flex items-center gap-1 rounded-full bg-slate-100 px-2 py-0.5 text-[12px] font-semibold text-slate-700"
+                        >Chưa xử lý</span
+                      >
+                      <span
+                        class="inline-flex items-center gap-1 rounded-full border border-slate-200 bg-white px-2 py-0.5 text-[12px] font-semibold text-slate-600"
+                      >
+                        <span class="opacity-70">Đã giao:</span> Nguyễn Văn An
+                      </span>
+                      <span class="text-slate-500"
+                        >Số văn bản: <b class="doc-number">008/TB-UBND</b></span
+                      >
+                      <span class="text-slate-500"
+                        >Ngày đến: <b>2024-01-30</b></span
+                      >
+                      <span class="text-slate-500"
+                        >Cơ quan gửi: <b>Sở Y tế Đà Nẵng</b></span
+                      >
+                      <span class="text-slate-500"
+                        >Hạn xử lý: <b>2024-02-05</b></span
+                      >
+                    </div>
+                    <p class="text-[12.5px] text-slate-500 mt-2 line-clamp-1">
+                      Kế hoạch kiểm tra an toàn thực phẩm tại các cơ sở kinh
+                      doanh…
+                    </p>
+                  </div>
+                  <div class="px-4 pb-3 flex items-center justify-end gap-2">
+                    <a
+                      href="vanbanden-detail.html"
+                      class="inline-flex items-center gap-2 h-9 px-3 rounded-md border border-slate-200 text-sm font-medium text-slate-700 transition-colors hover:bg-slate-50 focus:outline-none focus:ring-2 focus:ring-blue-500/20"
+                      >Chi tiết</a
+                    >
+                  </div>
+                </article>
+
+                <!-- (mẫu) item 4 -->
+                <article
+                  class="bg-white border border-slate-200 rounded-xl"
+                  data-doc-item
+                  data-status="approved"
+                  data-level="high"
+                >
+                  <div class="px-4 py-3">
+                    <h3 class="font-semibold doc-title">
+                      Báo cáo kết quả chương trình an sinh xã hội
+                    </h3>
+                    <div
+                      class="mt-1 flex flex-wrap items-center gap-2 text-[12.5px]"
+                    >
+                      <span
+                        class="inline-flex items-center gap-1 rounded-full bg-amber-50 px-2 py-0.5 text-[12px] font-semibold text-amber-700"
+                        >Đã duyệt</span
+                      >
+                      <span
+                        class="inline-flex items-center gap-1 rounded-full border border-slate-200 bg-white px-2 py-0.5 text-[12px] font-semibold text-slate-600"
+                      >
+                        <span class="opacity-70">Đã giao:</span> Trần Thị Hạnh
+                      </span>
+                      <span class="text-slate-500"
+                        >Số văn bản: <b class="doc-number">015/BC-UBND</b></span
+                      >
+                      <span class="text-slate-500"
+                        >Ngày đến: <b>2024-02-02</b></span
+                      >
+                      <span class="text-slate-500"
+                        >Cơ quan gửi: <b>UBND TP Đà Nẵng</b></span
+                      >
+                      <span class="text-slate-500"
+                        >Hạn xử lý: <b>2024-02-12</b></span
+                      >
+                    </div>
+                    <p class="text-[12.5px] text-slate-500 mt-2 line-clamp-1">
+                      Báo cáo tổng hợp kết quả thực hiện các chương trình an
+                      sinh xã hội quý I…
+                    </p>
+                  </div>
+                  <div class="px-4 pb-3 flex items-center justify-end gap-2">
+                    <a
+                      href="vanbanden-detail.html"
+                      class="inline-flex items-center gap-2 h-9 px-3 rounded-md border border-slate-200 text-sm font-medium text-slate-700 transition-colors hover:bg-slate-50 focus:outline-none focus:ring-2 focus:ring-blue-500/20"
+                      >Chi tiết</a
+                    >
+                  </div>
+                </article>
+              </div>
+            </section>
+          </div>
+        </main>
+      </div>
+    </div>
+
+    <!-- ===========================
+        FOOTER
+  ============================ -->
+    <div data-include="footer"></div>
+
+    <!-- ===========================
+        SCRIPTS
+  ============================ -->
+    <script src="../assets/js/api.js"></script>
+    <script src="../assets/js/doc-helpers.js"></script>
+    <script src="../assets/js/layout.js"></script>
+    <script src="../assets/js/lanhdao.js"></script>
+
+    <!-- Helper script (có thể bỏ khi đã xử lý trong lanhdao.js) -->
+    
+  </body>
+</html>

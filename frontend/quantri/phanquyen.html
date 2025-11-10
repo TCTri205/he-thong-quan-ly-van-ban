@@ -1,0 +1,1492 @@
+﻿<!-- File: quantri/phanquyen.html -->
+<!DOCTYPE html>
+<html lang="vi">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Hệ thống Quản lý Văn bản &amp; Điều hành • Phân quyền</title>
+    <!-- App theme overrides -->
+    <link rel="stylesheet" href="../assets/css/styles.css" />
+    <style>
+      /* Segment tabs */
+      .tab-btn {
+        flex: 1 1 0%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        height: 2.5rem;
+        border-radius: 0.75rem;
+        font-weight: 500;
+        color: #1f2937;
+        background: transparent;
+        cursor: pointer;
+        transition: 0.2s;
+      }
+      .tab-btn:hover {
+        background: #f8fafc;
+      }
+      .tab-btn.is-active {
+        background: #2563eb;
+        color: #fff;
+      }
+      /* Chips & badges (đồng nhất) */
+      .chip {
+        display: inline-flex;
+        align-items: center;
+        border-radius: 9999px;
+        background: #f1f5f9;
+        color: #334155;
+        padding: 0.125rem 0.625rem;
+        font-weight: 600;
+        font-size: 12px;
+        line-height: 1.2;
+        gap: 0.25rem;
+      }
+      .chip--green {
+        background: #d1fae5;
+        color: #047857;
+      }
+      .chip--purple {
+        background: #ede9fe;
+        color: #6d28d9;
+      }
+      .chip--red {
+        background: #ffe4e6;
+        color: #be123c;
+      }
+      .badge {
+        display: inline-flex;
+        align-items: center;
+        border-radius: 9999px;
+        background: #f1f5f9;
+        color: #334155;
+        padding: 0.125rem 0.5rem;
+        font-size: 12px;
+        line-height: 1.2;
+        gap: 0.25rem;
+      }
+      .badge--green {
+        background: #ecfdf5;
+        color: #047857;
+      }
+      .badge--dark {
+        background: #0f172a;
+        color: #fff;
+      }
+      /* Sidebar utilities (khớp trang người dùng) */
+    </style>
+  </head>
+  <body class="bg-slate-100 text-slate-800" data-role="quantri" data-root="..">
+    <!-- ===========================
+      HEADER (đồng nhất hệ thống)
+  ============================ -->
+    <div data-include="header"></div>
+
+    <!-- ===========================
+      LAYOUT
+  ============================ -->
+    <div class="pt-14">
+      <div class="flex">
+        <!-- ===== Sidebar ===== -->
+        <div data-include="sidebar"></div>
+
+        <!-- ===== Main ===== -->
+        <main class="w-full">
+          <div class="max-w-none px-6 lg:px-8 py-6 lg:py-7">
+            <!-- TOP KPIs -->
+            <section
+              class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4"
+            >
+              <div
+                class="bg-white border border-slate-200 rounded-xl p-4 flex items-center justify-between"
+              >
+                <div>
+                  <div class="text-[13px] text-slate-600 font-semibold">
+                    Tổng vai trò
+                  </div>
+                  <div class="mt-2 text-3xl font-bold">4</div>
+                </div>
+                <div
+                  class="w-10 h-10 rounded-lg bg-blue-50 grid place-items-center"
+                >
+                  <svg
+                    class="w-6 h-6 text-blue-600"
+                    xmlns="http://www.w3.org/2000/svg"
+                    viewBox="0 0 24 24"
+                    fill="currentColor"
+                  >
+                    <path
+                      d="M12 1 3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5Zm0 20.35C8.05 20.24 5 16.06 5 11V6.3L12 3.19ZM12 6a5 5 0 0 0-5 5h2a3 3 0 1 1 3 3 1 1 0 0 0-1 1v2h2v-1.17A5 5 0 0 0 12 6"
+                    />
+                  </svg>
+                </div>
+              </div>
+              <div
+                class="bg-white border border-slate-200 rounded-xl p-4 flex items-center justify-between"
+              >
+                <div>
+                  <div class="text-[13px] text-slate-600 font-semibold">
+                    Tổng người dùng
+                  </div>
+                  <div class="mt-2 text-3xl font-bold">6</div>
+                </div>
+                <div
+                  class="w-10 h-10 rounded-lg bg-emerald-50 grid place-items-center"
+                >
+                  <svg
+                    class="w-6 h-6 text-emerald-600"
+                    xmlns="http://www.w3.org/2000/svg"
+                    viewBox="0 0 24 24"
+                    fill="currentColor"
+                  >
+                    <path
+                      d="M16 11a3 3 0 1 0-3-3 3 3 0 0 0 3 3ZM8 11a3 3 0 1 0-3-3 3 3 0 0 0 3 3Zm0 2c-2.33 0-7 1.17-7 3.5V19h14v-2.5C15 14.17 10.33 13 8 13Zm8 0c-2.33 0-7 1.17-7 3.5V19h14v-2.5c0-2.33-4.67-3.5-7-3.5"
+                    />
+                  </svg>
+                </div>
+              </div>
+              <div
+                class="bg-white border border-slate-200 rounded-xl p-4 flex items-center justify-between"
+              >
+                <div>
+                  <div class="text-[13px] text-slate-600 font-semibold">
+                    Nhóm quyền
+                  </div>
+                  <div class="mt-2 text-3xl font-bold">3</div>
+                </div>
+                <div
+                  class="w-10 h-10 rounded-lg bg-violet-50 grid place-items-center"
+                >
+                  <svg
+                    class="w-6 h-6 text-violet-600"
+                    xmlns="http://www.w3.org/2000/svg"
+                    viewBox="0 0 24 24"
+                    fill="currentColor"
+                  >
+                    <path
+                      d="M12 2a7 7 0 0 0-7 7v4H3l2.3 3.3a5 5 0 0 0 4.1 2.1H14a5 5 0 0 0 4.1-2.1L20 13h-2V9a7 7 0 0 0-6-7"
+                    />
+                  </svg>
+                </div>
+              </div>
+              <div
+                class="bg-white border border-slate-200 rounded-xl p-4 flex items-center justify-between"
+              >
+                <div>
+                  <div class="text-[13px] text-slate-600 font-semibold">
+                    Module hệ thống
+                  </div>
+                  <div class="mt-2 text-3xl font-bold text-amber-600">10</div>
+                </div>
+                <div
+                  class="w-10 h-10 rounded-lg bg-amber-50 grid place-items-center"
+                >
+                  <svg
+                    class="w-6 h-6 text-amber-600"
+                    xmlns="http://www.w3.org/2000/svg"
+                    viewBox="0 0 24 24"
+                    fill="currentColor"
+                  >
+                    <path
+                      d="M12 2 2 7v15h20V7Zm-5 18H4V9h3Zm6 0h-2v-6h2Zm7 0h-3V9h3Z"
+                    />
+                  </svg>
+                </div>
+              </div>
+            </section>
+
+            <!-- SEGMENTED TABS -->
+            <section class="mt-4">
+              <div
+                class="bg-white border border-slate-200 rounded-xl p-1 flex items-center text-[13px]"
+              >
+                <button class="tab-btn is-active" data-tab="matrix">
+                  Ma trận phân quyền
+                </button>
+                <button class="tab-btn" data-tab="groups">Nhóm quyền</button>
+                <button class="tab-btn" data-tab="userperm">
+                  Quyền người dùng
+                </button>
+              </div>
+            </section>
+
+            <!-- ========== MATRIX TAB ========== -->
+            <section
+              id="tab-matrix"
+              class="mt-4 bg-white border border-slate-200 rounded-xl"
+            >
+              <header
+                class="px-4 py-3 border-b border-slate-100 flex items-center justify-between"
+              >
+                <div class="flex flex-wrap items-center gap-2">
+                  <label class="text-[13px] text-slate-600"
+                    >Ma trận phân quyền chi tiết</label
+                  >
+                  <select
+                    id="role-select"
+                    class="h-9 rounded-md border border-slate-200 text-[13px] px-2 bg-white focus:outline-none"
+                  >
+                    <option>Chuyên viên</option>
+                    <option>Lãnh đạo</option>
+                    <option>Văn thư</option>
+                    <option selected>Quản trị</option>
+                  </select>
+                </div>
+                <div class="flex items-center gap-2">
+                  <a
+                    href="phanquyen-detail.html"
+                    class="h-9 rounded-lg border border-slate-200 px-3 text-[13px] hover:bg-slate-50"
+                    >Xem chi tiết</a
+                  >
+                  <button
+                    class="h-9 rounded-lg border border-slate-200 px-3 text-[13px] hover:bg-slate-50"
+                    id="btn-export"
+                  >
+                    ⤓ Xuất
+                  </button>
+                  <button
+                    class="h-9 rounded-lg border border-slate-200 px-3 text-[13px] hover:bg-slate-50"
+                    id="btn-import"
+                  >
+                    ⬈ Nhập
+                  </button>
+                </div>
+              </header>
+              <div class="overflow-x-auto">
+                <table class="min-w-full text-[13px]">
+                  <thead class="bg-slate-50 text-slate-600">
+                    <tr>
+                      <th class="px-4 py-3 text-left font-semibold">
+                        Chức năng
+                      </th>
+                      <th class="px-4 py-3 text-center font-semibold">
+                        <input
+                          type="checkbox"
+                          class="perm-checkall align-middle"
+                          data-col="view"
+                        />
+                        Xem
+                      </th>
+                      <th class="px-4 py-3 text-center font-semibold">
+                        <input
+                          type="checkbox"
+                          class="perm-checkall align-middle"
+                          data-col="create"
+                        />
+                        Tạo mới
+                      </th>
+                      <th class="px-4 py-3 text-center font-semibold">
+                        <input
+                          type="checkbox"
+                          class="perm-checkall align-middle"
+                          data-col="edit"
+                        />
+                        Chỉnh sửa
+                      </th>
+                      <th class="px-4 py-3 text-center font-semibold">
+                        <input
+                          type="checkbox"
+                          class="perm-checkall align-middle"
+                          data-col="delete"
+                        />
+                        Xóa
+                      </th>
+                      <th class="px-4 py-3 text-center font-semibold">
+                        <input
+                          type="checkbox"
+                          class="perm-checkall align-middle"
+                          data-col="approve"
+                        />
+                        Duyệt
+                      </th>
+                      <th class="px-4 py-3 text-center font-semibold">
+                        <input
+                          type="checkbox"
+                          class="perm-checkall align-middle"
+                          data-col="archive"
+                        />
+                        Lưu trữ
+                      </th>
+                      <th class="px-4 py-3 text-center font-semibold">
+                        <input
+                          type="checkbox"
+                          class="perm-checkall align-middle"
+                          data-col="export"
+                        />
+                        Xuất dữ liệu
+                      </th>
+                      <th class="px-4 py-3 text-center font-semibold">
+                        <input
+                          type="checkbox"
+                          class="perm-checkall align-middle"
+                          data-col="send"
+                        />
+                        Gửi
+                      </th>
+                      <th class="px-4 py-3 text-center font-semibold">
+                        <input
+                          type="checkbox"
+                          class="perm-checkall align-middle"
+                          data-col="config"
+                        />
+                        Cấu hình
+                      </th>
+                      <th class="px-4 py-3 text-center font-semibold">
+                        <input
+                          type="checkbox"
+                          class="perm-checkall align-middle"
+                          data-col="backup"
+                        />
+                        Sao lưu
+                      </th>
+                    </tr>
+                  </thead>
+                  <tbody class="divide-y divide-slate-100" id="perm-table">
+                    <!-- (Các hàng mẫu giống trước, giữ nguyên) -->
+                    <tr class="hover:bg-slate-50/60">
+                      <td class="px-4 py-3">
+                        <div
+                          class="text-[11px] font-semibold uppercase tracking-wide text-blue-600"
+                        >
+                          Trang tổng quan hệ thống
+                        </div>
+                        <div class="font-medium mt-0.5">Trang chủ</div>
+                        <div class="text-[12px] text-slate-500">
+                          Trang tổng quan
+                        </div>
+                      </td>
+                      <td class="px-4 py-3 text-center">
+                        <input type="checkbox" checked data-perm="view" />
+                      </td>
+                      <td class="px-4 py-3 text-center">
+                        <input type="checkbox" data-perm="create" />
+                      </td>
+                      <td class="px-4 py-3 text-center">
+                        <input type="checkbox" data-perm="edit" />
+                      </td>
+                      <td class="px-4 py-3 text-center">
+                        <input type="checkbox" data-perm="delete" />
+                      </td>
+                      <td class="px-4 py-3 text-center">
+                        <input type="checkbox" data-perm="approve" />
+                      </td>
+                      <td class="px-4 py-3 text-center">
+                        <input type="checkbox" data-perm="archive" />
+                      </td>
+                      <td class="px-4 py-3 text-center">
+                        <input type="checkbox" data-perm="export" />
+                      </td>
+                      <td class="px-4 py-3 text-center">
+                        <input type="checkbox" data-perm="send" />
+                      </td>
+                      <td class="px-4 py-3 text-center">
+                        <input type="checkbox" data-perm="config" />
+                      </td>
+                      <td class="px-4 py-3 text-center">
+                        <input type="checkbox" data-perm="backup" />
+                      </td>
+                    </tr>
+                    <tr class="hover:bg-slate-50/60">
+                      <td class="px-4 py-3">
+                        <div
+                          class="text-[11px] font-semibold uppercase tracking-wide text-blue-600"
+                        >
+                          Quản lý văn bản
+                        </div>
+                        <div class="font-medium mt-0.5">Quản lý văn bản</div>
+                        <div class="text-[12px] text-slate-500">
+                          Văn bản đến, văn bản đi
+                        </div>
+                      </td>
+                      <td class="px-4 py-3 text-center">
+                        <input type="checkbox" checked data-perm="view" />
+                      </td>
+                      <td class="px-4 py-3 text-center">
+                        <input type="checkbox" checked data-perm="create" />
+                      </td>
+                      <td class="px-4 py-3 text-center">
+                        <input type="checkbox" checked data-perm="edit" />
+                      </td>
+                      <td class="px-4 py-3 text-center">
+                        <input type="checkbox" data-perm="delete" />
+                      </td>
+                      <td class="px-4 py-3 text-center">
+                        <input type="checkbox" data-perm="approve" />
+                      </td>
+                      <td class="px-4 py-3 text-center">
+                        <input type="checkbox" data-perm="archive" />
+                      </td>
+                      <td class="px-4 py-3 text-center">
+                        <input type="checkbox" data-perm="export" />
+                      </td>
+                      <td class="px-4 py-3 text-center">
+                        <input type="checkbox" data-perm="send" />
+                      </td>
+                      <td class="px-4 py-3 text-center">
+                        <input type="checkbox" data-perm="config" />
+                      </td>
+                      <td class="px-4 py-3 text-center">
+                        <input type="checkbox" data-perm="backup" />
+                      </td>
+                    </tr>
+                    <tr class="hover:bg-slate-50/60">
+                      <td class="px-4 py-3">
+                        <div
+                          class="text-[11px] font-semibold uppercase tracking-wide text-blue-600"
+                        >
+                          Quản lý hồ sơ
+                        </div>
+                        <div class="font-medium mt-0.5">Hồ sơ công việc</div>
+                        <div class="text-[12px] text-slate-500">
+                          Quản lý hồ sơ và lưu trữ
+                        </div>
+                      </td>
+                      <td class="px-4 py-3 text-center">
+                        <input type="checkbox" checked data-perm="view" />
+                      </td>
+                      <td class="px-4 py-3 text-center">
+                        <input type="checkbox" checked data-perm="create" />
+                      </td>
+                      <td class="px-4 py-3 text-center">
+                        <input type="checkbox" data-perm="edit" />
+                      </td>
+                      <td class="px-4 py-3 text-center">
+                        <input type="checkbox" data-perm="delete" />
+                      </td>
+                      <td class="px-4 py-3 text-center">
+                        <input type="checkbox" data-perm="approve" />
+                      </td>
+                      <td class="px-4 py-3 text-center">
+                        <input type="checkbox" data-perm="archive" />
+                      </td>
+                      <td class="px-4 py-3 text-center">
+                        <input type="checkbox" data-perm="export" />
+                      </td>
+                      <td class="px-4 py-3 text-center">
+                        <input type="checkbox" data-perm="send" />
+                      </td>
+                      <td class="px-4 py-3 text-center">
+                        <input type="checkbox" data-perm="config" />
+                      </td>
+                      <td class="px-4 py-3 text-center">
+                        <input type="checkbox" data-perm="backup" />
+                      </td>
+                    </tr>
+                    <tr class="hover:bg-slate-50/60">
+                      <td class="px-4 py-3">
+                        <div
+                          class="text-[11px] font-semibold uppercase tracking-wide text-blue-600"
+                        >
+                          Quản lý lịch
+                        </div>
+                        <div class="font-medium mt-0.5">Lịch công tác</div>
+                        <div class="text-[12px] text-slate-500">
+                          Quản lý lịch làm việc
+                        </div>
+                      </td>
+                      <td class="px-4 py-3 text-center">
+                        <input type="checkbox" checked data-perm="view" />
+                      </td>
+                      <td class="px-4 py-3 text-center">
+                        <input type="checkbox" data-perm="create" />
+                      </td>
+                      <td class="px-4 py-3 text-center">
+                        <input type="checkbox" data-perm="edit" />
+                      </td>
+                      <td class="px-4 py-3 text-center">
+                        <input type="checkbox" data-perm="delete" />
+                      </td>
+                      <td class="px-4 py-3 text-center">
+                        <input type="checkbox" data-perm="approve" />
+                      </td>
+                      <td class="px-4 py-3 text-center">
+                        <input type="checkbox" data-perm="archive" />
+                      </td>
+                      <td class="px-4 py-3 text-center">
+                        <input type="checkbox" data-perm="export" />
+                      </td>
+                      <td class="px-4 py-3 text-center">
+                        <input type="checkbox" data-perm="send" />
+                      </td>
+                      <td class="px-4 py-3 text-center">
+                        <input type="checkbox" data-perm="config" />
+                      </td>
+                      <td class="px-4 py-3 text-center">
+                        <input type="checkbox" data-perm="backup" />
+                      </td>
+                    </tr>
+                    <tr class="hover:bg-slate-50/60">
+                      <td class="px-4 py-3">
+                        <div
+                          class="text-[11px] font-semibold uppercase tracking-wide text-blue-600"
+                        >
+                          Xuất báo cáo
+                        </div>
+                        <div class="font-medium mt-0.5">
+                          Báo cáo &amp; Thống kê
+                        </div>
+                        <div class="text-[12px] text-slate-500">
+                          Xem và tạo báo cáo
+                        </div>
+                      </td>
+                      <td class="px-4 py-3 text-center">
+                        <input type="checkbox" checked data-perm="view" />
+                      </td>
+                      <td class="px-4 py-3 text-center">
+                        <input type="checkbox" data-perm="create" />
+                      </td>
+                      <td class="px-4 py-3 text-center">
+                        <input type="checkbox" data-perm="edit" />
+                      </td>
+                      <td class="px-4 py-3 text-center">
+                        <input type="checkbox" data-perm="delete" />
+                      </td>
+                      <td class="px-4 py-3 text-center">
+                        <input type="checkbox" data-perm="approve" />
+                      </td>
+                      <td class="px-4 py-3 text-center">
+                        <input type="checkbox" data-perm="archive" />
+                      </td>
+                      <td class="px-4 py-3 text-center">
+                        <input type="checkbox" data-perm="export" checked />
+                      </td>
+                      <td class="px-4 py-3 text-center">
+                        <input type="checkbox" data-perm="send" />
+                      </td>
+                      <td class="px-4 py-3 text-center">
+                        <input type="checkbox" data-perm="config" />
+                      </td>
+                      <td class="px-4 py-3 text-center">
+                        <input type="checkbox" data-perm="backup" />
+                      </td>
+                    </tr>
+                    <tr class="hover:bg-slate-50/60">
+                      <td class="px-4 py-3">
+                        <div
+                          class="text-[11px] font-semibold uppercase tracking-wide text-blue-600"
+                        >
+                          Quản lý thông báo
+                        </div>
+                        <div class="font-medium mt-0.5">Thông báo</div>
+                        <div class="text-[12px] text-slate-500">
+                          Quản lý thông báo hệ thống
+                        </div>
+                      </td>
+                      <td class="px-4 py-3 text-center">
+                        <input type="checkbox" checked data-perm="view" />
+                      </td>
+                      <td class="px-4 py-3 text-center">
+                        <input type="checkbox" data-perm="create" />
+                      </td>
+                      <td class="px-4 py-3 text-center">
+                        <input type="checkbox" data-perm="edit" />
+                      </td>
+                      <td class="px-4 py-3 text-center">
+                        <input type="checkbox" data-perm="delete" />
+                      </td>
+                      <td class="px-4 py-3 text-center">
+                        <input type="checkbox" data-perm="approve" />
+                      </td>
+                      <td class="px-4 py-3 text-center">
+                        <input type="checkbox" data-perm="archive" />
+                      </td>
+                      <td class="px-4 py-3 text-center">
+                        <input type="checkbox" data-perm="export" />
+                      </td>
+                      <td class="px-4 py-3 text-center">
+                        <input type="checkbox" data-perm="send" checked />
+                      </td>
+                      <td class="px-4 py-3 text-center">
+                        <input type="checkbox" data-perm="config" />
+                      </td>
+                      <td class="px-4 py-3 text-center">
+                        <input type="checkbox" data-perm="backup" />
+                      </td>
+                    </tr>
+                    <tr class="hover:bg-slate-50/60">
+                      <td class="px-4 py-3">
+                        <div
+                          class="text-[11px] font-semibold uppercase tracking-wide text-blue-600"
+                        >
+                          Quản lý danh mục
+                        </div>
+                        <div class="font-medium mt-0.5">Danh mục</div>
+                        <div class="text-[12px] text-slate-500">
+                          Quản lý danh mục hệ thống
+                        </div>
+                      </td>
+                      <td class="px-4 py-3 text-center">
+                        <input type="checkbox" checked data-perm="view" />
+                      </td>
+                      <td class="px-4 py-3 text-center">
+                        <input type="checkbox" data-perm="create" />
+                      </td>
+                      <td class="px-4 py-3 text-center">
+                        <input type="checkbox" data-perm="edit" />
+                      </td>
+                      <td class="px-4 py-3 text-center">
+                        <input type="checkbox" data-perm="delete" />
+                      </td>
+                      <td class="px-4 py-3 text-center">
+                        <input type="checkbox" data-perm="approve" />
+                      </td>
+                      <td class="px-4 py-3 text-center">
+                        <input type="checkbox" data-perm="archive" />
+                      </td>
+                      <td class="px-4 py-3 text-center">
+                        <input type="checkbox" data-perm="export" />
+                      </td>
+                      <td class="px-4 py-3 text-center">
+                        <input type="checkbox" data-perm="send" />
+                      </td>
+                      <td class="px-4 py-3 text-center">
+                        <input type="checkbox" data-perm="config" />
+                      </td>
+                      <td class="px-4 py-3 text-center">
+                        <input type="checkbox" data-perm="backup" />
+                      </td>
+                    </tr>
+                    <tr class="hover:bg-slate-50/60">
+                      <td class="px-4 py-3">
+                        <div
+                          class="text-[11px] font-semibold uppercase tracking-wide text-blue-600"
+                        >
+                          Quản lý người dùng
+                        </div>
+                        <div class="font-medium mt-0.5">Quản lý người dùng</div>
+                        <div class="text-[12px] text-slate-500">
+                          Quản lý tài khoản người dùng
+                        </div>
+                      </td>
+                      <td class="px-4 py-3 text-center">
+                        <input type="checkbox" data-perm="view" />
+                      </td>
+                      <td class="px-4 py-3 text-center">
+                        <input type="checkbox" data-perm="create" />
+                      </td>
+                      <td class="px-4 py-3 text-center">
+                        <input type="checkbox" data-perm="edit" />
+                      </td>
+                      <td class="px-4 py-3 text-center">
+                        <input type="checkbox" data-perm="delete" />
+                      </td>
+                      <td class="px-4 py-3 text-center">
+                        <input type="checkbox" data-perm="approve" />
+                      </td>
+                      <td class="px-4 py-3 text-center">
+                        <input type="checkbox" data-perm="archive" />
+                      </td>
+                      <td class="px-4 py-3 text-center">
+                        <input type="checkbox" data-perm="export" />
+                      </td>
+                      <td class="px-4 py-3 text-center">
+                        <input type="checkbox" data-perm="send" />
+                      </td>
+                      <td class="px-4 py-3 text-center">
+                        <input type="checkbox" data-perm="config" />
+                      </td>
+                      <td class="px-4 py-3 text-center">
+                        <input type="checkbox" data-perm="backup" />
+                      </td>
+                    </tr>
+                    <tr class="hover:bg-slate-50/60">
+                      <td class="px-4 py-3">
+                        <div
+                          class="text-[11px] font-semibold uppercase tracking-wide text-blue-600"
+                        >
+                          Cấu hình xác thực
+                        </div>
+                        <div class="font-medium mt-0.5">Phân quyền</div>
+                        <div class="text-[12px] text-slate-500">
+                          Thiết lập quyền truy cập
+                        </div>
+                      </td>
+                      <td class="px-4 py-3 text-center">
+                        <input type="checkbox" data-perm="view" checked />
+                      </td>
+                      <td class="px-4 py-3 text-center">
+                        <input type="checkbox" data-perm="create" />
+                      </td>
+                      <td class="px-4 py-3 text-center">
+                        <input type="checkbox" data-perm="edit" />
+                      </td>
+                      <td class="px-4 py-3 text-center">
+                        <input type="checkbox" data-perm="delete" />
+                      </td>
+                      <td class="px-4 py-3 text-center">
+                        <input type="checkbox" data-perm="approve" />
+                      </td>
+                      <td class="px-4 py-3 text-center">
+                        <input type="checkbox" data-perm="archive" />
+                      </td>
+                      <td class="px-4 py-3 text-center">
+                        <input type="checkbox" data-perm="export" />
+                      </td>
+                      <td class="px-4 py-3 text-center">
+                        <input type="checkbox" data-perm="send" />
+                      </td>
+                      <td class="px-4 py-3 text-center">
+                        <input type="checkbox" data-perm="config" checked />
+                      </td>
+                      <td class="px-4 py-3 text-center">
+                        <input type="checkbox" data-perm="backup" />
+                      </td>
+                    </tr>
+                    <tr class="hover:bg-slate-50/60">
+                      <td class="px-4 py-3">
+                        <div
+                          class="text-[11px] font-semibold uppercase tracking-wide text-blue-600"
+                        >
+                          Cấu hình hệ thống
+                        </div>
+                        <div class="font-medium mt-0.5">Quản lý hệ thống</div>
+                        <div class="text-[12px] text-slate-500">
+                          Cấu hình và bảo trì hệ thống
+                        </div>
+                      </td>
+                      <td class="px-4 py-3 text-center">
+                        <input type="checkbox" data-perm="view" />
+                      </td>
+                      <td class="px-4 py-3 text-center">
+                        <input type="checkbox" data-perm="create" />
+                      </td>
+                      <td class="px-4 py-3 text-center">
+                        <input type="checkbox" data-perm="edit" />
+                      </td>
+                      <td class="px-4 py-3 text-center">
+                        <input type="checkbox" data-perm="delete" />
+                      </td>
+                      <td class="px-4 py-3 text-center">
+                        <input type="checkbox" data-perm="approve" />
+                      </td>
+                      <td class="px-4 py-3 text-center">
+                        <input type="checkbox" data-perm="archive" />
+                      </td>
+                      <td class="px-4 py-3 text-center">
+                        <input type="checkbox" data-perm="export" />
+                      </td>
+                      <td class="px-4 py-3 text-center">
+                        <input type="checkbox" data-perm="send" />
+                      </td>
+                      <td class="px-4 py-3 text-center">
+                        <input type="checkbox" data-perm="config" checked />
+                      </td>
+                      <td class="px-4 py-3 text-center">
+                        <input type="checkbox" data-perm="backup" checked />
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </section>
+
+            <!-- ========== GROUPS TAB (đã chỉnh) ========== -->
+            <section
+              id="tab-groups"
+              class="mt-4 bg-white border border-slate-200 rounded-xl hidden"
+            >
+              <header
+                class="px-4 py-3 border-b border-slate-100 flex items-center justify-between"
+              >
+                <h3 class="text-[15px] font-semibold">Quản lý nhóm quyền</h3>
+                <button
+                  id="btn-create-group"
+                  class="h-9 rounded-lg bg-blue-600 text-white text-[13px] px-3 hover:bg-blue-600/90"
+                >
+                  + Tạo nhóm mới
+                </button>
+              </header>
+              <div class="p-4 space-y-3">
+                <!-- Nhóm Quản trị hệ thống (mới) -->
+                <article
+                  class="rounded-xl border border-slate-200 p-4 flex items-center justify-between"
+                >
+                  <div>
+                    <h4 class="font-medium">Nhóm Quản trị hệ thống</h4>
+                    <p class="text-[12.5px] text-slate-500">
+                      Toàn quyền cấu hình, sao lưu, quản lý người dùng
+                    </p>
+                    <div
+                      class="mt-1 flex items-center gap-4 text-[12px] text-slate-500"
+                    >
+                      <span class="flex items-center gap-1">
+                        <svg
+                          class="w-4 h-4"
+                          xmlns="http://www.w3.org/2000/svg"
+                          viewBox="0 0 24 24"
+                          fill="currentColor"
+                        >
+                          <path
+                            d="M16 11a3 3 0 1 0-3-3 3 3 0 0 0 3 3m-8 0a3 3 0 1 0-3-3 3 3 0 0 0 3 3m0 2c-2.33 0-7 1.17-7 3.5V19h9.2A6.6 6.6 0 0 1 7 17m9-2c2.33 0 8 1.17 8 3.5V19h-8.4A6.6 6.6 0 0 0 23 19c0-2.33-5.67-3.5-9-3.5"
+                          /></svg
+                        >1 quản trị viên
+                      </span>
+                      <span class="flex items-center gap-1">
+                        <svg
+                          class="w-4 h-4"
+                          xmlns="http://www.w3.org/2000/svg"
+                          viewBox="0 0 24 24"
+                          fill="currentColor"
+                        >
+                          <path d="M3 5h18v2H3m0 6h18v2H3m0 6h18v2H3" /></svg
+                        >4 quyền chính
+                      </span>
+                    </div>
+                  </div>
+                  <div class="flex items-center gap-2">
+                    <a
+                      href="phanquyen-detail.html"
+                      class="h-9 rounded-lg border border-slate-200 px-3 text-[13px] hover:bg-slate-50"
+                      >Xem chi tiết</a
+                    >
+                    <button
+                      class="h-9 rounded-lg border border-slate-200 px-3 text-[13px] hover:bg-slate-50"
+                    >
+                      Chỉnh sửa
+                    </button>
+                    <button
+                      class="h-9 rounded-lg border border-slate-200 px-3 text-[13px] hover:bg-rose-50 text-rose-600"
+                    >
+                      Xóa
+                    </button>
+                  </div>
+                </article>
+
+                <!-- Nhóm Xử lý văn bản -->
+                <article
+                  class="rounded-xl border border-slate-200 p-4 flex items-center justify-between"
+                >
+                  <div>
+                    <h4 class="font-medium">Nhóm Xử lý văn bản</h4>
+                    <p class="text-[12.5px] text-slate-500">
+                      Tạo, chỉnh sửa, luân chuyển văn bản
+                    </p>
+                    <div
+                      class="mt-1 flex items-center gap-4 text-[12px] text-slate-500"
+                    >
+                      <span class="flex items-center gap-1">
+                        <svg
+                          class="w-4 h-4"
+                          xmlns="http://www.w3.org/2000/svg"
+                          viewBox="0 0 24 24"
+                          fill="currentColor"
+                        >
+                          <path
+                            d="M16 11a3 3 0 1 0-3-3 3 3 0 0 0 3 3m-8 0a3 3 0 1 0-3-3 3 3 0 0 0 3 3m0 2c-2.33 0-7 1.17-7 3.5V19h9.2A6.6 6.6 0 0 1 7 17m9-2c2.33 0 8 1.17 8 3.5V19h-8.4A6.6 6.6 0 0 0 23 19c0-2.33-5.67-3.5-9-3.5"
+                          /></svg
+                        >3 thành viên
+                      </span>
+                      <span class="flex items-center gap-1">
+                        <svg
+                          class="w-4 h-4"
+                          xmlns="http://www.w3.org/2000/svg"
+                          viewBox="0 0 24 24"
+                          fill="currentColor"
+                        >
+                          <path d="M3 5h18v2H3m0 6h18v2H3m0 6h18v2H3" /></svg
+                        >3 quyền
+                      </span>
+                    </div>
+                  </div>
+                  <div class="flex items-center gap-2">
+                    <a
+                      href="phanquyen-detail.html"
+                      class="h-9 rounded-lg border border-slate-200 px-3 text-[13px] hover:bg-slate-50"
+                      >Xem chi tiết</a
+                    >
+                    <button
+                      class="h-9 rounded-lg border border-slate-200 px-3 text-[13px] hover:bg-slate-50"
+                    >
+                      Chỉnh sửa
+                    </button>
+                    <button
+                      class="h-9 rounded-lg border border-slate-200 px-3 text-[13px] hover:bg-rose-50 text-rose-600"
+                    >
+                      Xóa
+                    </button>
+                  </div>
+                </article>
+
+                <!-- Nhóm Báo cáo -->
+                <article
+                  class="rounded-xl border border-slate-200 p-4 flex items-center justify-between"
+                >
+                  <div>
+                    <h4 class="font-medium">Nhóm Báo cáo</h4>
+                    <p class="text-[12.5px] text-slate-500">
+                      Xem, tổng hợp và xuất báo cáo
+                    </p>
+                    <div
+                      class="mt-1 flex items-center gap-4 text-[12px] text-slate-500"
+                    >
+                      <span class="flex items-center gap-1">
+                        <svg
+                          class="w-4 h-4"
+                          xmlns="http://www.w3.org/2000/svg"
+                          viewBox="0 0 24 24"
+                          fill="currentColor"
+                        >
+                          <path
+                            d="M16 11a3 3 0 1 0-3-3 3 3 0 0 0 3 3m-8 0a3 3 0 1 0-3-3 3 3 0 0 0 3 3m0 2c-2.33 0-7 1.17-7 3.5V19h9.2A6.6 6.6 0 0 1 7 17m9-2c2.33 0 8 1.17 8 3.5V19h-8.4A6.6 6.6 0 0 0 23 19c0-2.33-5.67-3.5-9-3.5"
+                          /></svg
+                        >2 thành viên
+                      </span>
+                      <span class="flex items-center gap-1">
+                        <svg
+                          class="w-4 h-4"
+                          xmlns="http://www.w3.org/2000/svg"
+                          viewBox="0 0 24 24"
+                          fill="currentColor"
+                        >
+                          <path d="M3 5h18v2H3m0 6h18v2H3m0 6h18v2H3" /></svg
+                        >2 quyền
+                      </span>
+                    </div>
+                  </div>
+                  <div class="flex items-center gap-2">
+                    <a
+                      href="phanquyen-detail.html"
+                      class="h-9 rounded-lg border border-slate-200 px-3 text-[13px] hover:bg-slate-50"
+                      >Xem chi tiết</a
+                    >
+                    <button
+                      class="h-9 rounded-lg border border-slate-200 px-3 text-[13px] hover:bg-slate-50"
+                    >
+                      Chỉnh sửa
+                    </button>
+                    <button
+                      class="h-9 rounded-lg border border-slate-200 px-3 text-[13px] hover:bg-rose-50 text-rose-600"
+                    >
+                      Xóa
+                    </button>
+                  </div>
+                </article>
+
+                <!-- ===== Danh sách vai trò, permissions, mapping (giữ nguyên, đồng nhất) ===== -->
+                <section class="rounded-xl border border-slate-200">
+                  <header
+                    class="px-4 py-3 border-b border-slate-100 flex items-center justify-between"
+                  >
+                    <h4 class="text-[14px] font-semibold">
+                      Danh sách vai trò hệ thống
+                    </h4>
+                    <span class="text-[12px] text-slate-500"
+                      >4 vai trò hoạt động</span
+                    >
+                  </header>
+                  <div class="overflow-x-auto">
+                    <table class="min-w-full text-[13px]">
+                      <thead class="bg-slate-50 text-slate-600">
+                        <tr>
+                          <th class="px-4 py-3 text-left font-semibold">
+                            Mã vai trò
+                          </th>
+                          <th class="px-4 py-3 text-left font-semibold">
+                            Tên vai trò
+                          </th>
+                          <th class="px-4 py-3 text-left font-semibold">
+                            Mô tả
+                          </th>
+                          <th class="px-4 py-3 text-left font-semibold">
+                            Người dùng
+                          </th>
+                          <th class="px-4 py-3 text-left font-semibold">
+                            Quyền chính
+                          </th>
+                          <th class="px-4 py-3 text-left font-semibold">
+                            Cập nhật
+                          </th>
+                        </tr>
+                      </thead>
+                      <tbody class="divide-y divide-slate-100">
+                        <tr class="hover:bg-slate-50/60">
+                          <td class="px-4 py-3 font-medium text-slate-700">
+                            Nhóm quản trị
+                          </td>
+                          <td class="px-4 py-3">Quản trị hệ thống</td>
+                          <td class="px-4 py-3">
+                            Toàn quyền cấu hình và quản lý bảo mật
+                          </td>
+                          <td class="px-4 py-3">1</td>
+                          <td class="px-4 py-3 space-x-1">
+                            <span class="chip chip--purple"
+                              >Cấu hình hệ thống</span
+                            >
+                            <span class="chip chip--green"
+                              >Cấu hình xác thực</span
+                            >
+                            <span class="chip chip--red"
+                              >Quản lý người dùng</span
+                            >
+                          </td>
+                          <td class="px-4 py-3 text-slate-500">2024-01-18</td>
+                        </tr>
+                        <tr class="hover:bg-slate-50/60">
+                          <td class="px-4 py-3 font-medium text-slate-700">
+                            Nhóm lãnh đạo
+                          </td>
+                          <td class="px-4 py-3">Lãnh đạo</td>
+                          <td class="px-4 py-3">
+                            Theo dõi và phê duyệt văn bản, hồ sơ trọng yếu
+                          </td>
+                          <td class="px-4 py-3">2</td>
+                          <td class="px-4 py-3 space-x-1">
+                            <span class="chip chip--green">Duyệt văn bản</span>
+                            <span class="chip">Xuất báo cáo</span>
+                          </td>
+                          <td class="px-4 py-3 text-slate-500">2024-01-15</td>
+                        </tr>
+                        <tr class="hover:bg-slate-50/60">
+                          <td class="px-4 py-3 font-medium text-slate-700">
+                            Nhóm cán bộ
+                          </td>
+                          <td class="px-4 py-3">Chuyên viên xử lý</td>
+                          <td class="px-4 py-3">
+                            Tiếp nhận, xử lý văn bản và hồ sơ công việc
+                          </td>
+                          <td class="px-4 py-3">12</td>
+                          <td class="px-4 py-3 space-x-1">
+                            <span class="chip chip--green">Tạo văn bản</span>
+                            <span class="chip chip--purple">Quản lý hồ sơ</span>
+                          </td>
+                          <td class="px-4 py-3 text-slate-500">2024-01-12</td>
+                        </tr>
+                        <tr class="hover:bg-slate-50/60">
+                          <td class="px-4 py-3 font-medium text-slate-700">
+                            Nhóm văn thư
+                          </td>
+                          <td class="px-4 py-3">Văn thư</td>
+                          <td class="px-4 py-3">
+                            Quản lý sổ văn bản đến/đi và phát hành
+                          </td>
+                          <td class="px-4 py-3">3</td>
+                          <td class="px-4 py-3 space-x-1">
+                            <span class="chip chip--green"
+                              >Tiếp nhận văn bản</span
+                            >
+                            <span class="chip chip--purple"
+                              >Phát hành văn bản đi</span
+                            >
+                          </td>
+                          <td class="px-4 py-3 text-slate-500">2024-01-10</td>
+                        </tr>
+                      </tbody>
+                    </table>
+                  </div>
+                </section>
+
+                <section class="rounded-xl border border-slate-200">
+                  <header
+                    class="px-4 py-3 border-b border-slate-100 flex items-center justify-between"
+                  >
+                    <h4 class="text-[14px] font-semibold">
+                      Danh mục quyền (permissions)
+                    </h4>
+                    <span class="text-[12px] text-slate-500"
+                      >Mã quyền viết theo chuẩn DOMAIN.ACTION</span
+                    >
+                  </header>
+                  <div class="overflow-x-auto">
+                    <table class="min-w-full text-[13px]">
+                      <thead class="bg-slate-50 text-slate-600">
+                        <tr>
+                          <th class="px-4 py-3 text-left font-semibold">
+                            Mã quyền
+                          </th>
+                          <th class="px-4 py-3 text-left font-semibold">
+                            Tên quyền
+                          </th>
+                          <th class="px-4 py-3 text-left font-semibold">
+                            Mô tả
+                          </th>
+                          <th class="px-4 py-3 text-left font-semibold">
+                            Nhóm chức năng
+                          </th>
+                          <th class="px-4 py-3 text-left font-semibold">
+                            Mặc định
+                          </th>
+                        </tr>
+                      </thead>
+                      <tbody class="divide-y divide-slate-100">
+                        <tr class="hover:bg-slate-50/60">
+                          <td class="px-4 py-3 font-medium text-slate-700">
+                            Tạo văn bản
+                          </td>
+                          <td class="px-4 py-3">Tạo văn bản</td>
+                          <td class="px-4 py-3">
+                            Cho phép khởi tạo và nhập hồ sơ văn bản mới
+                          </td>
+                          <td class="px-4 py-3">Quản lý văn bản</td>
+                          <td class="px-4 py-3">
+                            <span class="chip chip--green">Chuyên viên</span>
+                          </td>
+                        </tr>
+                        <tr class="hover:bg-slate-50/60">
+                          <td class="px-4 py-3 font-medium text-slate-700">
+                            Duyệt văn bản
+                          </td>
+                          <td class="px-4 py-3">Phê duyệt văn bản</td>
+                          <td class="px-4 py-3">
+                            Duyệt, ký số hoặc từ chối văn bản trình
+                          </td>
+                          <td class="px-4 py-3">Quy trình phê duyệt</td>
+                          <td class="px-4 py-3">
+                            <span class="chip chip--purple">Lãnh đạo</span>
+                          </td>
+                        </tr>
+                        <tr class="hover:bg-slate-50/60">
+                          <td class="px-4 py-3 font-medium text-slate-700">
+                            Phân công hồ sơ
+                          </td>
+                          <td class="px-4 py-3">Phân công hồ sơ</td>
+                          <td class="px-4 py-3">
+                            Phân công người phụ trách và thiết lập hạn xử lý
+                          </td>
+                          <td class="px-4 py-3">Hồ sơ công việc</td>
+                          <td class="px-4 py-3">
+                            <span class="chip">Chuyên viên</span>
+                          </td>
+                        </tr>
+                        <tr class="hover:bg-slate-50/60">
+                          <td class="px-4 py-3 font-medium text-slate-700">
+                            Gửi thông báo
+                          </td>
+                          <td class="px-4 py-3">Gửi thông báo/nhắc việc</td>
+                          <td class="px-4 py-3">
+                            Tạo thông báo tới app/email/SMS và theo dõi trạng
+                            thái
+                          </td>
+                          <td class="px-4 py-3">Thông báo</td>
+                          <td class="px-4 py-3">
+                            <span class="chip chip--purple">Văn thư</span>
+                          </td>
+                        </tr>
+                        <tr class="hover:bg-slate-50/60">
+                          <td class="px-4 py-3 font-medium text-slate-700">
+                            Cấu hình hệ thống
+                          </td>
+                          <td class="px-4 py-3">Cấu hình hệ thống</td>
+                          <td class="px-4 py-3">
+                            Truy cập thiết lập hệ thống, sao lưu, tham số
+                          </td>
+                          <td class="px-4 py-3">Hệ thống</td>
+                          <td class="px-4 py-3">
+                            <span class="chip chip--red">Quản trị</span>
+                          </td>
+                        </tr>
+                      </tbody>
+                    </table>
+                  </div>
+                </section>
+
+                <section class="rounded-xl border border-slate-200">
+                  <header
+                    class="px-4 py-3 border-b border-slate-100 flex items-center justify-between"
+                  >
+                    <h4 class="text-[14px] font-semibold">
+                      Vai trò &amp; quyền chi tiết
+                    </h4>
+                    <span class="text-[12px] text-slate-500"
+                      >Trích mẫu từ bảng role_permissions</span
+                    >
+                  </header>
+                  <div class="overflow-x-auto">
+                    <table class="min-w-full text-[13px]">
+                      <thead class="bg-slate-50 text-slate-600">
+                        <tr>
+                          <th class="px-4 py-3 text-left font-semibold">
+                            Vai trò
+                          </th>
+                          <th class="px-4 py-3 text-left font-semibold">
+                            Mã quyền
+                          </th>
+                          <th class="px-4 py-3 text-left font-semibold">
+                            Tên quyền
+                          </th>
+                          <th class="px-4 py-3 text-left font-semibold">
+                            Phạm vi/ghi chú
+                          </th>
+                        </tr>
+                      </thead>
+                      <tbody class="divide-y divide-slate-100">
+                        <tr class="hover:bg-slate-50/60">
+                          <td class="px-4 py-3 font-medium text-slate-700">
+                            Nhóm quản trị
+                          </td>
+                          <td class="px-4 py-3 text-blue-600">
+                            Cấu hình xác thực
+                          </td>
+                          <td class="px-4 py-3">Thiết lập ma trận quyền</td>
+                          <td class="px-4 py-3">
+                            Toàn hệ thống, bao gồm sao lưu cấu hình
+                          </td>
+                        </tr>
+                        <tr class="hover:bg-slate-50/60">
+                          <td class="px-4 py-3 font-medium text-slate-700">
+                            Nhóm lãnh đạo
+                          </td>
+                          <td class="px-4 py-3 text-blue-600">Duyệt văn bản</td>
+                          <td class="px-4 py-3">Phê duyệt văn bản trình</td>
+                          <td class="px-4 py-3">
+                            Áp dụng cho văn bản của phòng được phân công
+                          </td>
+                        </tr>
+                        <tr class="hover:bg-slate-50/60">
+                          <td class="px-4 py-3 font-medium text-slate-700">
+                            Nhóm cán bộ
+                          </td>
+                          <td class="px-4 py-3 text-blue-600">
+                            Phân công hồ sơ
+                          </td>
+                          <td class="px-4 py-3">Phân công hồ sơ</td>
+                          <td class="px-4 py-3">
+                            Quyền owner với các hồ sơ được giao
+                          </td>
+                        </tr>
+                        <tr class="hover:bg-slate-50/60">
+                          <td class="px-4 py-3 font-medium text-slate-700">
+                            Nhóm văn thư
+                          </td>
+                          <td class="px-4 py-3 text-blue-600">
+                            Phát hành văn bản đi
+                          </td>
+                          <td class="px-4 py-3">Phát hành văn bản Đi</td>
+                          <td class="px-4 py-3">
+                            Gửi tới tổ chức ngoài, theo dõi trạng thái gửi
+                          </td>
+                        </tr>
+                      </tbody>
+                    </table>
+                  </div>
+                </section>
+              </div>
+            </section>
+
+            <!-- ========== USER PERMISSIONS TAB ========== -->
+            <section
+              id="tab-userperm"
+              class="mt-4 bg-white border border-slate-200 rounded-xl hidden"
+            >
+              <header class="px-4 py-3 border-b border-slate-100">
+                <h3 class="text-[15px] font-semibold mb-2">
+                  Quyền truy cập người dùng
+                </h3>
+                <label class="relative block max-w-md">
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    class="pointer-events-none absolute left-3 top-2.5 h-5 w-5 text-slate-400"
+                    viewBox="0 0 20 20"
+                    fill="currentColor"
+                  >
+                    <path
+                      fill-rule="evenodd"
+                      d="M12.9 14.32a8 8 0 1 1 1.414-1.414l3.387 3.386a1 1 0 0 1-1.414 1.415l-3.387-3.387ZM14 8a6 6 0 1 0-12 0 6 6 0 0 0 12 0Z"
+                      clip-rule="evenodd"
+                    />
+                  </svg>
+                  <input
+                    id="userperm-search"
+                    class="w-full h-10 pl-10 pr-4 rounded-lg border border-slate-200 focus:outline-none focus:ring-2 focus:ring-blue-600/20 focus:border-blue-500 text-[14px]"
+                    placeholder="Tìm kiếm người dùng…"
+                  />
+                </label>
+              </header>
+              <div class="overflow-x-auto">
+                <table class="min-w-full text-[13px]">
+                  <thead class="bg-slate-50 text-slate-600">
+                    <tr>
+                      <th class="px-4 py-3 text-left font-semibold">Họ tên</th>
+                      <th class="px-4 py-3 text-left font-semibold">Vai trò</th>
+                      <th class="px-4 py-3 text-left font-semibold">
+                        Phòng ban
+                      </th>
+                      <th class="px-4 py-3 text-left font-semibold">
+                        Trạng thái
+                      </th>
+                      <th class="px-4 py-3 text-left font-semibold">
+                        Đăng nhập cuối
+                      </th>
+                      <th class="px-4 py-3 text-left font-semibold">
+                        Thao tác
+                      </th>
+                    </tr>
+                  </thead>
+                  <tbody id="userperm-table" class="divide-y divide-slate-100">
+                    <!-- (Giữ nguyên các hàng mẫu như trước) -->
+                    <tr class="hover:bg-slate-50/60">
+                      <td class="px-4 py-3">
+                        <div class="font-medium">Nguyễn Văn An</div>
+                        <div class="text-[12.5px] text-slate-500">
+                          Tài khoản: @chuyenvien1
+                        </div>
+                        <div class="text-[12.5px] text-slate-500">
+                          Mã cán bộ: CV-001
+                        </div>
+                        <div class="text-[12px] text-slate-500">
+                          Thư điện tử: nguyenvanan@thanhkhe.gov.vn
+                        </div>
+                      </td>
+                      <td class="px-4 py-3">
+                        <span class="chip chip--green">Chuyên viên</span>
+                        <span class="chip chip--purple">Văn thư (watcher)</span>
+                      </td>
+                      <td class="px-4 py-3">Phòng Hành chính</td>
+                      <td class="px-4 py-3">
+                        <div class="flex flex-col gap-1">
+                          <span class="badge badge--green">Hoạt động</span>
+                          <span class="text-[12px] text-slate-500"
+                            >2 phiên Đang mở</span
+                          >
+                        </div>
+                      </td>
+                      <td class="px-4 py-3 text-slate-600">
+                        2024-12-25 09:30<br /><span class="text-[12px]"
+                          >IP: 10.10.3.25</span
+                        >
+                      </td>
+                      <td class="px-4 py-3">
+                        <button
+                          class="h-9 rounded-lg border border-slate-200 px-3 text-[13px] hover:bg-slate-50"
+                        >
+                          Phân quyền
+                        </button>
+                      </td>
+                    </tr>
+                    <tr class="hover:bg-slate-50/60">
+                      <td class="px-4 py-3">
+                        <div class="font-medium">Trần Thị Bình</div>
+                        <div class="text-[12.5px] text-slate-500">
+                          Tài khoản: @lanhdao1
+                        </div>
+                        <div class="text-[12.5px] text-slate-500">
+                          Mã cán bộ: LD-002
+                        </div>
+                        <div class="text-[12px] text-slate-500">
+                          Thư điện tử: tranthibinh@thanhkhe.gov.vn
+                        </div>
+                      </td>
+                      <td class="px-4 py-3">
+                        <span class="chip chip--purple">Lãnh đạo</span>
+                        <span class="chip chip--green"
+                          >Quản trị (delegate)</span
+                        >
+                      </td>
+                      <td class="px-4 py-3">Văn phòng Chủ tịch</td>
+                      <td class="px-4 py-3">
+                        <div class="flex flex-col gap-1">
+                          <span class="badge badge--green">Hoạt động</span>
+                          <span class="text-[12px] text-slate-500"
+                            >2FA: Đã bật</span
+                          >
+                        </div>
+                      </td>
+                      <td class="px-4 py-3 text-slate-600">
+                        2024-12-25 09:12<br /><span class="text-[12px]"
+                          >IP: 10.10.3.43</span
+                        >
+                      </td>
+                      <td class="px-4 py-3">
+                        <button
+                          class="h-9 rounded-lg border border-slate-200 px-3 text-[13px] hover:bg-slate-50"
+                        >
+                          Phân quyền
+                        </button>
+                      </td>
+                    </tr>
+                    <tr class="hover:bg-slate-50/60">
+                      <td class="px-4 py-3">
+                        <div class="font-medium">Lê Văn Cường</div>
+                        <div class="text-[12.5px] text-slate-500">
+                          Tài khoản: @vanthu1
+                        </div>
+                        <div class="text-[12.5px] text-slate-500">
+                          Mã cán bộ: VT-003
+                        </div>
+                        <div class="text-[12px] text-slate-500">
+                          Thư điện tử: levancuong@thanhkhe.gov.vn
+                        </div>
+                      </td>
+                      <td class="px-4 py-3">
+                        <span class="chip">Văn thư</span>
+                        <span class="chip chip--green"
+                          >Chuyên viên (viewer)</span
+                        >
+                      </td>
+                      <td class="px-4 py-3">Văn phòng UBND</td>
+                      <td class="px-4 py-3">
+                        <div class="flex flex-col gap-1">
+                          <span class="badge badge--green">Hoạt động</span>
+                          <span class="text-[12px] text-slate-500"
+                            >Đã kích hoạt ký số</span
+                          >
+                        </div>
+                      </td>
+                      <td class="px-4 py-3 text-slate-600">
+                        2024-12-24 17:58<br /><span class="text-[12px]"
+                          >IP: 10.10.3.50</span
+                        >
+                      </td>
+                      <td class="px-4 py-3">
+                        <button
+                          class="h-9 rounded-lg border border-slate-200 px-3 text-[13px] hover:bg-slate-50"
+                        >
+                          Phân quyền
+                        </button>
+                      </td>
+                    </tr>
+                    <tr class="hover:bg-slate-50/60">
+                      <td class="px-4 py-3">
+                        <div class="font-medium">Phạm Thị Dung</div>
+                        <div class="text-[12.5px] text-slate-500">
+                          Tài khoản: @admin01
+                        </div>
+                        <div class="text-[12.5px] text-slate-500">
+                          Mã cán bộ: QT-000
+                        </div>
+                        <div class="text-[12px] text-slate-500">
+                          Thư điện tử: phamthidung@thanhkhe.gov.vn
+                        </div>
+                      </td>
+                      <td class="px-4 py-3">
+                        <span class="chip chip--red">Quản trị</span>
+                        <span class="chip chip--purple">Lãnh đạo</span>
+                      </td>
+                      <td class="px-4 py-3">Phòng Tin học</td>
+                      <td class="px-4 py-3">
+                        <div class="flex flex-col gap-1">
+                          <span class="badge badge--green">Hoạt động</span>
+                          <span class="text-[12px] text-slate-500"
+                            >Xác thực: Qua OTP</span
+                          >
+                        </div>
+                      </td>
+                      <td class="px-4 py-3 text-slate-600">
+                        2024-12-25 08:05<br /><span class="text-[12px]"
+                          >IP: 10.10.1.12</span
+                        >
+                      </td>
+                      <td class="px-4 py-3">
+                        <button
+                          class="h-9 rounded-lg border border-slate-200 px-3 text-[13px] hover:bg-slate-50"
+                        >
+                          Phân quyền
+                        </button>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </section>
+          </div>
+        </main>
+      </div>
+    </div>
+
+    <!-- FOOTER -->
+    <div data-include="footer"></div>
+
+    <!-- Scripts -->
+    <script src="../assets/js/quantri.js" defer></script>
+    
+  </body>
+</html>

@@ -1,0 +1,531 @@
+﻿<!-- File: lanhdao/dashboard.html -->
+<!DOCTYPE html>
+<html lang="vi">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>
+      Hệ thống Quản lý Văn bản &amp; Điều hành • Trang tổng quan Lãnh đạo
+    </title>
+
+
+    <!-- App theme overrides -->
+    <link rel="stylesheet" href="../assets/css/styles.css" />
+  </head>
+  <body class="bg-slate-100 text-slate-800" data-role="lanhdao" data-root="..">
+    <!-- ===========================
+        HEADER
+  ============================ -->
+    <div data-include="header"></div>
+
+    <!-- ===========================
+        SHELL
+  ============================ -->
+    <div class="pt-14">
+      <div class="flex">
+        <!-- ====== SIDEBAR ====== -->
+        <div data-include="sidebar"></div>
+
+        <!-- ====== MAIN ====== -->
+        <main class="w-full">
+          <div class="max-w-none px-6 lg:px-8 py-6 lg:py-7">
+            <!-- ====== TOP METRICS ====== -->
+            <section class="grid grid-cols-1 md:grid-cols-4 gap-4 lg:gap-6">
+              <!-- Văn bản chờ duyệt -->
+              <article class="bg-white border border-slate-200 rounded-xl p-4">
+                <div class="flex items-start justify-between">
+                  <h3 class="text-[13px] font-semibold text-slate-600">
+                    Văn bản chờ phê duyệt
+                  </h3>
+                  <button
+                    class="p-1.5 rounded hover:bg-slate-100"
+                    title="Tạo nhanh"
+                    aria-label="Tạo nhanh"
+                  >
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      class="h-4 w-4 text-slate-400"
+                      viewBox="0 0 20 20"
+                      fill="currentColor"
+                      aria-hidden="true"
+                    >
+                      <path
+                        d="M10 3a1 1 0 011 1v5h5a1 1 0 110 2h-5v5a1 1 0 11-2 0v-5H4a1 1 0 110-2h5V4a1 1 0 011-1z"
+                      />
+                    </svg>
+                  </button>
+                </div>
+                <div class="pt-2">
+                  <div
+                    id="kpiPendingApprove"
+                    class="text-3xl font-bold text-orange-600"
+                  >
+                    4
+                  </div>
+                  <div class="text-[13px] text-slate-500">Cần phê duyệt</div>
+                </div>
+              </article>
+
+              <!-- Văn bản chờ ký -->
+              <article class="bg-white border border-slate-200 rounded-xl p-4">
+                <div class="flex items-start justify-between">
+                  <h3 class="text-[13px] font-semibold text-slate-600">
+                    Văn bản chờ ký
+                  </h3>
+                  <button
+                    class="p-1.5 rounded hover:bg-slate-100"
+                    title="Xem danh sách"
+                    aria-label="Xem danh sách"
+                  >
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      class="h-4 w-4 text-slate-400"
+                      viewBox="0 0 20 20"
+                      fill="currentColor"
+                      aria-hidden="true"
+                    >
+                      <path
+                        d="M16.5 3.5a2.121 2.121 0 013 3L7 19l-4 1 1-4 12.5-12.5z"
+                      />
+                    </svg>
+                  </button>
+                </div>
+                <div class="pt-2">
+                  <div
+                    id="kpiPendingSign"
+                    class="text-3xl font-bold text-indigo-600"
+                  >
+                    3
+                  </div>
+                  <div class="text-[13px] text-slate-500">
+                    Văn bản đi cần ký
+                  </div>
+                </div>
+              </article>
+
+              <!-- Công việc hoàn thành -->
+              <article class="bg-white border border-slate-200 rounded-xl p-4">
+                <div class="flex items-start justify-between">
+                  <h3 class="text-[13px] font-semibold text-slate-600">
+                    Công việc hoàn thành
+                  </h3>
+                  <button
+                    class="p-1.5 rounded hover:bg-slate-100"
+                    title="Chi tiết"
+                    aria-label="Chi tiết"
+                  >
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      class="h-4 w-4 text-slate-400"
+                      viewBox="0 0 20 20"
+                      fill="currentColor"
+                      aria-hidden="true"
+                    >
+                      <path d="M5 13l4 4L19 7" />
+                    </svg>
+                  </button>
+                </div>
+                <div class="pt-2">
+                  <div class="text-3xl font-bold text-emerald-600">
+                    <span id="kpiDone">2</span>/<span id="kpiTotal">12</span>
+                  </div>
+                  <div class="text-[13px] text-slate-500">
+                    Tỷ lệ <span id="kpiRate">17%</span>
+                  </div>
+                </div>
+              </article>
+
+              <!-- Công việc trễ hạn -->
+              <article class="bg-white border border-slate-200 rounded-xl p-4">
+                <div class="flex items-start justify-between">
+                  <h3 class="text-[13px] font-semibold text-slate-600">
+                    Công việc trễ hạn
+                  </h3>
+                  <button
+                    class="p-1.5 rounded hover:bg-slate-100"
+                    title="Chi tiết"
+                    aria-label="Chi tiết"
+                  >
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      class="h-4 w-4 text-slate-400"
+                      viewBox="0 0 20 20"
+                      fill="currentColor"
+                      aria-hidden="true"
+                    >
+                      <path
+                        d="M10 2a8 8 0 100 16 8 8 0 000-16zm1 9V6a1 1 0 10-2 0v6h4a1 1 0 100-2h-2z"
+                      />
+                    </svg>
+                  </button>
+                </div>
+                <div class="pt-2">
+                  <div id="kpiLate" class="text-3xl font-bold text-rose-600">
+                    10
+                  </div>
+                  <div class="text-[13px] text-slate-500">Cần chỉ đạo khẩn</div>
+                </div>
+              </article>
+            </section>
+
+            <!-- ====== TWO COLUMNS: VB CẦN PHÊ DUYỆT + TRẠNG THÁI ====== -->
+            <section class="mt-6 grid grid-cols-1 lg:grid-cols-2 gap-6">
+              <!-- Văn bản cần phê duyệt -->
+              <article class="bg-white border border-slate-200 rounded-xl">
+                <header class="px-4 py-3 border-b border-slate-100">
+                  <h3 class="text-[15px] font-semibold">
+                    Văn bản cần phê duyệt
+                  </h3>
+                  <p class="text-[12.5px] text-slate-500 mt-0.5">
+                    Danh sách văn bản chờ phê duyệt và chờ ký
+                  </p>
+                </header>
+
+                <ul class="divide-y divide-slate-100" id="approve-list">
+                  <li
+                    class="px-4 py-3 flex items-start justify-between gap-4 hover:bg-slate-50/60"
+                  >
+                    <div>
+                      <p class="font-medium">
+                        Thông báo tổ chức Đại hội Đảng bộ phường
+                      </p>
+                      <p class="text-[12.5px] text-slate-500">
+                        Số: 001/TB-UBND | 2024-01-15 —
+                        <span class="font-medium text-slate-600"
+                          >Hạn: 2024-01-20</span
+                        >
+                      </p>
+                    </div>
+                    <span
+                      class="rounded-full bg-amber-50 text-amber-700 text-xs font-semibold px-2.5 py-1"
+                      >Chờ duyệt</span
+                    >
+                  </li>
+
+                  <li
+                    class="px-4 py-3 flex items-start justify-between gap-4 hover:bg-slate-50/60"
+                  >
+                    <div>
+                      <p class="font-medium">
+                        Báo cáo kết quả thực hiện kế hoạch phát triển kinh tế
+                        2023
+                      </p>
+                      <p class="text-[12.5px] text-slate-500">
+                        Số: 021/BC-UBND | 2024-01-18
+                      </p>
+                    </div>
+                    <button
+                      class="px-3 py-1.5 rounded-md bg-slate-900 text-white text-[12px] font-medium hover:bg-slate-700"
+                      title="Phê duyệt"
+                    >
+                      Chờ duyệt
+                    </button>
+                  </li>
+
+                  <li
+                    class="px-4 py-3 flex items-start justify-between gap-4 hover:bg-slate-50/60"
+                  >
+                    <div>
+                      <p class="font-medium">
+                        Công văn đề nghị cấp kinh phí tổ chức sự kiện
+                      </p>
+                      <p class="text-[12.5px] text-slate-500">
+                        Số: 026/CV-UBND | 2024-02-01
+                      </p>
+                    </div>
+                    <button
+                      class="px-3 py-1.5 rounded-md bg-slate-900 text-white text-[12px] font-medium hover:bg-slate-700"
+                      title="Phê duyệt"
+                    >
+                      Chờ duyệt
+                    </button>
+                  </li>
+
+                  <li
+                    class="px-4 py-3 flex items-start justify-between gap-4 hover:bg-slate-50/60"
+                  >
+                    <div>
+                      <p class="font-medium">
+                        Quyết định phân công nhiệm vụ cho cán bộ
+                      </p>
+                      <p class="text-[12.5px] text-slate-500">
+                        Số: 028/QĐ-UBND | 2024-02-01
+                      </p>
+                    </div>
+                    <button
+                      class="px-3 py-1.5 rounded-md bg-slate-900 text-white text-[12px] font-medium hover:bg-slate-700"
+                      title="Phê duyệt"
+                    >
+                      Chờ duyệt
+                    </button>
+                  </li>
+                </ul>
+
+                <footer class="px-4 py-3 border-t border-slate-100">
+                  <button
+                    id="btnViewAllApprove"
+                    class="w-full text-center text-sm font-medium text-blue-700 hover:text-blue-800"
+                    type="button"
+                  >
+                    Xem tất cả văn bản cần duyệt
+                  </button>
+                </footer>
+              </article>
+
+              <!-- Trạng thái phê duyệt -->
+              <aside class="bg-white border border-slate-200 rounded-xl">
+                <header class="px-4 py-3 border-b border-slate-100">
+                  <h3 class="text-[15px] font-semibold">
+                    Trạng thái phê duyệt
+                  </h3>
+                  <p class="text-[12.5px] text-slate-500 mt-0.5">
+                    document_approvals • các bước trình ký gần đây
+                  </p>
+                </header>
+
+                <ul class="divide-y divide-slate-100" id="approval-tracking">
+                  <li
+                    class="px-4 py-3 flex items-center justify-between hover:bg-slate-50/60"
+                  >
+                    <div class="flex items-start gap-3">
+                      <div
+                        class="mt-0.5 text-indigo-600 font-semibold text-[13px]"
+                      >
+                        STEP
+                      </div>
+                      <div>
+                        <p class="font-medium">VB-015 • Bước 2/3</p>
+                        <p class="text-[12.5px] text-slate-500">
+                          2024-02-08 08:45 — Đang chờ Chủ tịch phê duyệt quyết
+                          định.
+                        </p>
+                        <p class="text-[12px] text-slate-400">
+                          Người duyệt: Trần Thị Bình • Trạng thái: PENDING
+                        </p>
+                      </div>
+                    </div>
+                    <span
+                      class="px-3 py-1.5 rounded-md bg-amber-50 text-[12px] font-medium text-amber-700"
+                      >Chờ ký</span
+                    >
+                  </li>
+
+                  <li
+                    class="px-4 py-3 flex items-center justify-between hover:bg-slate-50/60"
+                  >
+                    <div class="flex items-start gap-3">
+                      <div
+                        class="mt-0.5 text-indigo-600 font-semibold text-[13px]"
+                      >
+                        STEP
+                      </div>
+                      <div>
+                        <p class="font-medium">VB-012 • Bước 3/3</p>
+                        <p class="text-[12.5px] text-slate-500">
+                          2024-02-06 16:10 — Đã ký số và ban hành đến các đơn vị
+                          liên quan.
+                        </p>
+                        <p class="text-[12px] text-slate-400">
+                          Người duyệt: Nguyễn Văn An • Trạng thái: APPROVE
+                        </p>
+                      </div>
+                    </div>
+                    <span
+                      class="px-3 py-1.5 rounded-md bg-emerald-50 text-[12px] font-medium text-emerald-700"
+                      >Đã ký</span
+                    >
+                  </li>
+
+                  <li
+                    class="px-4 py-3 flex items-center justify-between hover:bg-slate-50/60"
+                  >
+                    <div class="flex items-start gap-3">
+                      <div
+                        class="mt-0.5 text-indigo-600 font-semibold text-[13px]"
+                      >
+                        STEP
+                      </div>
+                      <div>
+                        <p class="font-medium">VB-019 • Bước 1/2</p>
+                        <p class="text-[12.5px] text-slate-500">
+                          2024-02-05 14:20 — Trả lại, yêu cầu bổ sung căn cứ
+                          pháp lý.
+                        </p>
+                        <p class="text-[12px] text-slate-400">
+                          Người duyệt: Phạm Thị Dung • Trạng thái: REJECT
+                        </p>
+                      </div>
+                    </div>
+                    <span
+                      class="px-3 py-1.5 rounded-md bg-rose-50 text-[12px] font-medium text-rose-700"
+                      >Yêu cầu bổ sung</span
+                    >
+                  </li>
+                </ul>
+              </aside>
+            </section>
+
+            <!-- ====== TIẾN ĐỘ + BÁO CÁO / THÔNG BÁO ====== -->
+            <section class="mt-6 grid grid-cols-1 lg:grid-cols-2 gap-6">
+              <!-- Tiến độ công việc toàn đơn vị -->
+              <article class="bg-white border border-slate-200 rounded-xl">
+                <header class="px-4 py-3 border-b border-slate-100">
+                  <h3 class="text-[15px] font-semibold">
+                    Tiến độ công việc toàn đơn vị
+                  </h3>
+                  <p class="text-[12.5px] text-slate-500">
+                    Tổng quan tiến độ các công việc đang triển khai
+                  </p>
+                </header>
+
+                <div class="p-4">
+                  <!-- progress -->
+                  <div
+                    class="flex items-center justify-between text-[12.5px] text-slate-500 mb-2"
+                  >
+                    <span>Hoàn thành</span>
+                    <span
+                      ><span id="unitDone">2</span>/<span id="unitTotal"
+                        >12</span
+                      ></span
+                    >
+                  </div>
+                  <div class="h-2 rounded-full bg-slate-100 overflow-hidden">
+                    <div
+                      id="unitProgressBar"
+                      class="h-full w-[17%] bg-blue-600"
+                    ></div>
+                  </div>
+
+                  <ul id="unitTaskList" class="mt-4 space-y-2.5">
+                    <li
+                      class="flex items-center justify-between rounded-lg border border-slate-200 px-3 py-2"
+                    >
+                      <span class="text-[14px]"
+                        >Chuẩn bị báo cáo tổng kết năm 2023</span
+                      >
+                      <span
+                        class="px-2.5 py-1 rounded-full bg-blue-50 text-blue-700 text-xs font-semibold"
+                        >Đang thực hiện</span
+                      >
+                    </li>
+                    <li
+                      class="flex items-center justify-between rounded-lg border border-slate-200 px-3 py-2"
+                    >
+                      <span class="text-[14px]"
+                        >Tổ chức họp Ban chỉ đạo xây dựng nông thôn mới</span
+                      >
+                      <span
+                        class="px-2.5 py-1 rounded-full bg-emerald-50 text-emerald-700 text-xs font-semibold"
+                        >Hoàn thành</span
+                      >
+                    </li>
+                    <li
+                      class="flex items-center justify-between rounded-lg border border-slate-200 px-3 py-2"
+                    >
+                      <span class="text-[14px]"
+                        >Xử lý văn bản về an toàn thực phẩm</span
+                      >
+                      <span
+                        class="px-2.5 py-1 rounded-full bg-slate-100 text-slate-700 text-xs font-semibold"
+                        >Chưa bắt đầu</span
+                      >
+                    </li>
+                  </ul>
+                </div>
+              </article>
+
+              <!-- Báo cáo & Thông báo -->
+              <aside class="bg-white border border-slate-200 rounded-xl">
+                <header class="px-4 py-3 border-b border-slate-100">
+                  <h3 class="text-[15px] font-semibold">
+                    Báo cáo &amp; Thông báo
+                  </h3>
+                  <p class="text-[12.5px] text-slate-500">
+                    Báo cáo chờ xử lý và thông báo quan trọng
+                  </p>
+                </header>
+
+                <ul class="p-2" id="alertList">
+                  <li
+                    class="px-3 py-3 rounded-lg hover:bg-slate-50 border-b border-slate-100 last:border-b-0"
+                  >
+                    <div class="flex items-start gap-3">
+                      <div class="mt-0.5 text-blue-600">🔔</div>
+                      <div class="flex-1">
+                        <p class="font-medium text-[14px]">
+                          Văn bản VB008 sắp hết hạn xử lý
+                        </p>
+                        <p class="text-[12.5px] text-slate-500">
+                          Thông báo về việc kiểm tra an toàn thực phẩm sắp hết
+                          hạn xử lý vào ngày 05/02/2024
+                        </p>
+                        <div class="text-[12px] text-slate-400 mt-1">
+                          2024-02-03
+                        </div>
+                      </div>
+                      <span
+                        class="w-2 h-2 rounded-full bg-blue-600 mt-2"
+                      ></span>
+                    </div>
+                  </li>
+
+                  <li
+                    class="px-3 py-3 rounded-lg hover:bg-slate-50 border-b border-slate-100 last:border-b-0"
+                  >
+                    <div class="flex items-start gap-3">
+                      <div class="mt-0.5 text-blue-600">🔔</div>
+                      <div class="flex-1">
+                        <p class="font-medium text-[14px]">
+                          Có văn bản mới cần xử lý
+                        </p>
+                        <p class="text-[12.5px] text-slate-500">
+                          Công văn về công tác chuẩn bị bầu cử vừa được tiếp
+                          nhận
+                        </p>
+                        <div class="text-[12px] text-slate-400 mt-1">
+                          2024-02-07
+                        </div>
+                      </div>
+                      <span
+                        class="w-2 h-2 rounded-full bg-blue-600 mt-2"
+                      ></span>
+                    </div>
+                  </li>
+
+                  <li class="px-3 py-3 rounded-lg hover:bg-slate-50">
+                    <div class="flex items-start gap-3">
+                      <div class="mt-0.5 text-blue-600">🔔</div>
+                      <div class="flex-1">
+                        <p class="font-medium text-[14px]">
+                          Nhiệm vụ T006 đã quá hạn
+                        </p>
+                        <p class="text-[12.5px] text-slate-500">
+                          “Xử lý công văn về kỷ luật, kỷ cương” đã quá hạn hoàn
+                          thành
+                        </p>
+                        <div class="text-[12px] text-slate-400 mt-1">
+                          2024-02-08
+                        </div>
+                      </div>
+                    </div>
+                  </li>
+                </ul>
+              </aside>
+            </section>
+          </div>
+        </main>
+      </div>
+    </div>
+
+    <!-- ===========================
+        FOOTER
+  ============================ -->
+    <div data-include="footer"></div>
+
+    <!-- App script -->
+    <script src="../assets/js/api.js"></script>
+    <script src="../assets/js/layout.js"></script>
+    <script src="../assets/js/lanhdao.js"></script>
+</body>
+</html>

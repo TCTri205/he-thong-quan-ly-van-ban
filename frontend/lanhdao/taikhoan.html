@@ -1,0 +1,281 @@
+﻿<!-- File: lanhdao/taikhoan.html -->
+<!DOCTYPE html>
+<html lang="vi">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Hệ thống Quản lý Văn bản &amp; Điều hành • Tài khoản (Lãnh đạo)</title>
+    <!-- App theme overrides (shared) -->
+    <link rel="stylesheet" href="../assets/css/styles.css" />
+  </head>
+  <body class="bg-slate-100 text-slate-800" data-role="lanhdao" data-root=".." data-login-path="../login.html">
+    <!-- ================= HEADER ================= -->
+    <div data-include="header"></div>
+
+    <!-- ================ SHELL ================ -->
+    <div class="pt-14">
+      <div class="flex">
+        <!-- Sidebar -->
+        <div data-include="sidebar"></div>
+
+        <!-- Main -->
+        <main class="w-full">
+          <div class="max-w-none px-6 lg:px-8 py-6 lg:py-7">
+            <!-- ====== THÔNG TIN CÁ NHÂN ====== -->
+            <section class="bg-white border border-slate-200 rounded-xl">
+              <header
+                class="px-4 py-3 border-b border-slate-100 flex items-center justify-between"
+              >
+                <h2 class="text-[15px] font-semibold">Thông tin cá nhân</h2>
+                <div class="flex items-center gap-2">
+                  <button
+                    id="btnEdit"
+                    type="button"
+                    class="px-3 h-9 rounded-md bg-slate-100 hover:bg-slate-200 text-sm font-medium"
+                  >
+                    ✎ Chỉnh sửa
+                  </button>
+                  <button
+                    id="btnSave"
+                    type="button"
+                    class="hidden px-3 h-9 rounded-md bg-blue-600 hover:bg-blue-700 text-white text-sm font-medium"
+                  >
+                    Lưu thay đổi
+                  </button>
+                  <button
+                    id="btnCancel"
+                    type="button"
+                    class="hidden px-3 h-9 rounded-md bg-slate-100 hover:bg-slate-200 text-sm font-medium"
+                  >
+                    Huỷ
+                  </button>
+                </div>
+              </header>
+              <div class="p-4">
+                <div
+                  class="flex flex-col md:flex-row md:items-center md:justify-between gap-4 pb-4"
+                >
+                  <div class="flex items-center gap-4">
+                    <div
+                      class="w-16 h-16 rounded-full bg-blue-50 text-blue-600 grid place-items-center text-lg font-bold" data-avatar-initials="--"
+                      aria-label="Avatar lớn"
+                    >
+                      TTB
+                    </div>
+                    <div>
+                      <div class="flex items-center gap-2">
+                        <h3 id="displayName" class="text-lg font-semibold">
+                          Trần Thị Bình
+                        </h3>
+                        <span
+                          class="px-2 py-0.5 rounded-full text-xs font-semibold bg-blue-50 text-blue-700"
+                          >Lãnh đạo</span
+                        >
+                      </div>
+                      <div class="text-[13px] text-slate-500">@lanhdao1</div>
+                      <div class="text-[12px] text-slate-400">
+                        Tài khoản được tạo từ tháng 09/2023
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <label class="block">
+                    <span class="text-[13px] text-slate-500">Họ và tên</span>
+                    <input
+                      id="inpName"
+                      class="mt-1 w-full h-10 rounded-lg border border-slate-200 px-3 focus:outline-none focus:ring-2 focus:ring-blue-600/20"
+                      value="Trần Thị Bình"
+                      disabled
+                    />
+                  </label>
+                  <label class="block">
+                    <span class="text-[13px] text-slate-500"
+                      >Email công vụ</span
+                    >
+                    <input
+                      id="inpEmail"
+                      type="email"
+                      class="mt-1 w-full h-10 rounded-lg border border-slate-200 px-3 focus:outline-none focus:ring-2 focus:ring-blue-600/20"
+                      value="tranthibinh@thanhkhe.gov.vn"
+                      disabled
+                    />
+                  </label>
+                  <label class="block">
+                    <span class="text-[13px] text-slate-500"
+                      >Số điện thoại</span
+                    >
+                    <input
+                      id="inpPhone"
+                      class="mt-1 w-full h-10 rounded-lg border border-slate-200 px-3 focus:outline-none focus:ring-2 focus:ring-blue-600/20"
+                      value="0902345678"
+                      disabled
+                    />
+                  </label>
+                  <label class="block">
+                    <span class="text-[13px] text-slate-500">Phòng ban</span>
+                    <input
+                      id="inpDept"
+                      class="mt-1 w-full h-10 rounded-lg border border-slate-200 px-3 focus:outline-none focus:ring-2 focus:ring-blue-600/20"
+                      value="Văn phòng Chủ tịch"
+                      disabled
+                    />
+                  </label>
+                </div>
+              </div>
+            </section>
+
+            <!-- ====== BẢO MẬT TÀI KHOẢN ====== -->
+            <section class="mt-6 bg-white border border-slate-200 rounded-xl">
+              <header
+                class="px-4 py-3 border-b border-slate-100 flex items-center justify-between"
+              >
+                <h2 class="text-[15px] font-semibold">Bảo mật tài khoản</h2>
+                <button
+                  id="btnOpenPwd"
+                  type="button"
+                  class="px-3 h-9 rounded-md bg-slate-100 hover:bg-slate-200 text-sm font-medium"
+                >
+                  🔑 Đổi mật khẩu
+                </button>
+              </header>
+              <div class="p-4">
+                <div
+                  class="rounded-lg border border-emerald-200 bg-emerald-50 p-3 text-[14px] text-emerald-700"
+                >
+                  <div class="font-medium">Tài khoản được bảo mật</div>
+                  <div class="text-[12.5px] text-emerald-700/80">
+                    Mật khẩu được cập nhật lần cuối:
+                    <span id="pwdLastChanged">05/12/2023</span>
+                  </div>
+                </div>
+                <div class="mt-4">
+                  <h3 class="text-[14px] font-semibold mb-2">
+                    Lịch sử đăng nhập gần đây:
+                  </h3>
+                  <ul
+                    id="signinList"
+                    class="divide-y divide-slate-100 rounded-lg border border-slate-200 bg-white"
+                    aria-live="polite"
+                  >
+                    <!-- rows injected by JS -->
+                  </ul>
+                </div>
+              </div>
+            </section>
+
+            <!-- ====== ĐĂNG XUẤT ====== -->
+            <section class="mt-6 bg-white border border-slate-200 rounded-xl">
+              <header class="px-4 py-3 border-b border-slate-100">
+                <h2 class="text-[15px] font-semibold">Đăng xuất</h2>
+              </header>
+              <div class="p-4">
+                <p class="text-[13.5px] text-slate-600">
+                  Đăng xuất khỏi tài khoản này. Bạn sẽ cần đăng nhập lại để tiếp
+                  tục sử dụng hệ thống.
+                </p>
+                <button
+                  id="btnLogout" data-action="logout" data-logout-confirm="Bạn có chắc muốn đăng xuất?"
+                  type="button"
+                  class="mt-3 inline-flex items-center gap-2 px-3 h-9 rounded-md bg-rose-600 hover:bg-rose-700 text-white text-sm font-medium"
+                >
+                  ↪ Đăng xuất
+                </button>
+              </div>
+            </section>
+          </div>
+        </main>
+      </div>
+    </div>
+
+    <!-- ================ FOOTER ================ -->
+    <div data-include="footer"></div>
+
+    <!-- Toast -->
+    <div id="toast" class="toast" aria-live="polite"></div>
+
+    <!-- Modal: Đổi mật khẩu -->
+    <div
+      id="pwdModal"
+      class="fixed inset-0 z-[60] hidden"
+      role="dialog"
+      aria-modal="true"
+      aria-labelledby="pwdTitle"
+    >
+      <div class="absolute inset-0 bg-slate-900/40"></div>
+      <div
+        class="relative mx-auto mt-24 w-[92%] max-w-md rounded-xl bg-white border border-slate-200 shadow-lg"
+      >
+        <header
+          class="px-4 py-3 border-b border-slate-100 flex items-center justify-between"
+        >
+          <h3 id="pwdTitle" class="text-[15px] font-semibold">Đổi mật khẩu</h3>
+          <button
+            id="pwdClose"
+            type="button"
+            class="grid place-items-center w-9 h-9 rounded-full hover:bg-slate-100"
+            aria-label="Đóng"
+          >
+            ✕
+          </button>
+        </header>
+        <div class="p-4 space-y-3">
+          <label class="block">
+            <span class="text-[13px] text-slate-500">Mật khẩu hiện tại</span>
+            <input
+              id="curPwd"
+              type="password"
+              class="mt-1 w-full h-10 rounded-lg border border-slate-200 px-3 focus:outline-none focus:ring-2 focus:ring-blue-600/20"
+            />
+          </label>
+          <label class="block">
+            <span class="text-[13px] text-slate-500">Mật khẩu mới</span>
+            <input
+              id="newPwd"
+              type="password"
+              class="mt-1 w-full h-10 rounded-lg border border-slate-200 px-3 focus:outline-none focus:ring-2 focus:ring-blue-600/20"
+            />
+          </label>
+          <label class="block">
+            <span class="text-[13px] text-slate-500"
+              >Xác nhận mật khẩu mới</span
+            >
+            <input
+              id="cfmPwd"
+              type="password"
+              class="mt-1 w-full h-10 rounded-lg border border-slate-200 px-3 focus:outline-none focus:ring-2 focus:ring-blue-600/20"
+            />
+          </label>
+          <p class="text-[12.5px] text-slate-500">
+            Gợi ý: dùng tối thiểu 8 ký tự, gồm chữ hoa, chữ thường, số và ký
+            hiệu.
+          </p>
+        </div>
+        <div
+          class="p-4 border-t border-slate-100 flex items-center justify-end gap-2"
+        >
+          <button
+            id="pwdCancel"
+            type="button"
+            class="px-3 h-9 rounded-md bg-slate-100 hover:bg-slate-200 text-sm font-medium"
+          >
+            Huỷ
+          </button>
+          <button
+            id="pwdSubmit"
+            type="button"
+            class="px-3 h-9 rounded-md bg-blue-600 hover:bg-blue-700 text-white text-sm font-medium"
+          >
+            Cập nhật
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Base app script cho khối Lãnh đạo -->
+    <script src="../assets/js/api.js"></script>
+    <script src="../assets/js/layout.js"></script>
+    <script src="../assets/js/lanhdao.js"></script>
+</body>
+</html>

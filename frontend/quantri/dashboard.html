@@ -1,0 +1,528 @@
+﻿<!-- File: quantri/dashboard.html -->
+<!DOCTYPE html>
+<html lang="vi">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>
+      Hệ thống Quản lý Văn bản &amp; Điều hành • Trang tổng quan quản trị
+    </title>
+
+
+    <!-- App theme overrides (dùng chung toàn hệ thống) -->
+    <link rel="stylesheet" href="../assets/css/styles.css" />
+  </head>
+  <body class="bg-slate-100 text-slate-800" data-role="quantri" data-root="..">
+    <!-- ===========================
+      HEADER (đồng bộ với chuyenvien)
+  ============================ -->
+    <div data-include="header"></div>
+
+    <!-- ===========================
+      SHELL
+  ============================ -->
+    <div class="pt-14">
+      <div class="flex">
+        <!-- ====== SIDEBAR (from vanthu/dashboard.html pattern) ====== -->
+        <div data-include="sidebar"></div>
+
+        <!-- ====== MAIN ====== -->
+        <main class="w-full">
+          <div class="max-w-none px-6 lg:px-8 py-6 lg:py-7">
+            <!-- ====== TOP METRICS (4 cards) ====== -->
+            <section
+              class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 lg:gap-6"
+            >
+              <!-- card 1 -->
+              <article class="bg-white border border-slate-200 rounded-xl p-4">
+                <div class="flex items-start justify-between">
+                  <h3 class="text-[13px] font-semibold text-slate-600">
+                    Tổng số người dùng
+                  </h3>
+                  <button
+                    class="p-1.5 rounded hover:bg-slate-100"
+                    title="Tùy chọn"
+                    aria-label="Tùy chọn"
+                  >
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      class="h-4 w-4 text-slate-400"
+                      viewBox="0 0 20 20"
+                      fill="currentColor"
+                    >
+                      <path
+                        d="M10 3a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3Zm0 5.5a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3ZM10 14a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3Z"
+                      />
+                    </svg>
+                  </button>
+                </div>
+                <div class="pt-2">
+                  <div id="metricUsers" class="text-3xl font-bold">18</div>
+                  <div class="text-[13px] text-slate-500">
+                    <span id="metricUsersActive">15</span> đang hoạt động
+                  </div>
+                </div>
+              </article>
+              <!-- card 2 -->
+              <article class="bg-white border border-slate-200 rounded-xl p-4">
+                <div class="flex items-start justify-between">
+                  <h3 class="text-[13px] font-semibold text-slate-600">
+                    Tổng số văn bản
+                  </h3>
+                  <button
+                    class="p-1.5 rounded hover:bg-slate-100"
+                    title="Tùy chọn"
+                    aria-label="Tùy chọn"
+                  >
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      class="h-4 w-4 text-slate-400"
+                      viewBox="0 0 20 20"
+                      fill="currentColor"
+                    >
+                      <path d="M3 3h14v2H3V3Zm0 6h14v2H3V9Zm0 6h14v2H3v-2Z" />
+                    </svg>
+                  </button>
+                </div>
+                <div class="pt-2">
+                  <div id="metricDocs" class="text-3xl font-bold">39</div>
+                  <div class="text-[13px] text-slate-500">
+                    <span id="metricDocsDone">13</span> đã xử lý
+                  </div>
+                </div>
+              </article>
+              <!-- card 3 -->
+              <article class="bg-white border border-slate-200 rounded-xl p-4">
+                <div class="flex items-start justify-between">
+                  <h3 class="text-[13px] font-semibold text-slate-600">
+                    Dung lượng hệ thống
+                  </h3>
+                  <button
+                    class="p-1.5 rounded hover:bg-slate-100"
+                    title="Chi tiết"
+                    aria-label="Chi tiết"
+                  >
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      class="h-4 w-4 text-slate-400"
+                      viewBox="0 0 24 24"
+                      fill="currentColor"
+                    >
+                      <path
+                        d="M6 2h9l5 5v13a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2Zm8 1.5V8h4.5L14 3.5Z"
+                      />
+                    </svg>
+                  </button>
+                </div>
+                <div class="pt-2">
+                  <div
+                    id="metricStorage"
+                    class="text-3xl font-bold text-amber-600"
+                  >
+                    65%
+                  </div>
+                  <div class="text-[13px] text-slate-500">Đã sử dụng</div>
+                </div>
+              </article>
+              <!-- card 4 -->
+              <article class="bg-white border border-slate-200 rounded-xl p-4">
+                <div class="flex items-start justify-between">
+                  <h3 class="text-[13px] font-semibold text-slate-600">
+                    Cảnh báo hệ thống
+                  </h3>
+                  <button
+                    class="p-1.5 rounded hover:bg-slate-100"
+                    title="Xem"
+                    aria-label="Xem"
+                  >
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      class="h-4 w-4 text-slate-400"
+                      viewBox="0 0 24 24"
+                      fill="currentColor"
+                    >
+                      <path
+                        d="M1 21h22L12 2 1 21Zm12-3h-2v-2h2v2Zm0-4h-2v-4h2v4Z"
+                      />
+                    </svg>
+                  </button>
+                </div>
+                <div class="pt-2">
+                  <div
+                    id="metricAlerts"
+                    class="text-3xl font-bold text-rose-600"
+                  >
+                    12
+                  </div>
+                  <div class="text-[13px] text-slate-500">
+                    Công việc trễ hạn
+                  </div>
+                </div>
+              </article>
+            </section>
+
+            <!-- ====== USERS BY ROLE + HEALTH ====== -->
+            <section class="mt-6 grid grid-cols-1 lg:grid-cols-2 gap-6">
+              <!-- Users by role -->
+              <article class="bg-white border border-slate-200 rounded-xl">
+                <header class="px-4 py-3 border-b border-slate-100">
+                  <h3 class="text-[15px] font-semibold">
+                    Phân bổ người dùng theo vai trò
+                  </h3>
+                  <p class="text-[12.5px] text-slate-500 mt-0.5">
+                    Tổng quan về cơ cấu nhân sự hệ thống
+                  </p>
+                </header>
+                <div class="p-4 space-y-3">
+                  <div class="flex items-center justify-between gap-3">
+                    <div class="flex items-center gap-3 flex-1">
+                      <span class="w-2.5 h-2.5 rounded-full bg-sky-500"></span
+                      ><span>Chuyên viên</span>
+                    </div>
+                    <span class="text-slate-500 text-sm mr-2">2</span>
+                    <div
+                      class="w-28 h-2 rounded-full bg-slate-100 overflow-hidden"
+                    >
+                      <div class="h-full bg-sky-500" style="width: 33%"></div>
+                    </div>
+                  </div>
+                  <div class="flex items-center justify-between gap-3">
+                    <div class="flex items-center gap-3 flex-1">
+                      <span
+                        class="w-2.5 h-2.5 rounded-full bg-emerald-500"
+                      ></span
+                      ><span>Lãnh đạo</span>
+                    </div>
+                    <span class="text-slate-500 text-sm mr-2">1</span>
+                    <div
+                      class="w-28 h-2 rounded-full bg-slate-100 overflow-hidden"
+                    >
+                      <div
+                        class="h-full bg-emerald-500"
+                        style="width: 17%"
+                      ></div>
+                    </div>
+                  </div>
+                  <div class="flex items-center justify-between gap-3">
+                    <div class="flex items-center gap-3 flex-1">
+                      <span
+                        class="w-2.5 h-2.5 rounded-full bg-indigo-500"
+                      ></span
+                      ><span>Văn thư</span>
+                    </div>
+                    <span class="text-slate-500 text-sm mr-2">2</span>
+                    <div
+                      class="w-28 h-2 rounded-full bg-slate-100 overflow-hidden"
+                    >
+                      <div
+                        class="h-full bg-indigo-500"
+                        style="width: 33%"
+                      ></div>
+                    </div>
+                  </div>
+                  <div class="flex items-center justify-between gap-3">
+                    <div class="flex items-center gap-3 flex-1">
+                      <span class="w-2.5 h-2.5 rounded-full bg-amber-500"></span
+                      ><span>Quản trị</span>
+                    </div>
+                    <span class="text-slate-500 text-sm mr-2">1</span>
+                    <div
+                      class="w-28 h-2 rounded-full bg-slate-100 overflow-hidden"
+                    >
+                      <div class="h-full bg-amber-500" style="width: 17%"></div>
+                    </div>
+                  </div>
+                  <div class="pt-2">
+                    <a
+                      href="nguoidung.html"
+                      class="text-[13px] text-blue-600 hover:underline"
+                      >Quản lý người dùng</a
+                    >
+                  </div>
+                </div>
+              </article>
+
+              <!-- System health -->
+              <article class="bg-white border border-slate-200 rounded-xl">
+                <header class="px-4 py-3 border-b border-slate-100">
+                  <h3 class="text-[15px] font-semibold">Tình trạng hệ thống</h3>
+                  <p class="text-[12.5px] text-slate-500 mt-0.5">
+                    Giám sát hiệu suất và tài nguyên
+                  </p>
+                </header>
+                <div class="p-4 space-y-4">
+                  <div>
+                    <div
+                      class="flex items-center justify-between text-[12.5px] text-slate-500 mb-1"
+                    >
+                      <span>Dung lượng đĩa</span><span id="diskUsage">65%</span>
+                    </div>
+                    <div class="h-2 rounded-full bg-slate-100 overflow-hidden">
+                      <div
+                        id="diskBar"
+                        class="h-full w-[65%] bg-slate-900"
+                      ></div>
+                    </div>
+                  </div>
+                  <div>
+                    <div
+                      class="flex items-center justify-between text-[12.5px] text-slate-500 mb-1"
+                    >
+                      <span>Bộ nhớ RAM</span><span id="ramUsage">42%</span>
+                    </div>
+                    <div class="h-2 rounded-full bg-slate-100 overflow-hidden">
+                      <div
+                        id="ramBar"
+                        class="h-full w-[42%] bg-slate-900/90"
+                      ></div>
+                    </div>
+                  </div>
+                  <div class="grid sm:grid-cols-2 gap-3">
+                    <div
+                      class="rounded-lg border border-emerald-200 bg-emerald-50 p-4"
+                    >
+                      <div class="text-emerald-700 text-[13px]">
+                        Thời gian hoạt động
+                      </div>
+                      <div id="uptime" class="mt-1 font-semibold text-lg">
+                        99.9%
+                      </div>
+                    </div>
+                    <div class="rounded-lg border border-sky-200 bg-sky-50 p-4">
+                      <div class="text-sky-700 text-[13px]">Máy chủ</div>
+                      <div id="serverStatus" class="mt-1 font-semibold text-lg">
+                        Trực tuyến
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </article>
+            </section>
+
+            <!-- ====== DOCS STATS + ACTIVITY ====== -->
+            <section class="mt-6 grid grid-cols-1 lg:grid-cols-2 gap-6">
+              <!-- Stats -->
+              <article class="bg-white border border-slate-200 rounded-xl">
+                <header class="px-4 py-3 border-b border-slate-100">
+                  <h3 class="text-[15px] font-semibold">
+                    Thống kê văn bản &amp; công việc
+                  </h3>
+                  <p class="text-[12.5px] text-slate-500 mt-0.5">
+                    Tình hình xử lý văn bản và công việc
+                  </p>
+                </header>
+                <div class="p-4 space-y-4">
+                  <div class="grid sm:grid-cols-2 gap-3">
+                    <div
+                      class="rounded-lg bg-slate-50 p-4 border border-slate-200"
+                    >
+                      <div class="text-slate-600 text-[13px]">Văn bản đến</div>
+                      <div id="docsIn" class="mt-1 text-2xl font-semibold">
+                        21
+                      </div>
+                    </div>
+                    <div
+                      class="rounded-lg bg-emerald-50 p-4 border border-emerald-200"
+                    >
+                      <div class="text-emerald-700 text-[13px]">Văn bản đi</div>
+                      <div id="docsOut" class="mt-1 text-2xl font-semibold">
+                        18
+                      </div>
+                    </div>
+                  </div>
+                  <div>
+                    <div
+                      class="flex items-center justify-between text-[12.5px] text-slate-500 mb-1"
+                    >
+                      <span>Tiến độ xử lý văn bản</span
+                      ><span
+                        ><span id="docsDone">13</span>/<span id="docsTotal"
+                          >39</span
+                        ></span
+                      >
+                    </div>
+                    <div class="h-2 rounded-full bg-slate-100 overflow-hidden">
+                      <div
+                        id="docsProgress"
+                        class="h-full w-[33%] bg-slate-900"
+                      ></div>
+                    </div>
+                  </div>
+                  <div>
+                    <div
+                      class="flex items-center justify-between text-[12.5px] text-slate-500 mb-1"
+                    >
+                      <span>Hoàn thành công việc</span
+                      ><span
+                        ><span id="tasksDone">0</span>/<span id="tasksTotal"
+                          >12</span
+                        ></span
+                      >
+                    </div>
+                    <div class="h-2 rounded-full bg-slate-100 overflow-hidden">
+                      <div
+                        id="tasksProgress"
+                        class="h-full w-[0%] bg-slate-900/90"
+                      ></div>
+                    </div>
+                  </div>
+                  <div class="rounded-lg border border-rose-200 bg-rose-50 p-4">
+                    <div class="text-rose-700 text-[13px]">
+                      Công việc trễ hạn
+                    </div>
+                    <div id="tasksOverdue" class="mt-1 text-xl font-semibold">
+                      12
+                    </div>
+                  </div>
+                </div>
+              </article>
+
+              <!-- Recent activities -->
+              <aside class="bg-white border border-slate-200 rounded-xl">
+                <header class="px-4 py-3 border-b border-slate-100">
+                  <h3 class="text-[15px] font-semibold">Hoạt động gần đây</h3>
+                  <p class="text-[12.5px] text-slate-500 mt-0.5">
+                    Nhật ký hoạt động của hệ thống
+                  </p>
+                </header>
+                <ul
+                  class="p-2 divide-y divide-slate-100 max-h-[360px] overflow-auto custom-scroll"
+                  id="activityList"
+                >
+                  <li class="px-3 py-3 hover:bg-slate-50">
+                    <div class="flex items-start gap-3">
+                      <span
+                        class="mt-1 w-1.5 h-1.5 rounded-full bg-sky-500"
+                      ></span>
+                      <div class="flex-1">
+                        <p class="font-medium text-[14px]">Đăng nhập</p>
+                        <p class="text-[12.5px] text-slate-500">
+                          Nguyễn Văn An • 10 phút trước
+                        </p>
+                      </div>
+                    </div>
+                  </li>
+                  <li class="px-3 py-3 hover:bg-slate-50">
+                    <div class="flex items-start gap-3">
+                      <span
+                        class="mt-1 w-1.5 h-1.5 rounded-full bg-emerald-500"
+                      ></span>
+                      <div class="flex-1">
+                        <p class="font-medium text-[14px]">Tạo văn bản mới</p>
+                        <p class="text-[12.5px] text-slate-500">
+                          Lê Văn Cường • 25 phút trước
+                        </p>
+                      </div>
+                    </div>
+                  </li>
+                  <li class="px-3 py-3 hover:bg-slate-50">
+                    <div class="flex items-start gap-3">
+                      <span
+                        class="mt-1 w-1.5 h-1.5 rounded-full bg-indigo-500"
+                      ></span>
+                      <div class="flex-1">
+                        <p class="font-medium text-[14px]">Phê duyệt văn bản</p>
+                        <p class="text-[12.5px] text-slate-500">
+                          Trần Thị Bình • 1 giờ trước
+                        </p>
+                      </div>
+                    </div>
+                  </li>
+                  <li class="px-3 py-3 hover:bg-slate-50">
+                    <div class="flex items-start gap-3">
+                      <span
+                        class="mt-1 w-1.5 h-1.5 rounded-full bg-amber-500"
+                      ></span>
+                      <div class="flex-1">
+                        <p class="font-medium text-[14px]">Cập nhật hồ sơ</p>
+                        <p class="text-[12.5px] text-slate-500">
+                          Nguyễn Văn An • 2 giờ trước
+                        </p>
+                      </div>
+                    </div>
+                  </li>
+                  <li class="px-3 py-3 hover:bg-slate-50">
+                    <div class="flex items-start gap-3">
+                      <span
+                        class="mt-1 w-1.5 h-1.5 rounded-full bg-slate-600"
+                      ></span>
+                      <div class="flex-1">
+                        <p class="font-medium text-[14px]">Backup dữ liệu</p>
+                        <p class="text-[12.5px] text-slate-500">
+                          Hệ thống • 3 giờ trước
+                        </p>
+                      </div>
+                    </div>
+                  </li>
+                </ul>
+                <div class="px-3 pb-3">
+                  <a
+                    href="thongkebaocao.html#activity"
+                    class="w-full h-10 rounded-md border border-slate-200 text-[13px] hover:bg-slate-50 grid place-items-center"
+                    >Xem tất cả hoạt động</a
+                  >
+                </div>
+              </aside>
+            </section>
+
+            <!-- ====== QUICK ACTIONS ====== -->
+            <section class="mt-6 bg-white border border-slate-200 rounded-xl">
+              <header class="px-4 py-3 border-b border-slate-100">
+                <h3 class="text-[15px] font-semibold">Thao tác nhanh</h3>
+                <p class="text-[12.5px] text-slate-500">
+                  Các chức năng quản trị thường dùng
+                </p>
+              </header>
+              <div
+                class="p-4 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4"
+              >
+                <button
+                  data-action="add-user"
+                  class="h-24 rounded-xl border border-slate-200 hover:bg-slate-50 flex flex-col items-center justify-center gap-1.5"
+                >
+                  <span class="text-xl">👤</span>
+                  <span class="font-medium text-[14px]">Thêm người dùng</span>
+                </button>
+                <button
+                  data-action="backup"
+                  class="h-24 rounded-xl border border-slate-200 hover:bg-slate-50 flex flex-col items-center justify-center gap-1.5"
+                >
+                  <span class="text-xl">💾</span>
+                  <span class="font-medium text-[14px]">Backup dữ liệu</span>
+                </button>
+                <button
+                  data-action="security"
+                  class="h-24 rounded-xl border border-slate-200 hover:bg-slate-50 flex flex-col items-center justify-center gap-1.5"
+                >
+                  <span class="text-xl">🔐</span>
+                  <span class="font-medium text-[14px]">Cấu hình bảo mật</span>
+                </button>
+                <button
+                  data-action="report"
+                  class="h-24 rounded-xl border border-slate-200 hover:bg-slate-50 flex flex-col items-center justify-center gap-1.5"
+                >
+                  <span class="text-xl">📈</span>
+                  <span class="font-medium text-[14px]">Báo cáo hệ thống</span>
+                </button>
+              </div>
+            </section>
+          </div>
+        </main>
+      </div>
+    </div>
+
+    <!-- ===========================
+      FOOTER
+  ============================ -->
+    <div data-include="footer"></div>
+
+    <!-- Role script -->
+    <script src="../assets/js/api.js"></script>
+    <script src="../assets/js/doc-helpers.js"></script>
+    <script src="../assets/js/layout.js"></script>
+    <script src="../assets/js/quantri.js"></script>
+
+    <!-- Trang có thể hoạt động độc lập nếu thiếu quantri.js (fallback nhẹ nhàng) -->
+    
+  </body>
+</html>

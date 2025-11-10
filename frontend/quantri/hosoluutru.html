@@ -1,0 +1,692 @@
+﻿<!-- File: quantri/hosoluutru.html -->
+<!DOCTYPE html>
+<html lang="vi">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>
+      Hệ thống Quản lý Văn bản &amp; Điều hành • Hồ sơ &amp; Lưu trữ
+    </title>
+    <!-- App theme overrides -->
+    <link rel="stylesheet" href="../assets/css/styles.css" />
+    <style>
+      /* Đồng bộ sidebar và tiện ích chung với các trang quản trị khác */
+      .badge {
+        display: inline-flex;
+        align-items: center;
+        border-radius: 6px;
+        padding: 2px 8px;
+        border: 1px solid #e2e8f0;
+        background: #f8fafc;
+        font-size: 12px;
+        color: #334155;
+      }
+      .badge--ok {
+        border-color: #0f172a;
+        background: #0f172a;
+        color: #fff;
+      }
+    </style>
+  </head>
+  <body class="bg-slate-100 text-slate-800" data-role="quantri" data-root="..">
+    <!-- ===========================
+      HEADER (đồng nhất hệ thống)
+  ============================ -->
+    <div data-include="header"></div>
+
+    <!-- ===========================
+      LAYOUT
+  ============================ -->
+    <div class="pt-14">
+      <div class="flex">
+        <!-- ===== Sidebar ===== -->
+        <div data-include="sidebar"></div>
+
+        <!-- ===== Main ===== -->
+        <main class="w-full">
+          <div class="max-w-none px-6 lg:px-8 py-6 lg:py-7">
+            <h1 class="text-[15px] font-semibold mb-3">
+              Quản lý lưu trữ hồ sơ và dữ liệu hệ thống
+            </h1>
+
+            <!-- ===== KPIs ===== -->
+            <section
+              class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 lg:gap-6"
+            >
+              <!-- card -->
+              <article
+                class="bg-white border border-slate-200 rounded-xl p-4 flex items-center justify-between"
+              >
+                <div>
+                  <p class="text-[13px] text-slate-600 font-semibold">
+                    Tổng dung lượng
+                  </p>
+                  <p class="mt-2 text-3xl font-bold">500 GB</p>
+                </div>
+                <div
+                  class="w-10 h-10 rounded-lg bg-blue-50 grid place-items-center"
+                >
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    class="w-6 h-6 text-blue-600"
+                    viewBox="0 0 24 24"
+                    fill="currentColor"
+                  >
+                    <path
+                      d="M6 2h9l5 5v13a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2m8 1.5V8h4.5z"
+                    />
+                  </svg>
+                </div>
+              </article>
+              <article
+                class="bg-white border border-slate-200 rounded-xl p-4 flex items-center justify-between"
+              >
+                <div>
+                  <p class="text-[13px] text-slate-600 font-semibold">
+                    Đã sử dụng
+                  </p>
+                  <p class="mt-2 text-3xl font-bold text-amber-600">347.5 GB</p>
+                  <p class="text-[12px] text-slate-500">
+                    69.5% tổng dung lượng
+                  </p>
+                </div>
+                <div
+                  class="w-10 h-10 rounded-lg bg-amber-50 grid place-items-center"
+                >
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    class="w-6 h-6 text-amber-600"
+                    viewBox="0 0 24 24"
+                    fill="currentColor"
+                  >
+                    <path
+                      d="M12 2a10 10 0 1 0 10 10A10.012 10.012 0 0 0 12 2m1 15H7v-2h6m4-4H7V9h10z"
+                    />
+                  </svg>
+                </div>
+              </article>
+              <article
+                class="bg-white border border-slate-200 rounded-xl p-4 flex items-center justify-between"
+              >
+                <div>
+                  <p class="text-[13px] text-slate-600 font-semibold">
+                    Còn trống
+                  </p>
+                  <p class="mt-2 text-3xl font-bold text-emerald-600">
+                    152.5 GB
+                  </p>
+                </div>
+                <div
+                  class="w-10 h-10 rounded-lg bg-emerald-50 grid place-items-center"
+                >
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    class="w-6 h-6 text-emerald-600"
+                    viewBox="0 0 24 24"
+                    fill="currentColor"
+                  >
+                    <path d="M3 4h18v2H3m0 6h18v2H3m0 6h18v2H3" />
+                  </svg>
+                </div>
+              </article>
+              <article
+                class="bg-white border border-slate-200 rounded-xl p-4 flex items-center justify-between"
+              >
+                <div>
+                  <p class="text-[13px] text-slate-600 font-semibold">
+                    Sao lưu gần nhất
+                  </p>
+                  <p class="mt-2 text-[14px] font-semibold">25/12/2024</p>
+                  <p class="text-[12px] text-emerald-600 font-medium">
+                    Thành công
+                  </p>
+                </div>
+                <div
+                  class="w-10 h-10 rounded-lg bg-violet-50 grid place-items-center"
+                >
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    class="w-6 h-6 text-violet-600"
+                    viewBox="0 0 24 24"
+                    fill="currentColor"
+                  >
+                    <path
+                      d="M12 2a10 10 0 1 0 10 10A10.012 10.012 0 0 0 12 2m-1 15-5-5 1.41-1.41L11 13.17l6.59-6.59L19 8z"
+                    />
+                  </svg>
+                </div>
+              </article>
+            </section>
+
+            <!-- ===== Segmented tabs ===== -->
+            <section class="mt-4">
+              <div
+                class="bg-white border border-slate-200 rounded-xl p-1 flex items-center text-[13px] overflow-x-auto"
+              >
+                <button
+                  class="seg-btn flex-1 h-10 rounded-lg text-center font-medium hover:bg-slate-50 px-3 whitespace-nowrap bg-blue-600 text-white"
+                  data-tab="usage"
+                >
+                  Dung lượng &amp; Backup
+                </button>
+                <button
+                  class="seg-btn flex-1 h-10 rounded-lg text-center font-medium hover:bg-slate-50 px-3 whitespace-nowrap"
+                  data-tab="policy"
+                >
+                  Quy định lưu trữ
+                </button>
+                <button
+                  class="seg-btn flex-1 h-10 rounded-lg text-center font-medium hover:bg-slate-50 px-3 whitespace-nowrap"
+                  data-tab="queue"
+                >
+                  Lưu trữ hồ sơ
+                </button>
+                <button
+                  class="seg-btn flex-1 h-10 rounded-lg text-center font-medium hover:bg-slate-50 px-3 whitespace-nowrap"
+                  data-tab="config"
+                >
+                  Cấu hình
+                </button>
+              </div>
+            </section>
+
+            <!-- ===========================
+               TAB 1: USAGE + BACKUP
+          ============================ -->
+            <section
+              id="tab-usage"
+              class="mt-4 grid grid-cols-1 xl:grid-cols-2 gap-6"
+            >
+              <!-- Left: breakdown -->
+              <article class="bg-white border border-slate-200 rounded-xl">
+                <header class="px-4 py-3 border-b border-slate-100">
+                  <h3 class="text-[15px] font-semibold">
+                    Phân bố dung lượng lưu trữ
+                  </h3>
+                  <p class="text-[12.5px] text-slate-500 mt-0.5">
+                    Tổng dung lượng đã sử dụng
+                  </p>
+                </header>
+                <div class="p-4">
+                  <div
+                    class="h-2.5 rounded-full bg-slate-200 overflow-hidden mb-4"
+                    aria-label="347.5/500 GB"
+                  >
+                    <div class="h-full bg-slate-900" style="width: 69.5%"></div>
+                  </div>
+                  <div class="grid grid-cols-2 sm:grid-cols-4 gap-4">
+                    <div class="text-center">
+                      <div
+                        class="mx-auto w-2 h-2 rounded-full bg-blue-500 mb-2"
+                      ></div>
+                      <p class="text-[12px] text-slate-500">Văn bản</p>
+                      <p class="text-[14px] font-semibold">234.2 GB</p>
+                    </div>
+                    <div class="text-center">
+                      <div
+                        class="mx-auto w-2 h-2 rounded-full bg-emerald-500 mb-2"
+                      ></div>
+                      <p class="text-[12px] text-slate-500">Hình ảnh</p>
+                      <p class="text-[14px] font-semibold">45.8 GB</p>
+                    </div>
+                    <div class="text-center">
+                      <div
+                        class="mx-auto w-2 h-2 rounded-full bg-violet-500 mb-2"
+                      ></div>
+                      <p class="text-[12px] text-slate-500">Đoạn phim</p>
+                      <p class="text-[14px] font-semibold">12.3 GB</p>
+                    </div>
+                    <div class="text-center">
+                      <div
+                        class="mx-auto w-2 h-2 rounded-full bg-slate-500 mb-2"
+                      ></div>
+                      <p class="text-[12px] text-slate-500">Khác</p>
+                      <p class="text-[14px] font-semibold">55.2 GB</p>
+                    </div>
+                  </div>
+                </div>
+              </article>
+
+              <!-- Right: restore -->
+              <article class="bg-white border border-slate-200 rounded-xl">
+                <header
+                  class="px-4 py-3 border-b border-slate-100 flex items-center justify-between"
+                >
+                  <h3 class="text-[15px] font-semibold">Khôi phục dữ liệu</h3>
+                  <button
+                    id="btn-restore"
+                    class="h-9 rounded-lg bg-slate-900 text-white text-[13px] px-3"
+                  >
+                    ⤴ Khôi phục
+                  </button>
+                </header>
+                <div class="p-6 text-center">
+                  <div
+                    class="mx-auto w-16 h-16 rounded-full border-2 border-dashed border-slate-300 grid place-items-center"
+                  >
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      class="w-8 h-8 text-slate-400"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                    >
+                      <path
+                        d="M12 5v14m7-7H5"
+                        stroke="currentColor"
+                        stroke-width="2"
+                        stroke-linecap="round"
+                      />
+                    </svg>
+                  </div>
+                  <p class="mt-3 text-[13px] text-slate-500">
+                    Chọn “Khôi phục” để khôi phục dữ liệu từ bản backup
+                  </p>
+                </div>
+              </article>
+
+              <!-- Backup history -->
+              <article
+                class="xl:col-span-2 bg-white border border-slate-200 rounded-xl"
+              >
+                <header
+                  class="px-4 py-3 border-b border-slate-100 flex items-center justify-between"
+                >
+                  <h3 class="text-[15px] font-semibold">Sao lưu dữ liệu</h3>
+                  <button
+                    id="btn-backup"
+                    class="h-9 rounded-lg bg-slate-900 text-white text-[13px] px-3"
+                  >
+                    ⬇ Tạo backup
+                  </button>
+                </header>
+                <ul class="p-3 space-y-3">
+                  <li
+                    class="rounded-lg border border-slate-200 px-4 py-3 flex items-center justify-between"
+                  >
+                    <div>
+                      <div class="font-medium">Sao lưu tự động</div>
+                      <div class="text-[12px] text-slate-500">
+                        2024-12-25 02:00 • 45.2 GB • 2h 15m
+                      </div>
+                    </div>
+                    <span
+                      class="inline-flex items-center rounded-full bg-emerald-50 text-emerald-700 text-xs font-semibold px-2.5 py-1"
+                      >Thành công</span
+                    >
+                  </li>
+                  <li
+                    class="rounded-lg border border-slate-200 px-4 py-3 flex items-center justify-between"
+                  >
+                    <div>
+                      <div class="font-medium">Sao lưu thủ công</div>
+                      <div class="text-[12px] text-slate-500">
+                        2024-12-24 14:30 • 18.2 GB • 45m
+                      </div>
+                    </div>
+                    <span
+                      class="inline-flex items-center rounded-full bg-emerald-50 text-emerald-700 text-xs font-semibold px-2.5 py-1"
+                      >Thành công</span
+                    >
+                  </li>
+                  <li
+                    class="rounded-lg border border-slate-200 px-4 py-3 flex items-center justify-between"
+                  >
+                    <div>
+                      <div class="font-medium">Sao lưu tự động</div>
+                      <div class="text-[12px] text-slate-500">
+                        2024-12-20 00:20 • 45.1 GB • 2h 18m
+                      </div>
+                    </div>
+                    <span
+                      class="inline-flex items-center rounded-full bg-emerald-50 text-emerald-700 text-xs font-semibold px-2.5 py-1"
+                      >Thành công</span
+                    >
+                  </li>
+                </ul>
+              </article>
+            </section>
+
+            <!-- ===========================
+               TAB 2: RETENTION POLICY
+          ============================ -->
+            <section id="tab-policy" class="mt-4 hidden">
+              <article class="bg-white border border-slate-200 rounded-xl">
+                <header class="px-4 py-3 border-b border-slate-100">
+                  <h3 class="text-[15px] font-semibold">
+                    Quy định thời hạn bảo quản
+                  </h3>
+                </header>
+                <div class="overflow-x-auto">
+                  <table class="min-w-full text-[13px]">
+                    <thead class="bg-slate-50 text-slate-600">
+                      <tr>
+                        <th class="px-4 py-3 text-left font-semibold">
+                          Tên quy định
+                        </th>
+                        <th class="px-4 py-3 text-left font-semibold">
+                          Danh mục
+                        </th>
+                        <th class="px-4 py-3 text-left font-semibold">
+                          Thời hạn
+                        </th>
+                        <th class="px-4 py-3 text-left font-semibold">
+                          Số lượng
+                        </th>
+                        <th class="px-4 py-3 text-left font-semibold">
+                          Trạng thái
+                        </th>
+                        <th class="px-4 py-3 text-left font-semibold">
+                          Rà soát tiếp theo
+                        </th>
+                        <th class="px-4 py-3 text-left font-semibold">
+                          Thao tác
+                        </th>
+                      </tr>
+                    </thead>
+                    <tbody class="divide-y divide-slate-100">
+                      <tr class="hover:bg-slate-50/60">
+                        <td class="px-4 py-3">
+                          Hồ sơ hành chính
+                          <div class="text-[12px] text-slate-500">
+                            Các văn bản hành chính thường ngày, thông báo nội bộ
+                          </div>
+                        </td>
+                        <td class="px-4 py-3">
+                          <span class="badge">Hành chính</span>
+                        </td>
+                        <td class="px-4 py-3">5 năm</td>
+                        <td class="px-4 py-3">1.247</td>
+                        <td class="px-4 py-3">
+                          <span
+                            class="badge bg-emerald-50 border-emerald-200 text-emerald-700"
+                            >Đang áp dụng</span
+                          >
+                        </td>
+                        <td class="px-4 py-3">2025-01-15</td>
+                        <td class="px-4 py-3">
+                          <div class="flex gap-2">
+                            <button
+                              class="px-3 h-8 rounded-md bg-slate-100 text-[12px] hover:bg-slate-200"
+                            >
+                              Chỉnh sửa
+                            </button>
+                            <button
+                              class="px-3 h-8 rounded-md bg-slate-100 text-[12px] hover:bg-slate-200"
+                            >
+                              Rà soát
+                            </button>
+                          </div>
+                        </td>
+                      </tr>
+                      <tr class="hover:bg-slate-50/60">
+                        <td class="px-4 py-3">
+                          Hồ sơ tài chính
+                          <div class="text-[12px] text-slate-500">
+                            Báo cáo tài chính, ngân sách, quyết toán
+                          </div>
+                        </td>
+                        <td class="px-4 py-3">
+                          <span class="badge">Tài chính</span>
+                        </td>
+                        <td class="px-4 py-3">15 năm</td>
+                        <td class="px-4 py-3">856</td>
+                        <td class="px-4 py-3">
+                          <span
+                            class="badge bg-emerald-50 border-emerald-200 text-emerald-700"
+                            >Đang áp dụng</span
+                          >
+                        </td>
+                        <td class="px-4 py-3">2025-02-20</td>
+                        <td class="px-4 py-3">
+                          <div class="flex gap-2">
+                            <button
+                              class="px-3 h-8 rounded-md bg-slate-100 text-[12px] hover:bg-slate-200"
+                            >
+                              Chỉnh sửa
+                            </button>
+                            <button
+                              class="px-3 h-8 rounded-md bg-slate-100 text-[12px] hover:bg-slate-200"
+                            >
+                              Rà soát
+                            </button>
+                          </div>
+                        </td>
+                      </tr>
+                      <tr class="hover:bg-slate-50/60">
+                        <td class="px-4 py-3">
+                          Hồ sơ quy hoạch
+                          <div class="text-[12px] text-slate-500">
+                            Quy hoạch phát triển kinh tế xã hội, quy hoạch đô
+                            thị
+                          </div>
+                        </td>
+                        <td class="px-4 py-3">
+                          <span class="badge">Quy hoạch</span>
+                        </td>
+                        <td class="px-4 py-3">Vĩnh viễn</td>
+                        <td class="px-4 py-3">423</td>
+                        <td class="px-4 py-3">
+                          <span
+                            class="badge bg-emerald-50 border-emerald-200 text-emerald-700"
+                            >Đang áp dụng</span
+                          >
+                        </td>
+                        <td class="px-4 py-3">2025-03-10</td>
+                        <td class="px-4 py-3">
+                          <div class="flex gap-2">
+                            <button
+                              class="px-3 h-8 rounded-md bg-slate-100 text-[12px] hover:bg-slate-200"
+                            >
+                              Chỉnh sửa
+                            </button>
+                            <button
+                              class="px-3 h-8 rounded-md bg-slate-100 text-[12px] hover:bg-slate-200"
+                            >
+                              Rà soát
+                            </button>
+                          </div>
+                        </td>
+                      </tr>
+                      <tr class="hover:bg-slate-50/60">
+                        <td class="px-4 py-3">
+                          Hồ sơ nhân sự
+                          <div class="text-[12px] text-slate-500">
+                            Hồ sơ cán bộ, công chức, viên chức
+                          </div>
+                        </td>
+                        <td class="px-4 py-3">
+                          <span class="badge">Nhân sự</span>
+                        </td>
+                        <td class="px-4 py-3">20 năm</td>
+                        <td class="px-4 py-3">689</td>
+                        <td class="px-4 py-3">
+                          <span
+                            class="badge bg-amber-50 border-amber-200 text-amber-700"
+                            >Cần rà soát</span
+                          >
+                        </td>
+                        <td class="px-4 py-3">2024-12-01</td>
+                        <td class="px-4 py-3">
+                          <div class="flex gap-2">
+                            <button
+                              class="px-3 h-8 rounded-md bg-slate-100 text-[12px] hover:bg-slate-200"
+                            >
+                              Chỉnh sửa
+                            </button>
+                            <button
+                              class="px-3 h-8 rounded-md bg-slate-100 text-[12px] hover:bg-slate-200"
+                            >
+                              Rà soát
+                            </button>
+                          </div>
+                        </td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+              </article>
+            </section>
+
+            <!-- ===========================
+               TAB 3: ARCHIVE QUEUE
+          ============================ -->
+            <section id="tab-queue" class="mt-4 hidden">
+              <article class="bg-white border border-slate-200 rounded-xl">
+                <header
+                  class="px-4 py-3 border-b border-slate-100 flex items-center justify-between"
+                >
+                  <h3 class="text-[15px] font-semibold">Hàng đợi lưu trữ</h3>
+                  <button
+                    class="h-9 rounded-lg bg-slate-900 text-white text-[13px] px-3"
+                    id="btn-archive"
+                  >
+                    🗃 Lưu trữ dữ liệu
+                  </button>
+                </header>
+                <ul class="p-4 space-y-4">
+                  <!-- item -->
+                  <li class="rounded-lg border border-slate-200 p-4">
+                    <div
+                      class="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-2"
+                    >
+                      <div class="font-medium">
+                        Văn_bản_hành_chính_2023.zip
+                        <div class="text-[12px] text-slate-500 font-normal">
+                          Danh mục: Hành chính &nbsp; Ngày: 2024-12-20 &nbsp;
+                          Kích thước: 2.4 GB
+                        </div>
+                      </div>
+                      <span
+                        class="inline-flex items-center rounded-full bg-blue-50 text-blue-700 text-xs font-semibold px-2.5 py-1"
+                        >Đang xử lý</span
+                      >
+                    </div>
+                    <div class="mt-3 h-2 rounded-full bg-slate-200">
+                      <div class="h-full bg-slate-900" style="width: 65%"></div>
+                    </div>
+                  </li>
+
+                  <li class="rounded-lg border border-slate-200 p-4">
+                    <div
+                      class="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-2"
+                    >
+                      <div class="font-medium">
+                        Báo_cáo_tài_chính_Q4_2023.zip
+                        <div class="text-[12px] text-slate-500 font-normal">
+                          Danh mục: Tài chính &nbsp; Ngày: 2024-12-19 &nbsp;
+                          Kích thước: 1.8 GB
+                        </div>
+                      </div>
+                      <span
+                        class="inline-flex items-center rounded-full bg-emerald-50 text-emerald-700 text-xs font-semibold px-2.5 py-1"
+                        >Hoàn thành</span
+                      >
+                    </div>
+                  </li>
+
+                  <li class="rounded-lg border border-slate-200 p-4">
+                    <div
+                      class="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-2"
+                    >
+                      <div class="font-medium">
+                        Hồ_sơ_nhân_sự_2023.zip
+                        <div class="text-[12px] text-slate-500 font-normal">
+                          Danh mục: Nhân sự &nbsp; Ngày: 2024-12-18 &nbsp; Kích
+                          thước: 3.2 GB
+                        </div>
+                      </div>
+                      <span
+                        class="inline-flex items-center rounded-full bg-amber-50 text-amber-700 text-xs font-semibold px-2.5 py-1"
+                        >Chờ xử lý</span
+                      >
+                    </div>
+                  </li>
+                </ul>
+              </article>
+            </section>
+
+            <!-- ===========================
+               TAB 4: CONFIG
+          ============================ -->
+            <section id="tab-config" class="mt-4 hidden">
+              <article class="bg-white border border-slate-200 rounded-xl">
+                <header class="px-4 py-3 border-b border-slate-100">
+                  <h3 class="text-[15px] font-semibold">Cấu hình lưu trữ</h3>
+                </header>
+                <div
+                  class="grid grid-cols-1 lg:grid-cols-2 gap-6 p-4 lg:p-6 text-[14px]"
+                >
+                  <!-- Auto backup -->
+                  <div>
+                    <h4 class="font-semibold mb-3">Sao lưu tự động</h4>
+                    <label class="block text-[13px] text-slate-600 mb-1"
+                      >Tần suất backup:</label
+                    >
+                    <select
+                      class="w-full h-10 rounded-lg border border-slate-200 px-3 bg-white focus:outline-none focus:ring-2 focus:ring-blue-600/20 focus:border-blue-500"
+                    >
+                      <option>Hàng ngày lúc 02:00</option>
+                      <option>Hàng ngày lúc 23:00</option>
+                      <option>Hàng tuần (CN 03:00)</option>
+                    </select>
+
+                    <label class="block text-[13px] text-slate-600 mt-3 mb-1"
+                      >Số lượng backup lưu trữ:</label
+                    >
+                    <select
+                      class="w-full h-10 rounded-lg border border-slate-200 px-3 bg-white focus:outline-none focus:ring-2 focus:ring-blue-600/20 focus:border-blue-500"
+                    >
+                      <option>30 bản</option>
+                      <option>60 bản</option>
+                      <option>90 bản</option>
+                    </select>
+                  </div>
+
+                  <!-- Threshold -->
+                  <div>
+                    <h4 class="font-semibold mb-3">Cảnh báo dung lượng</h4>
+                    <label class="block text-[13px] text-slate-600 mb-1"
+                      >Cảnh báo khi dung lượng đạt:</label
+                    >
+                    <select
+                      class="w-full h-10 rounded-lg border border-slate-200 px-3 bg-white focus:outline-none focus:ring-2 focus:ring-blue-600/20 focus:border-blue-500"
+                    >
+                      <option>80%</option>
+                      <option>85%</option>
+                      <option>90%</option>
+                    </select>
+
+                    <label class="block text-[13px] text-slate-600 mt-3 mb-1"
+                      >Tự động lưu trữ khi đầy:</label
+                    >
+                    <select
+                      class="w-full h-10 rounded-lg border border-slate-200 px-3 bg-white focus:outline-none focus:ring-2 focus:ring-blue-600/20 focus:border-blue-500"
+                    >
+                      <option>Bật</option>
+                      <option>Tắt</option>
+                    </select>
+                  </div>
+
+                  <div class="lg:col-span-2">
+                    <button
+                      class="px-4 h-10 rounded-lg bg-slate-900 text-white text-[13px]"
+                    >
+                      Lưu cấu hình
+                    </button>
+                  </div>
+                </div>
+              </article>
+            </section>
+          </div>
+        </main>
+      </div>
+    </div>
+
+    <!-- FOOTER -->
+    <div data-include="footer"></div>
+
+    <!-- App script -->
+    <script src="../assets/js/quantri.js" defer></script>
+    
+  </body>
+</html>

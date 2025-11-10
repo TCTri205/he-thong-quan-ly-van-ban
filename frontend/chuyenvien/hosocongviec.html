@@ -1,0 +1,1143 @@
+﻿<!-- File: chuyenvien/hosocongviec.html -->
+<!DOCTYPE html>
+<html lang="vi">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Hệ thống Quản lý Văn bản &amp; Điều hành • Hồ sơ công việc</title>
+    <!-- App theme overrides -->
+    <link rel="stylesheet" href="../assets/css/styles.css" />
+  </head>
+  <body class="bg-slate-100 text-slate-800" data-page="hosocongviec" data-role="chuyenvien" data-root="..">
+    <!-- ================= HEADER ================= -->
+    <div data-include="header"></div>
+
+    <!-- ================= SHELL ================= -->
+    <div class="pt-14">
+      <div class="flex">
+        <!-- Sidebar -->
+        <div data-include="sidebar"></div>
+
+        <!-- Main -->
+        <main class="w-full">
+          <div class="max-w-none px-6 lg:px-8 py-6 lg:py-7">
+            <section id="cv-case-shell" class="space-y-6">
+              <!-- ========== LIST VIEW ========== -->
+              <div id="cv-case-list" data-view="list" class="space-y-6">
+                <!-- Overview cards -->
+                <section class="grid grid-cols-1 md:grid-cols-4 gap-4 lg:gap-6">
+                  <article
+                    class="bg-white border border-slate-200 rounded-xl p-4"
+                  >
+                    <div class="flex items-start justify-between">
+                      <h3 class="text-[13px] font-semibold text-slate-600">
+                        Tổng công việc
+                      </h3>
+                      <span
+                        class="inline-grid w-7 h-7 rounded-full place-items-center border border-slate-200"
+                        >👁</span
+                      >
+                    </div>
+                    <div class="pt-2">
+                      <div class="text-3xl font-bold">6</div>
+                      <div class="text-[13px] text-slate-500">Được giao</div>
+                    </div>
+                  </article>
+
+                  <article
+                    class="bg-white border border-slate-200 rounded-xl p-4"
+                  >
+                    <div class="flex items-start justify-between">
+                      <h3 class="text-[13px] font-semibold text-slate-600">
+                        Đang thực hiện
+                      </h3>
+                      <span
+                        class="inline-grid w-7 h-7 rounded-full place-items-center border border-slate-200"
+                        >⏳</span
+                      >
+                    </div>
+                    <div class="pt-2">
+                      <div class="text-3xl font-bold text-blue-700">1</div>
+                      <div class="text-[13px] text-slate-500">Công việc</div>
+                    </div>
+                  </article>
+
+                  <article
+                    class="bg-white border border-slate-200 rounded-xl p-4"
+                  >
+                    <div class="flex items-start justify-between">
+                      <h3 class="text-[13px] font-semibold text-slate-600">
+                        Đã hoàn thành
+                      </h3>
+                      <span
+                        class="inline-grid w-7 h-7 rounded-full place-items-center border border-slate-200"
+                        >✔</span
+                      >
+                    </div>
+                    <div class="pt-2">
+                      <div class="text-3xl font-bold">0</div>
+                      <div class="text-[13px] text-slate-500">Công việc</div>
+                    </div>
+                  </article>
+
+                  <article
+                    class="bg-white border border-slate-200 rounded-xl p-4"
+                  >
+                    <div class="flex items-start justify-between">
+                      <h3 class="text-[13px] font-semibold text-slate-600">
+                        Trễ hạn
+                      </h3>
+                      <span
+                        class="inline-grid w-7 h-7 rounded-full place-items-center border border-slate-200"
+                        >ℹ</span
+                      >
+                    </div>
+                    <div class="pt-2">
+                      <div class="text-3xl font-bold text-rose-600">6</div>
+                      <div class="text-[13px] text-slate-500">
+                        Cần xử lý gấp
+                      </div>
+                    </div>
+                  </article>
+                </section>
+
+                <!-- Filters -->
+                <section class="mt-6 card p-4 fade-in">
+                  <h3 class="text-sm font-semibold text-slate-700 mb-3">
+                    Tìm kiếm và lọc
+                  </h3>
+                  <div class="grid grid-cols-1 md:grid-cols-8 gap-3">
+                    <div class="md:col-span-3">
+                      <input
+                        type="text"
+                        data-filter="q"
+                        class="w-full border border-slate-200 rounded-md px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-600/20 focus:border-blue-500"
+                        placeholder="Tìm kiếm công việc…"
+                      />
+                    </div>
+                    <div class="md:col-span-2">
+                      <select
+                        data-filter="status"
+                        class="w-full border border-slate-200 rounded-md px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-600/20 focus:border-blue-500"
+                      >
+                        <option value="">Tất cả trạng thái</option>
+                        <option>Đang thực hiện</option>
+                        <option>Hoàn thành</option>
+                        <option>Trễ hạn</option>
+                      </select>
+                    </div>
+                    <div class="md:col-span-2">
+                      <select
+                        data-filter="priority"
+                        class="w-full border border-slate-200 rounded-md px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-600/20 focus:border-blue-500"
+                      >
+                        <option value="">Tất cả mức độ</option>
+                        <option>Cao</option>
+                        <option>Trung bình</option>
+                        <option>Thấp</option>
+                      </select>
+                    </div>
+                    <div class="md:col-span-1">
+                      <button
+                        type="button"
+                        class="w-full flex items-center justify-center gap-2 border border-slate-200 rounded-md px-3 py-2 text-sm hover:bg-slate-50"
+                        data-action="open-advanced-filter"
+                      >
+                        <svg
+                          xmlns="http://www.w3.org/2000/svg"
+                          class="w-4 h-4"
+                          viewBox="0 0 24 24"
+                          fill="none"
+                          stroke="currentColor"
+                        >
+                          <path d="M3 5h18M6 12h12M10 19h4" />
+                        </svg>
+                        Lọc nâng cao
+                      </button>
+                    </div>
+                  </div>
+                </section>
+
+                <!-- Task table -->
+                <section class="mt-6 card p-4 fade-in">
+                  <div class="mb-3">
+                    <h2 class="font-semibold">Danh sách công việc</h2>
+                    <p class="text-sm text-slate-500">Hiển thị 6 công việc</p>
+                  </div>
+
+                  <div class="overflow-x-auto lg:overflow-visible">
+                    <table class="w-full text-sm tbl-hover" id="cvCaseTable">
+                      <thead class="text-left text-slate-600">
+                        <tr class="border-b border-slate-200">
+                          <th class="py-2 pr-3">Tiêu đề công việc</th>
+                          <th class="py-2 pr-3 whitespace-nowrap">
+                            Người giao
+                          </th>
+                          <th class="py-2 pr-3 whitespace-nowrap">Ngày giao</th>
+                          <th class="py-2 pr-3 whitespace-nowrap">
+                            Hạn hoàn thành
+                          </th>
+                          <th class="py-2 pr-3">Tiến độ</th>
+                          <th class="py-2 pr-3 whitespace-nowrap">Mức độ</th>
+                          <th class="py-2 pr-3 whitespace-nowrap">
+                            Trạng thái
+                          </th>
+                          <th class="py-2 pr-0 text-right whitespace-nowrap">
+                            Thao tác
+                          </th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        <!-- Row 1 -->
+                        <tr
+                          class="border-b border-slate-100 bg-white"
+                          data-case-id="HS-2024-01"
+                          data-case-code="HS-2024-01"
+                          data-case-title="Chuẩn bị báo cáo tổng kết năm 2023"
+                          data-case-type="Báo cáo tổng kết"
+                          data-case-status="Trễ hạn"
+                          data-case-priority="Cao"
+                          data-case-department="Phòng Hành chính"
+                          data-case-leader="Trần Thị Bình"
+                          data-case-owner="Nguyễn Văn An"
+                          data-case-created-at="2024-01-15"
+                          data-case-due="2024-01-30"
+                          data-case-task-count="6 nhiệm vụ"
+                        >
+                          <td class="py-3 pr-3 align-top">
+                            <div class="font-medium break-words">
+                              <a
+                                href="#"
+                                class="text-blue-700 hover:underline flex flex-wrap items-center gap-2"
+                              >
+                                <span class="badge-dot bg-blue-600"></span>
+                                Chuẩn bị báo cáo tổng kết năm 2023
+                              </a>
+                            </div>
+                            <div class="text-xs text-slate-500">
+                              Tổng hợp số liệu, soạn thảo báo cáo tổng kết hoạt
+                              động năm 2023
+                            </div>
+                          </td>
+                          <td class="py-3 pr-3 whitespace-nowrap align-top">
+                            Trần Thị Bình
+                          </td>
+                          <td class="py-3 pr-3 whitespace-nowrap align-top">
+                            2024-01-15
+                          </td>
+                          <td
+                            class="py-3 pr-3 whitespace-nowrap text-rose-600 font-medium align-top"
+                          >
+                            2024-01-30
+                          </td>
+                          <td class="py-3 pr-3 align-top">
+                            <div class="w-28 h-2 rounded-full bg-slate-200">
+                              <div
+                                class="h-full bg-slate-700 rounded-full"
+                                style="width: 50%"
+                              ></div>
+                            </div>
+                            <div class="text-xs text-slate-500 mt-1">50%</div>
+                          </td>
+                          <td class="py-3 pr-3 whitespace-nowrap align-top">
+                            <span class="chip chip--green">Cao</span>
+                          </td>
+                          <td class="py-3 pr-3 whitespace-nowrap align-top">
+                            <span class="chip chip--rose">Trễ hạn</span>
+                          </td>
+                          <td class="py-3 pr-0 text-right align-top">
+                            <div class="flex items-center justify-end gap-2">
+                              <a
+                                href="hosocongviec-detail.html"
+                                class="btn-icon"
+                                title="Xem"
+                                data-open-case="HS-2024-01"
+                              >
+                                👁
+                              </a>
+                            </div>
+                          </td>
+                        </tr>
+
+                        <!-- Row 2 -->
+                        <tr
+                          class="border-b border-slate-100 bg-white"
+                          data-case-id="HS-2024-02"
+                          data-case-code="HS-2024-02"
+                          data-case-title="Tổ chức họp Ban chỉ đạo xây dựng nông thôn mới"
+                          data-case-type="Họp Ban chỉ đạo"
+                          data-case-status="Trễ hạn"
+                          data-case-priority="Khẩn"
+                          data-case-department="Phòng Hành chính"
+                          data-case-leader="Trần Thị Bình"
+                          data-case-owner="Nguyễn Văn An"
+                          data-case-created-at="2024-01-10"
+                          data-case-due="2024-01-25"
+                          data-case-task-count="4 nhiệm vụ"
+                        >
+                          <td class="py-3 pr-3 align-top">
+                            <div class="font-medium break-words">
+                              <a
+                                href="#"
+                                class="text-blue-700 hover:underline flex flex-wrap items-center gap-2"
+                              >
+                                <span class="badge-dot bg-blue-600"></span>
+                                Tổ chức họp Ban chỉ đạo xây dựng nông thôn mới
+                              </a>
+                            </div>
+                            <div class="text-xs text-slate-500">
+                              Chuẩn bị tài liệu, thông báo lịch họp cho các
+                              thành viên Ban chỉ đạo
+                            </div>
+                          </td>
+                          <td class="py-3 pr-3 whitespace-nowrap align-top">
+                            Trần Thị Bình
+                          </td>
+                          <td class="py-3 pr-3 whitespace-nowrap align-top">
+                            2024-01-10
+                          </td>
+                          <td
+                            class="py-3 pr-3 whitespace-nowrap text-rose-600 font-medium align-top"
+                          >
+                            2024-01-25
+                          </td>
+                          <td class="py-3 pr-3 align-top">
+                            <div class="w-28 h-2 rounded-full bg-slate-200">
+                              <div
+                                class="h-full bg-slate-700 rounded-full"
+                                style="width: 0%"
+                              ></div>
+                            </div>
+                            <div class="text-xs text-slate-500 mt-1">0%</div>
+                          </td>
+                          <td class="py-3 pr-3 whitespace-nowrap align-top">
+                            <span class="chip chip--default">Thường</span>
+                          </td>
+                          <td class="py-3 pr-3 whitespace-nowrap align-top">
+                            <span class="chip chip--amber">Trễ hạn</span>
+                          </td>
+                          <td class="py-3 pr-0 text-right align-top">
+                            <div class="flex items-center justify-end gap-2">
+                              <a
+                                href="hosocongviec-detail.html"
+                                class="btn-icon"
+                                title="Xem"
+                                data-open-case="HS-2024-02"
+                              >
+                                👁
+                              </a>
+                            </div>
+                          </td>
+                        </tr>
+
+                        <!-- Row 3 -->
+                        <tr
+                          class="border-b border-slate-100 bg-white"
+                          data-case-id="HS-2024-03"
+                          data-case-code="HS-2024-03"
+                          data-case-title="Xử lý văn bản về an toàn thực phẩm"
+                          data-case-type="Xử lý văn bản"
+                          data-case-status="Trễ hạn"
+                          data-case-priority="Khẩn"
+                          data-case-department="Phòng Hành chính"
+                          data-case-leader="Trần Thị Bình"
+                          data-case-owner="Nguyễn Văn An"
+                          data-case-created-at="2024-01-30"
+                          data-case-due="2024-02-05"
+                          data-case-task-count="5 nhiệm vụ"
+                        >
+                          <td class="py-3 pr-3 align-top">
+                            <div class="font-medium break-words">
+                              <a
+                                href="#"
+                                class="text-blue-700 hover:underline flex flex-wrap items-center gap-2"
+                              >
+                                <span class="badge-dot bg-blue-600"></span>
+                                Xử lý văn bản về an toàn thực phẩm
+                              </a>
+                            </div>
+                            <div class="text-xs text-slate-500">
+                              Phối hợp Phòng Y tế xây dựng biện pháp kiểm tra
+                              ATTP
+                            </div>
+                          </td>
+                          <td class="py-3 pr-3 whitespace-nowrap align-top">
+                            Trần Thị Bình
+                          </td>
+                          <td class="py-3 pr-3 whitespace-nowrap align-top">
+                            2024-01-30
+                          </td>
+                          <td
+                            class="py-3 pr-3 whitespace-nowrap text-rose-600 font-medium align-top"
+                          >
+                            2024-02-05
+                          </td>
+                          <td class="py-3 pr-3 align-top">
+                            <div class="w-28 h-2 rounded-full bg-slate-200">
+                              <div
+                                class="h-full bg-slate-700 rounded-full"
+                                style="width: 0%"
+                              ></div>
+                            </div>
+                            <div class="text-xs text-slate-500 mt-1">0%</div>
+                          </td>
+                          <td class="py-3 pr-3 whitespace-nowrap align-top">
+                            <span class="chip chip--amber">Khẩn</span>
+                          </td>
+                          <td class="py-3 pr-3 whitespace-nowrap align-top">
+                            <span class="chip chip--amber">Trễ hạn</span>
+                          </td>
+                          <td class="py-3 pr-0 text-right align-top">
+                            <div class="flex items-center justify-end gap-2">
+                              <a
+                                href="hosocongviec-detail.html"
+                                class="btn-icon"
+                                title="Xem"
+                                data-open-case="HS-2024-03"
+                              >
+                                👁
+                              </a>
+                            </div>
+                          </td>
+                        </tr>
+
+                        <!-- Row 4 -->
+                        <tr
+                          class="border-b border-slate-100 bg-white"
+                          data-case-id="HS-2024-04"
+                          data-case-code="HS-2024-04"
+                          data-case-title="Xử lý chỉ thị về kỷ luật kỷ cương"
+                          data-case-type="Xử lý chỉ thị"
+                          data-case-status="Trễ hạn"
+                          data-case-priority="Khẩn"
+                          data-case-department="Phòng Hành chính"
+                          data-case-leader="Trần Thị Bình"
+                          data-case-owner="Nguyễn Văn An"
+                          data-case-created-at="2024-01-31"
+                          data-case-due="2024-02-07"
+                          data-case-task-count="3 nhiệm vụ"
+                        >
+                          <td class="py-3 pr-3 align-top">
+                            <div class="font-medium break-words">
+                              <a
+                                href="#"
+                                class="text-blue-700 hover:underline flex flex-wrap items-center gap-2"
+                              >
+                                <span class="badge-dot bg-blue-600"></span>
+                                Xử lý chỉ thị về kỷ luật kỷ cương
+                              </a>
+                            </div>
+                            <div class="text-xs text-slate-500">
+                              Nghiên cứu nội dung chỉ thị và đề xuất biện pháp
+                              thực hiện
+                            </div>
+                          </td>
+                          <td class="py-3 pr-3 whitespace-nowrap align-top">
+                            Trần Thị Bình
+                          </td>
+                          <td class="py-3 pr-3 whitespace-nowrap align-top">
+                            2024-01-31
+                          </td>
+                          <td
+                            class="py-3 pr-3 whitespace-nowrap text-rose-600 font-medium align-top"
+                          >
+                            2024-02-07
+                          </td>
+                          <td class="py-3 pr-3 align-top">
+                            <div class="w-28 h-2 rounded-full bg-slate-200">
+                              <div
+                                class="h-full bg-slate-700 rounded-full"
+                                style="width: 0%"
+                              ></div>
+                            </div>
+                            <div class="text-xs text-slate-500 mt-1">0%</div>
+                          </td>
+                          <td class="py-3 pr-3 whitespace-nowrap align-top">
+                            <span class="chip chip--amber">Khẩn</span>
+                          </td>
+                          <td class="py-3 pr-3 whitespace-nowrap align-top">
+                            <span class="chip chip--amber">Trễ hạn</span>
+                          </td>
+                          <td class="py-3 pr-0 text-right align-top">
+                            <div class="flex items-center justify-end gap-2">
+                              <a
+                                href="hosocongviec-detail.html"
+                                class="btn-icon"
+                                title="Xem"
+                                data-open-case="HS-2024-04"
+                              >
+                                👁
+                              </a>
+                            </div>
+                          </td>
+                        </tr>
+
+                        <!-- Row 5 -->
+                        <tr
+                          class="border-b border-slate-100 bg-white"
+                          data-case-id="HS-2024-05"
+                          data-case-code="HS-2024-05"
+                          data-case-title="Xử lý văn bản trật tự xây dựng"
+                          data-case-type="Xử lý văn bản"
+                          data-case-status="Trễ hạn"
+                          data-case-priority="Khẩn"
+                          data-case-department="Phòng Hành chính"
+                          data-case-leader="Trần Thị Bình"
+                          data-case-owner="Nguyễn Văn An"
+                          data-case-created-at="2024-02-04"
+                          data-case-due="2024-02-12"
+                          data-case-task-count="4 nhiệm vụ"
+                        >
+                          <td class="py-3 pr-3 align-top">
+                            <div class="font-medium break-words">
+                              <a
+                                href="#"
+                                class="text-blue-700 hover:underline flex flex-wrap items-center gap-2"
+                              >
+                                <span class="badge-dot bg-blue-600"></span>
+                                Xử lý văn bản trật tự xây dựng
+                              </a>
+                            </div>
+                            <div class="text-xs text-slate-500">
+                              Phối hợp Thanh tra Xây dựng xử lý các trường hợp
+                              vi phạm
+                            </div>
+                          </td>
+                          <td class="py-3 pr-3 whitespace-nowrap align-top">
+                            Trần Thị Bình
+                          </td>
+                          <td class="py-3 pr-3 whitespace-nowrap align-top">
+                            2024-02-04
+                          </td>
+                          <td
+                            class="py-3 pr-3 whitespace-nowrap text-rose-600 font-medium align-top"
+                          >
+                            2024-02-12
+                          </td>
+                          <td class="py-3 pr-3 align-top">
+                            <div class="w-28 h-2 rounded-full bg-slate-200">
+                              <div
+                                class="h-full bg-slate-700 rounded-full"
+                                style="width: 0%"
+                              ></div>
+                            </div>
+                            <div class="text-xs text-slate-500 mt-1">0%</div>
+                          </td>
+                          <td class="py-3 pr-3 whitespace-nowrap align-top">
+                            <span class="chip chip--amber">Khẩn</span>
+                          </td>
+                          <td class="py-3 pr-3 whitespace-nowrap align-top">
+                            <span class="chip chip--amber">Trễ hạn</span>
+                          </td>
+                          <td class="py-3 pr-0 text-right align-top">
+                            <div class="flex items-center justify-end gap-2">
+                              <a
+                                href="hosocongviec-detail.html"
+                                class="btn-icon"
+                                title="Xem"
+                                data-open-case="HS-2024-05"
+                              >
+                                👁
+                              </a>
+                            </div>
+                          </td>
+                        </tr>
+
+                        <!-- Row 6 -->
+                        <tr
+                          class="border-b border-slate-100 bg-white"
+                          data-case-id="HS-2024-06"
+                          data-case-code="HS-2024-06"
+                          data-case-title="Nghiên cứu Luật Đất Đai 2024"
+                          data-case-type="Nghiên cứu văn bản"
+                          data-case-status="Trễ hạn"
+                          data-case-priority="Cao"
+                          data-case-department="Phòng Hành chính"
+                          data-case-leader="Trần Thị Bình"
+                          data-case-owner="Nguyễn Văn An"
+                          data-case-created-at="2024-01-20"
+                          data-case-due="2024-03-01"
+                          data-case-task-count="5 nhiệm vụ"
+                        >
+                          <td class="py-3 pr-3 align-top">
+                            <div class="font-medium break-words">
+                              <a
+                                href="#"
+                                class="text-blue-700 hover:underline flex flex-wrap items-center gap-2"
+                              >
+                                <span class="badge-dot bg-blue-600"></span>
+                                Nghiên cứu Luật Đất Đai 2024
+                              </a>
+                            </div>
+                            <div class="text-xs text-slate-500">
+                              Nghiên cứu thông tư hướng dẫn và đề xuất phương án
+                              thực hiện
+                            </div>
+                          </td>
+                          <td class="py-3 pr-3 whitespace-nowrap align-top">
+                            Trần Thị Bình
+                          </td>
+                          <td class="py-3 pr-3 whitespace-nowrap align-top">
+                            2024-01-20
+                          </td>
+                          <td
+                            class="py-3 pr-3 whitespace-nowrap text-rose-600 font-medium align-top"
+                          >
+                            2024-03-01
+                          </td>
+                          <td class="py-3 pr-3 align-top">
+                            <div class="w-28 h-2 rounded-full bg-slate-200">
+                              <div
+                                class="h-full bg-slate-700 rounded-full"
+                                style="width: 0%"
+                              ></div>
+                            </div>
+                            <div class="text-xs text-slate-500 mt-1">0%</div>
+                          </td>
+                          <td class="py-3 pr-3 whitespace-nowrap align-top">
+                            <span class="chip chip--green">Cao</span>
+                          </td>
+                          <td class="py-3 pr-3 whitespace-nowrap align-top">
+                            <span class="chip chip--amber">Trễ hạn</span>
+                          </td>
+                          <td class="py-3 pr-0 text-right align-top">
+                            <div class="flex items-center justify-end gap-2">
+                              <a
+                                href="hosocongviec-detail.html"
+                                class="btn-icon"
+                                title="Xem"
+                                data-open-case="HS-2024-06"
+                              >
+                                👁
+                              </a>
+                            </div>
+                          </td>
+                        </tr>
+                      </tbody>
+                    </table>
+                  </div>
+                </section>
+              </div>
+
+              <!-- ========== DETAIL VIEW ========== -->
+              <section
+                id="cv-case-detail"
+                data-view="detail"
+                class="space-y-6 hidden"
+              >
+                <div
+                  class="flex flex-col gap-3 md:flex-row md:items-center md:justify-between"
+                >
+                  <div class="flex items-center gap-2">
+                    <button
+                      type="button"
+                      class="inline-flex items-center gap-2 h-9 px-3 rounded-md border border-slate-200 text-sm font-medium text-slate-700 hover:bg-slate-50 focus:outline-none focus:ring-2 focus:ring-blue-500/20"
+                      data-action="back-to-list"
+                    >
+                      <span aria-hidden="true">←</span> Quay lại danh sách
+                    </button>
+                    <span
+                      class="text-[13px] text-slate-500"
+                      id="cvCaseBreadcrumb"
+                    >
+                      Hồ sơ công việc • Chi tiết &amp; theo dõi
+                    </span>
+                  </div>
+                  <div class="flex items-center gap-2">
+                    <button
+                      type="button"
+                      class="h-9 rounded-md bg-blue-600 px-3 text-sm font-medium text-white hover:bg-blue-700 shadow-sm"
+                      data-action="create-task"
+                    >
+                      Tạo nhiệm vụ
+                    </button>
+                    <button
+                      type="button"
+                      class="h-9 rounded-md border border-slate-200 px-3 text-sm font-medium text-slate-700 hover:bg-slate-50"
+                      data-action="add-member"
+                    >
+                      Thêm thành viên
+                    </button>
+                    <button
+                      type="button"
+                      class="h-9 rounded-md border border-slate-200 px-3 text-sm font-medium text-slate-700 hover:bg-slate-50"
+                      data-action="quick-note"
+                    >
+                      Ghi chú nhanh
+                    </button>
+                  </div>
+                </div>
+
+                <article class="card p-5 space-y-4">
+                  <header class="space-y-2">
+                    <div class="flex flex-wrap items-center gap-2">
+                      <span
+                        id="cvCaseStatus"
+                        class="px-2.5 py-1 rounded-full bg-blue-50 text-blue-700 text-xs font-semibold"
+                        >Đang thực hiện</span
+                      >
+                      <span
+                        id="cvCasePriority"
+                        class="px-2.5 py-1 rounded-full bg-amber-100 text-amber-700 text-xs font-semibold"
+                        >Ưu tiên cao</span
+                      >
+                    </div>
+                    <h2
+                      id="cvCaseTitle"
+                      class="text-[18px] font-semibold text-slate-800"
+                    >
+                      Hồ sơ xử lý văn bản an toàn thực phẩm trên địa bàn phường
+                    </h2>
+                    <p class="text-[13px] text-slate-500 leading-relaxed">
+                      Hồ sơ phối hợp các phòng ban liên quan triển khai kế hoạch
+                      kiểm tra an toàn thực phẩm, bao gồm tiếp nhận văn bản,
+                      phân công xử lý và tổng hợp kết quả báo cáo.
+                    </p>
+                  </header>
+
+                  <dl
+                    class="grid gap-4 md:grid-cols-3 text-[13px] text-slate-600"
+                    id="cvCaseMetadata"
+                  >
+                    <div class="flex flex-col gap-1">
+                      <dt class="font-semibold text-slate-700">Mã hồ sơ</dt>
+                      <dd id="cvCaseCode">HS-2024-15</dd>
+                    </div>
+                    <div class="flex flex-col gap-1">
+                      <dt class="font-semibold text-slate-700">Loại hồ sơ</dt>
+                      <dd id="cvCaseType">Xử lý văn bản</dd>
+                    </div>
+                    <div class="flex flex-col gap-1">
+                      <dt class="font-semibold text-slate-700">
+                        Phòng phụ trách
+                      </dt>
+                      <dd id="cvCaseDepartment">Phòng Hành chính</dd>
+                    </div>
+                    <div class="flex flex-col gap-1">
+                      <dt class="font-semibold text-slate-700">
+                        Người chủ trì
+                      </dt>
+                      <dd id="cvCaseLeader">Trần Thị Bình</dd>
+                    </div>
+                    <div class="flex flex-col gap-1">
+                      <dt class="font-semibold text-slate-700">
+                        Người phụ trách
+                      </dt>
+                      <dd id="cvCaseOwner">Nguyễn Văn An</dd>
+                    </div>
+                    <div class="flex flex-col gap-1">
+                      <dt class="font-semibold text-slate-700">
+                        Hạn hoàn thành
+                      </dt>
+                      <dd id="cvCaseDue">2024-02-15</dd>
+                    </div>
+                    <div class="flex flex-col gap-1">
+                      <dt class="font-semibold text-slate-700">
+                        Ngày khởi tạo
+                      </dt>
+                      <dd id="cvCaseCreatedAt">2024-01-25</dd>
+                    </div>
+                    <div class="flex flex-col gap-1">
+                      <dt class="font-semibold text-slate-700">Trạng thái</dt>
+                      <dd id="cvCaseStatusText">Đang thực hiện</dd>
+                    </div>
+                    <div class="flex flex-col gap-1">
+                      <dt class="font-semibold text-slate-700">Số nhiệm vụ</dt>
+                      <dd id="cvCaseTaskCount">6 nhiệm vụ</dd>
+                    </div>
+                  </dl>
+                </article>
+
+                <section class="grid gap-6 lg:grid-cols-3">
+                  <article class="card p-5 lg:col-span-2">
+                    <header
+                      class="flex items-center justify-between gap-2 border-b border-slate-100 pb-3"
+                    >
+                      <div>
+                        <h3 class="text-[15px] font-semibold text-slate-800">
+                          Thành viên tham gia
+                        </h3>
+                        <p class="text-[12.5px] text-slate-500">
+                          Dữ liệu bảng Thành viên tham gia hồ sơ
+                        </p>
+                      </div>
+                      <button
+                        type="button"
+                        class="h-9 rounded-md border border-slate-200 px-3 text-sm font-medium text-slate-700 hover:bg-slate-50"
+                        data-action="add-member"
+                      >
+                        Thêm thành viên
+                      </button>
+                    </header>
+
+                    <div class="overflow-x-auto -mx-5">
+                      <table
+                        class="min-w-full text-[13px]"
+                        id="cvCaseParticipants"
+                      >
+                        <thead class="bg-slate-50 text-slate-600">
+                          <tr>
+                            <th class="px-5 py-3 text-left font-semibold">
+                              Thành viên
+                            </th>
+                            <th class="px-5 py-3 text-left font-semibold">
+                              Vai trò
+                            </th>
+                            <th class="px-5 py-3 text-left font-semibold">
+                              Đơn vị
+                            </th>
+                            <th class="px-5 py-3 text-left font-semibold">
+                              Tham gia
+                            </th>
+                          </tr>
+                        </thead>
+                        <tbody class="divide-y divide-slate-100">
+                          <tr>
+                            <td class="px-5 py-3">
+                              Nguyễn Văn An
+                              <div class="text-[12px] text-slate-500">
+                                Chuyên viên Hành chính
+                              </div>
+                            </td>
+                            <td class="px-5 py-3">
+                              <span class="chip chip--blue">Chủ trì</span>
+                            </td>
+                            <td class="px-5 py-3">Phòng Hành chính</td>
+                            <td class="px-5 py-3">2024-01-25</td>
+                          </tr>
+                          <tr>
+                            <td class="px-5 py-3">
+                              Lê Văn Cường
+                              <div class="text-[12px] text-slate-500">
+                                Văn thư
+                              </div>
+                            </td>
+                            <td class="px-5 py-3">
+                              <span class="chip chip--default">Theo dõi</span>
+                            </td>
+                            <td class="px-5 py-3">Văn phòng UBND</td>
+                            <td class="px-5 py-3">2024-01-26</td>
+                          </tr>
+                        </tbody>
+                      </table>
+                    </div>
+                  </article>
+
+                  <aside class="card p-5 space-y-4">
+                    <header>
+                      <h3 class="text-[15px] font-semibold text-slate-800">
+                        Chỉ số tiến độ
+                      </h3>
+                      <p class="text-[12.5px] text-slate-500">
+                        Thống kê nhanh nhiệm vụ &amp; trạng thái
+                      </p>
+                    </header>
+                    <ul class="space-y-3 text-[13px]">
+                      <li class="flex items-center justify-between">
+                        <span class="text-slate-600">Nhiệm vụ hoàn thành</span>
+                        <span class="font-semibold text-emerald-600"
+                          >12 / 18</span
+                        >
+                      </li>
+                      <li class="flex items-center justify-between">
+                        <span class="text-slate-600">Nhiệm vụ quá hạn</span>
+                        <span class="font-semibold text-rose-600">2</span>
+                      </li>
+                      <li class="flex items-center justify-between">
+                        <span class="text-slate-600">Văn bản liên quan</span>
+                        <span class="font-semibold text-slate-700">5</span>
+                      </li>
+                    </ul>
+                  </aside>
+                </section>
+
+                <section class="grid gap-6 lg:grid-cols-2">
+                  <article class="card p-5 space-y-4">
+                    <header class="flex items-center justify-between gap-2">
+                      <div>
+                        <h3 class="text-[15px] font-semibold text-slate-800">
+                          Nhiệm vụ trong hồ sơ
+                        </h3>
+                        <p class="text-[12.5px] text-slate-500">
+                          Tương ứng bảng Nhiệm vụ trong hồ sơ
+                        </p>
+                      </div>
+                      <button
+                        type="button"
+                        class="h-9 rounded-md border border-slate-200 px-3 text-sm font-medium text-slate-700 hover:bg-slate-50"
+                        data-action="add-task"
+                      >
+                        Thêm nhiệm vụ
+                      </button>
+                    </header>
+
+                    <ul id="cvCaseTasks" class="space-y-3 text-[13px]">
+                      <li class="rounded-lg border border-slate-100 p-3">
+                        <div class="flex items-center justify-between gap-2">
+                          <div>
+                            <div class="font-medium text-slate-700">
+                              Soạn thảo kế hoạch kiểm tra ATTP
+                            </div>
+                            <div class="text-[12px] text-slate-500">
+                              Phụ trách: Nguyễn Văn An • Hạn: 2024-02-05
+                            </div>
+                          </div>
+                          <span class="chip chip--amber">Đang làm</span>
+                        </div>
+                      </li>
+                      <li class="rounded-lg border border-slate-100 p-3">
+                        <div class="flex items-center justify-between gap-2">
+                          <div>
+                            <div class="font-medium text-slate-700">
+                              Tổng hợp báo cáo gửi quận
+                            </div>
+                            <div class="text-[12px] text-slate-500">
+                              Phụ trách: Phòng Y tế • Hạn: 2024-02-12
+                            </div>
+                          </div>
+                          <span class="chip chip--default">Chưa bắt đầu</span>
+                        </div>
+                      </li>
+                    </ul>
+                  </article>
+
+                  <article class="card p-5 space-y-4">
+                    <header class="flex items-center justify-between gap-2">
+                      <div>
+                        <h3 class="text-[15px] font-semibold text-slate-800">
+                          Nhật ký hoạt động
+                        </h3>
+                        <p class="text-[12.5px] text-slate-500">
+                          Liên kết Nhật ký hoạt động hồ sơ
+                        </p>
+                      </div>
+                      <button
+                        type="button"
+                        class="h-9 rounded-md border border-slate-200 px-3 text-sm font-medium text-slate-700 hover:bg-slate-50"
+                        data-action="add-activity"
+                      >
+                        Ghi nhận hoạt động
+                      </button>
+                    </header>
+
+                    <ul id="cvCaseActivities" class="space-y-3 text-[13px]">
+                      <li class="rounded-lg border border-slate-100 p-3">
+                        <div class="flex items-center justify-between">
+                          <span class="font-semibold text-slate-700"
+                            >2024-02-05 09:15 • CẬP NHẬT</span
+                          >
+                          <span class="text-[12px] text-slate-500"
+                            >Nguyễn Văn An</span
+                          >
+                        </div>
+                        <p class="mt-1 text-[12.5px] text-slate-600">
+                          Cập nhật phụ lục danh sách cơ sở kinh doanh cần kiểm
+                          tra.
+                        </p>
+                      </li>
+                      <li class="rounded-lg border border-slate-100 p-3">
+                        <div class="flex items-center justify-between">
+                          <span class="font-semibold text-slate-700"
+                            >2024-02-04 15:40 • BÌNH LUẬN</span
+                          >
+                          <span class="text-[12px] text-slate-500"
+                            >Phòng Y tế</span
+                          >
+                        </div>
+                        <p class="mt-1 text-[12.5px] text-slate-600">
+                          Đề nghị bổ sung danh sách kiểm tra đối với chợ Thanh
+                          Khê.
+                        </p>
+                      </li>
+                    </ul>
+                  </article>
+                </section>
+
+                <section class="grid gap-6 lg:grid-cols-2">
+                  <article class="card p-5 space-y-4">
+                    <header class="flex items-center justify-between gap-2">
+                      <div>
+                        <h3 class="text-[15px] font-semibold text-slate-800">
+                          Tài liệu đính kèm
+                        </h3>
+                        <p class="text-[12.5px] text-slate-500">
+                          Liên kết bảng Tệp đính kèm hồ sơ
+                        </p>
+                      </div>
+                      <button
+                        type="button"
+                        class="h-9 rounded-md border border-slate-200 px-3 text-sm font-medium text-slate-700 hover:bg-slate-50"
+                        data-action="add-attachment"
+                      >
+                        Thêm tệp
+                      </button>
+                    </header>
+
+                    <ul id="cvCaseAttachments" class="space-y-3 text-[13px]">
+                      <li
+                        class="rounded-lg border border-slate-100 p-3 flex items-center justify-between gap-3"
+                      >
+                        <div>
+                          <div class="font-medium text-slate-700">
+                            Kế-hoạch-kiểm-tra-ATTP.docx
+                          </div>
+                          <div class="text-[12px] text-slate-500">
+                            320 KB • Upload bởi Nguyễn Văn An • 2024-02-03
+                          </div>
+                        </div>
+                        <button
+                          type="button"
+                          class="btn-icon"
+                          title="Tải xuống"
+                        >
+                          ⬇
+                        </button>
+                      </li>
+                      <li
+                        class="rounded-lg border border-slate-100 p-3 flex items-center justify-between gap-3"
+                      >
+                        <div>
+                          <div class="font-medium text-slate-700">
+                            Danh-sách-cơ-sở-cần-kiểm-tra.xlsx
+                          </div>
+                          <div class="text-[12px] text-slate-500">
+                            150 KB • Upload bởi Phòng Y tế • 2024-02-04
+                          </div>
+                        </div>
+                        <button
+                          type="button"
+                          class="btn-icon"
+                          title="Tải xuống"
+                        >
+                          ⬇
+                        </button>
+                      </li>
+                    </ul>
+                  </article>
+
+                  <article class="card p-5 space-y-4">
+                    <header class="flex items-center justify-between gap-2">
+                      <div>
+                        <h3 class="text-[15px] font-semibold text-slate-800">
+                          Văn bản liên quan
+                        </h3>
+                        <p class="text-[12.5px] text-slate-500">
+                          Dữ liệu bảng Văn bản liên quan trong hồ sơ
+                        </p>
+                      </div>
+                      <button
+                        type="button"
+                        class="h-9 rounded-md border border-slate-200 px-3 text-sm font-medium text-slate-700 hover:bg-slate-50"
+                        data-action="attach-document"
+                      >
+                        Gắn văn bản
+                      </button>
+                    </header>
+
+                    <ul id="cvCaseDocuments" class="space-y-3 text-[13px]">
+                      <li
+                        class="rounded-lg border border-slate-100 p-3 flex items-center justify-between gap-3"
+                      >
+                        <div>
+                          <div class="font-medium text-slate-700">
+                            008/TB-UBND • Thông báo kiểm tra an toàn thực phẩm
+                          </div>
+                          <div class="text-[12px] text-slate-500">
+                            Văn bản đến ngày 2024-01-30 • Trạng thái: Đang xử lý
+                          </div>
+                        </div>
+                        <a
+                          href="vanbanden.html"
+                          class="text-sm font-medium text-blue-600 hover:underline"
+                          >Xem văn bản</a
+                        >
+                      </li>
+                      <li
+                        class="rounded-lg border border-slate-100 p-3 flex items-center justify-between gap-3"
+                      >
+                        <div>
+                          <div class="font-medium text-slate-700">
+                            024/CV-UBND • Công văn đề nghị hỗ trợ trang thiết bị
+                            y tế
+                          </div>
+                          <div class="text-[12px] text-slate-500">
+                            Văn bản đi ngày 2024-02-09 • Trạng thái: Chờ duyệt
+                          </div>
+                        </div>
+                        <a
+                          href="vanbandi.html"
+                          class="text-sm font-medium text-blue-600 hover:underline"
+                          >Xem văn bản</a
+                        >
+                      </li>
+                    </ul>
+                  </article>
+                </section>
+
+                <article class="card p-5 space-y-4">
+                  <header class="flex items-center justify-between gap-2">
+                    <div>
+                      <h3 class="text-[15px] font-semibold text-slate-800">
+                        Trao đổi &amp; ghi chú
+                      </h3>
+                      <p class="text-[12.5px] text-slate-500">
+                        Tham chiếu bảng Bình luận (đối tượng = hồ sơ)
+                      </p>
+                    </div>
+                    <button
+                      type="button"
+                      class="h-9 rounded-md border border-slate-200 px-3 text-sm font-medium text-slate-700 hover:bg-slate-50"
+                      data-action="add-comment"
+                    >
+                      Thêm bình luận
+                    </button>
+                  </header>
+
+                  <ul id="cvCaseComments" class="space-y-3 text-[13px]">
+                    <li class="rounded-lg border border-slate-100 p-3">
+                      <div class="flex items-center justify-between">
+                        <span class="font-medium text-slate-700"
+                          >Phòng Y tế</span
+                        >
+                        <span class="text-[12px] text-slate-400"
+                          >2024-02-05 10:20</span
+                        >
+                      </div>
+                      <p class="mt-1 text-[12.5px] text-slate-600">
+                        Đã liên hệ Trung tâm kiểm nghiệm thực phẩm để phối hợp.
+                      </p>
+                    </li>
+                    <li class="rounded-lg border border-slate-100 p-3">
+                      <div class="flex items-center justify-between">
+                        <span class="font-medium text-slate-700"
+                          >Nguyễn Văn An</span
+                        >
+                        <span class="text-[12px] text-slate-400"
+                          >2024-02-04 08:45</span
+                        >
+                      </div>
+                      <p class="mt-1 text-[12.5px] text-slate-600">
+                        Đã cập nhật danh sách cơ sở kinh doanh dự kiến kiểm tra.
+                      </p>
+                    </li>
+                  </ul>
+                </article>
+              </section>
+            </section>
+          </div>
+        </main>
+      </div>
+    </div>
+
+    <!-- ================= FOOTER ================= -->
+    <div data-include="footer"></div>
+
+    <!-- Toast container (used by page scripts) -->
+    <div id="toast" class="toast" aria-live="polite"></div>
+
+    <!-- App script -->
+    <script src="../assets/js/api.js"></script>
+    <script src="../assets/js/layout.js"></script>
+    <script src="../assets/js/chuyenvien.js"></script>
+  </body>
+</html>

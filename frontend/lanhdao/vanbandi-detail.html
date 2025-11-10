@@ -1,0 +1,578 @@
+﻿<!-- File: lanhdao/vanbandi-detail.html -->
+<!DOCTYPE html>
+<html lang="vi">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Văn bản đi • Chi tiết (Lãnh đạo)</title>
+
+
+    <!-- App theme overrides -->
+    <link rel="stylesheet" href="../assets/css/styles.css" />
+  </head>
+  <body class="bg-slate-100 text-slate-800" data-page="vanbandi-detail" data-role="lanhdao" data-root="..">
+    <!-- ================= HEADER ================= -->
+    <div data-include="header"></div>
+
+    <!-- ================= LAYOUT ================= -->
+    <div class="pt-14">
+      <div class="flex">
+        <!-- Sidebar -->
+        <div data-include="sidebar"></div>
+
+        <!-- Main -->
+        <main class="w-full">
+          <div class="max-w-none px-6 lg:px-8 py-6 lg:py-7">
+            <!-- Top bar: back + actions -->
+            <div
+              class="flex flex-col gap-3 md:flex-row md:items-center md:justify-between"
+            >
+              <div class="flex items-center gap-2">
+                <a
+                  href="vanbandi.html"
+                  class="inline-flex items-center gap-2 h-9 px-3 rounded-md border border-slate-200 text-sm font-medium text-slate-700 transition hover:bg-slate-50 focus:outline-none focus:ring-2 focus:ring-blue-500/20"
+                  aria-label="Quay lại danh sách văn bản đi"
+                >
+                  <span aria-hidden="true">&larr;</span>
+                  <span>Danh sách văn bản đi</span>
+                </a>
+                <span class="text-[13px] text-slate-500"
+                  >006/TB-UBND • Văn bản đi</span
+                >
+              </div>
+              <div class="flex items-center gap-2">
+                <button
+                  class="h-9 rounded-md bg-blue-600 px-3 text-sm font-medium text-white hover:bg-blue-700 shadow-sm"
+                >
+                  Trình ký
+                </button>
+                <button
+                  class="h-9 rounded-md border border-slate-200 px-3 text-sm font-medium text-slate-700 hover:bg-slate-50"
+                >
+                  Ký số
+                </button>
+                <button
+                  class="h-9 rounded-md border border-slate-200 px-3 text-sm font-medium text-slate-700 hover:bg-slate-50"
+                >
+                  Phát hành
+                </button>
+              </div>
+            </div>
+
+            <!-- Header / meta -->
+            <article class="card p-5 space-y-4 mt-4 md:mt-5">
+              <header class="space-y-2">
+                <div class="flex flex-wrap items-center gap-2">
+                  <span
+                    class="px-2.5 py-1 rounded-full bg-emerald-50 text-emerald-700 text-xs font-semibold"
+                    >Văn bản đi</span
+                  >
+                  <span
+                    class="px-2.5 py-1 rounded-full bg-slate-900 text-white text-xs font-semibold"
+                    >Đang trình ký</span
+                  >
+                  <span
+                    class="px-2.5 py-1 rounded-full bg-slate-100 text-slate-700 text-xs font-semibold"
+                    >Thường</span
+                  >
+                </div>
+                <h1 class="text-[19px] font-semibold text-slate-800">
+                  Thông báo về việc tổ chức lễ kỷ niệm ngày thành lập phường
+                  Thanh Khê Đông
+                </h1>
+                <p class="text-[13px] text-slate-500 leading-relaxed">
+                  Văn bản do UBND phường ban hành thông tin kế hoạch tổ chức lễ
+                  kỷ niệm, phân công nhiệm vụ cho các đơn vị liên quan và mời
+                  đại biểu tham dự.
+                </p>
+              </header>
+
+              <dl class="grid gap-4 md:grid-cols-3 text-[13px] text-slate-600">
+                <div class="flex flex-col gap-1">
+                  <dt class="font-semibold text-slate-700">Ký hiệu</dt>
+                  <dd>006/TB-UBND</dd>
+                </div>
+                <div class="flex flex-col gap-1">
+                  <dt class="font-semibold text-slate-700">Số phát hành</dt>
+                  <dd>006/2024/TB-VP</dd>
+                </div>
+                <div class="flex flex-col gap-1">
+                  <dt class="font-semibold text-slate-700">Ngày soạn</dt>
+                  <dd>2024-01-22</dd>
+                </div>
+                <div class="flex flex-col gap-1">
+                  <dt class="font-semibold text-slate-700">
+                    Ngày dự kiến phát hành
+                  </dt>
+                  <dd>2024-01-25</dd>
+                </div>
+                <div class="flex flex-col gap-1">
+                  <dt class="font-semibold text-slate-700">Người ký</dt>
+                  <dd>Trần Thị Bình</dd>
+                </div>
+                <div class="flex flex-col gap-1">
+                  <dt class="font-semibold text-slate-700">Phương thức ký</dt>
+                  <dd>Ký số (VNPT eSign)</dd>
+                </div>
+                <div class="flex flex-col gap-1">
+                  <dt class="font-semibold text-slate-700">Đơn vị soạn thảo</dt>
+                  <dd>Văn phòng UBND</dd>
+                </div>
+                <div class="flex flex-col gap-1">
+                  <dt class="font-semibold text-slate-700">Đơn vị phát hành</dt>
+                  <dd>UBND Phường Thanh Khê Đông</dd>
+                </div>
+                <div class="flex flex-col gap-1">
+                  <dt class="font-semibold text-slate-700">Nơi nhận chính</dt>
+                  <dd>Các tổ chức, cá nhân trên địa bàn</dd>
+                </div>
+              </dl>
+            </article>
+
+            <!-- Draft team + Publishing info -->
+            <section class="grid gap-6 lg:grid-cols-3 mt-6">
+              <article class="card p-5 lg:col-span-2">
+                <header
+                  class="flex items-center justify-between gap-2 border-b border-slate-100 pb-3"
+                >
+                  <div>
+                    <h2 class="text-[15px] font-semibold text-slate-800">
+                      Nhóm soạn thảo
+                    </h2>
+                    <p class="text-[12.5px] text-slate-500">
+                      Dữ liệu phân công văn bản
+                    </p>
+                  </div>
+                  <button
+                    class="h-9 rounded-md border border-slate-200 px-3 text-sm font-medium text-slate-700 hover:bg-slate-50"
+                  >
+                    Thêm thành viên
+                  </button>
+                </header>
+
+                <div class="overflow-x-auto -mx-5">
+                  <table class="min-w-full text-[13px]">
+                    <thead class="bg-slate-50 text-slate-600">
+                      <tr>
+                        <th class="px-5 py-3 text-left font-semibold">
+                          Thành viên
+                        </th>
+                        <th class="px-5 py-3 text-left font-semibold">
+                          Vai trò
+                        </th>
+                        <th class="px-5 py-3 text-left font-semibold">
+                          Người giao
+                        </th>
+                        <th class="px-5 py-3 text-left font-semibold">
+                          Thời hạn
+                        </th>
+                        <th class="px-5 py-3 text-left font-semibold">
+                          Trạng thái
+                        </th>
+                      </tr>
+                    </thead>
+                    <tbody class="divide-y divide-slate-100">
+                      <tr>
+                        <td class="px-5 py-3">
+                          Nguyễn Văn An
+                          <div class="text-[12px] text-slate-500">
+                            Chủ biên thông báo
+                          </div>
+                        </td>
+                        <td class="px-5 py-3">
+                          <span class="chip chip--blue">Chủ trì</span>
+                        </td>
+                        <td class="px-5 py-3">Trần Thị Bình</td>
+                        <td class="px-5 py-3">2024-01-23</td>
+                        <td class="px-5 py-3">
+                          <span class="chip chip--green">Hoàn thành</span>
+                        </td>
+                      </tr>
+                      <tr>
+                        <td class="px-5 py-3">
+                          Lê Văn Cường
+                          <div class="text-[12px] text-slate-500">
+                            Văn thư phát hành
+                          </div>
+                        </td>
+                        <td class="px-5 py-3">
+                          <span class="chip chip--default">Theo dõi</span>
+                        </td>
+                        <td class="px-5 py-3">Nguyễn Văn An</td>
+                        <td class="px-5 py-3">2024-01-24</td>
+                        <td class="px-5 py-3">
+                          <span class="chip chip--amber">Đang chuẩn bị</span>
+                        </td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+              </article>
+
+              <aside class="card p-5 space-y-4">
+                <header>
+                  <h2 class="text-[15px] font-semibold text-slate-800">
+                    Thông tin phát hành
+                  </h2>
+                  <p class="text-[12.5px] text-slate-500">
+                    Sổ theo dõi văn bản đi &amp; Danh sách phát hành
+                  </p>
+                </header>
+
+                <div
+                  class="rounded-lg border border-slate-100 p-3 text-[13px] space-y-2"
+                >
+                  <div class="flex items-center justify-between">
+                    <span class="text-slate-600">Số phát hành</span>
+                    <span class="font-medium text-slate-700"
+                      >006/2024/TB-VP</span
+                    >
+                  </div>
+                  <div class="flex items-center justify-between">
+                    <span class="text-slate-600">Ngày phát hành</span>
+                    <span class="font-medium text-slate-700">2024-01-25</span>
+                  </div>
+                  <div class="flex items-center justify-between">
+                    <span class="text-slate-600">Hình thức</span>
+                    <span class="font-medium text-slate-700"
+                      >Bưu chính + Thư điện tử</span
+                    >
+                  </div>
+                  <div class="flex items-center justify-between">
+                    <span class="text-slate-600">Trạng thái</span>
+                    <span class="font-medium text-emerald-600">ĐÃ GỬI</span>
+                  </div>
+                </div>
+
+                <ul class="space-y-3 text-[13px]">
+                  <li class="rounded-lg border border-slate-100 p-3">
+                    <div class="flex items-center justify-between gap-2">
+                      <div>
+                        <div class="font-medium text-slate-700">
+                          Phòng Nội vụ Quận Thanh Khê
+                        </div>
+                        <div class="text-[12px] text-slate-500">
+                          Thư điện tử: noivu@quanthanhkhe.gov.vn • Gửi: Thư điện
+                          tử
+                        </div>
+                      </div>
+                      <span class="chip chip--green">Đã nhận</span>
+                    </div>
+                  </li>
+                  <li class="rounded-lg border border-slate-100 p-3">
+                    <div class="flex items-center justify-between gap-2">
+                      <div>
+                        <div class="font-medium text-slate-700">
+                          Các tổ chức đoàn thể phường
+                        </div>
+                        <div class="text-[12px] text-slate-500">
+                          Theo danh sách đính kèm • Gửi: Bưu chính
+                        </div>
+                      </div>
+                      <span class="chip chip--amber">Đang chuyển</span>
+                    </div>
+                  </li>
+                </ul>
+              </aside>
+            </section>
+
+            <!-- Approval flow + Logs -->
+            <section class="grid gap-6 lg:grid-cols-2 mt-6">
+              <article class="card p-5 space-y-4">
+                <header class="flex items-center justify-between gap-2">
+                  <div>
+                    <h2 class="text-[15px] font-semibold text-slate-800">
+                      Quy trình trình ký
+                    </h2>
+                    <p class="text-[12.5px] text-slate-500">
+                      Lịch sử phê duyệt văn bản
+                    </p>
+                  </div>
+                  <span
+                    class="px-2.5 py-1 rounded-full bg-slate-100 text-slate-700 text-xs font-semibold"
+                    >4 bước</span
+                  >
+                </header>
+                <ol class="space-y-3 text-[13px]">
+                  <li class="rounded-lg border border-slate-100 p-3">
+                    <div class="flex items-center justify-between">
+                      <span class="font-medium text-slate-700"
+                        >Bước 1 • Nguyễn Văn An</span
+                      >
+                      <span class="chip chip--green">ĐÃ DUYỆT</span>
+                    </div>
+                    <p class="mt-1 text-[12.5px] text-slate-500">
+                      Hoàn tất dự thảo và chuyển duyệt (2024-01-22 09:10).
+                    </p>
+                  </li>
+                  <li class="rounded-lg border border-slate-100 p-3">
+                    <div class="flex items-center justify-between">
+                      <span class="font-medium text-slate-700"
+                        >Bước 2 • Phòng Văn hóa</span
+                      >
+                      <span class="chip chip--green">ĐÃ DUYỆT</span>
+                    </div>
+                    <p class="mt-1 text-[12.5px] text-slate-500">
+                      Xác nhận nội dung chương trình lễ kỷ niệm (2024-01-23).
+                    </p>
+                  </li>
+                  <li class="rounded-lg border border-slate-100 p-3">
+                    <div class="flex items-center justify-between">
+                      <span class="font-medium text-slate-700"
+                        >Bước 3 • Phòng Tài chính</span
+                      >
+                      <span class="chip chip--amber">ĐANG XỬ LÝ</span>
+                    </div>
+                    <p class="mt-1 text-[12.5px] text-slate-500">
+                      Đang xem xét kinh phí tổ chức.
+                    </p>
+                  </li>
+                  <li class="rounded-lg border border-slate-100 p-3">
+                    <div class="flex items-center justify-between">
+                      <span class="font-medium text-slate-700"
+                        >Bước 4 • Trần Thị Bình</span
+                      >
+                      <span class="chip chip--default">CHỜ KÝ</span>
+                    </div>
+                    <p class="mt-1 text-[12.5px] text-slate-500">
+                      Ký số sau khi kinh phí được duyệt.
+                    </p>
+                  </li>
+                </ol>
+              </article>
+
+              <article class="card p-5 space-y-4">
+                <header class="flex items-center justify-between gap-2">
+                  <div>
+                    <h2 class="text-[15px] font-semibold text-slate-800">
+                      Nhật ký xử lý
+                    </h2>
+                    <p class="text-[12.5px] text-slate-500">
+                      Nhật ký xử lý văn bản
+                    </p>
+                  </div>
+                  <button
+                    class="h-9 rounded-md border border-slate-200 px-3 text-sm font-medium text-slate-700 hover:bg-slate-50"
+                  >
+                    Ghi nhận sự kiện
+                  </button>
+                </header>
+                <ul class="space-y-3 text-[13px]">
+                  <li class="rounded-lg border border-slate-100 p-3">
+                    <div class="flex items-center justify-between">
+                      <span class="font-semibold text-slate-700"
+                        >2024-01-22 08:45 • ĐÃ GỬI</span
+                      >
+                      <span class="text-[12px] text-slate-500"
+                        >Nguyễn Văn An</span
+                      >
+                    </div>
+                    <p class="mt-1 text-[12.5px] text-slate-600">
+                      Gửi phiên bản dự thảo lần 1.
+                    </p>
+                  </li>
+                  <li class="rounded-lg border border-slate-100 p-3">
+                    <div class="flex items-center justify-between">
+                      <span class="font-semibold text-slate-700"
+                        >2024-01-23 14:20 • ĐÃ RÀ SOÁT</span
+                      >
+                      <span class="text-[12px] text-slate-500"
+                        >Phòng Văn hóa</span
+                      >
+                    </div>
+                    <p class="mt-1 text-[12.5px] text-slate-600">
+                      Thông qua nội dung chương trình.
+                    </p>
+                  </li>
+                  <li class="rounded-lg border border-slate-100 p-3">
+                    <div class="flex items-center justify-between">
+                      <span class="font-semibold text-slate-700"
+                        >2024-01-24 09:10 • ĐÃ CậP NHẬT</span
+                      >
+                      <span class="text-[12px] text-slate-500"
+                        >Nguyễn Văn An</span
+                      >
+                    </div>
+                    <p class="mt-1 text-[12.5px] text-slate-600">
+                      Bổ sung phụ lục dự trù kinh phí.
+                    </p>
+                  </li>
+                </ul>
+              </article>
+            </section>
+
+            <!-- Versions + Related reports -->
+            <section class="grid gap-6 lg:grid-cols-2 mt-6">
+              <article class="card p-5 space-y-4">
+                <header class="flex items-center justify-between gap-2">
+                  <div>
+                    <h2 class="text-[15px] font-semibold text-slate-800">
+                      Phiên bản văn bản
+                    </h2>
+                    <p class="text-[12.5px] text-slate-500">
+                      Phiên bản văn bản
+                    </p>
+                  </div>
+                  <button
+                    class="h-9 rounded-md border border-slate-200 px-3 text-sm font-medium text-slate-700 hover:bg-slate-50"
+                  >
+                    Tải phiên bản mới
+                  </button>
+                </header>
+                <ul class="space-y-3 text-[13px]">
+                  <li
+                    class="rounded-lg border border-slate-100 p-3 flex items-center justify-between gap-3"
+                  >
+                    <div>
+                      <div class="font-medium text-slate-700">
+                        V3 • thông-báo-lễ-kỷ-niệm.docx
+                      </div>
+                      <div class="text-[12px] text-slate-500">
+                        Cập nhật: 2024-01-24 • Nguyễn Văn An
+                      </div>
+                    </div>
+                    <button
+                      class="btn-icon"
+                      title="Xem/tải"
+                      aria-label="Xem hoặc tải V3"
+                    >
+                      ⬇
+                    </button>
+                  </li>
+                  <li
+                    class="rounded-lg border border-slate-100 p-3 flex items-center justify-between gap-3"
+                  >
+                    <div>
+                      <div class="font-medium text-slate-700">
+                        V2 • thông-báo-lễ-kỷ-niệm.docx
+                      </div>
+                      <div class="text-[12px] text-slate-500">
+                        Cập nhật: 2024-01-23 • Nguyễn Văn An
+                      </div>
+                    </div>
+                    <button
+                      class="btn-icon"
+                      title="Xem/tải"
+                      aria-label="Xem hoặc tải V2"
+                    >
+                      ⬇
+                    </button>
+                  </li>
+                </ul>
+              </article>
+
+              <article class="card p-5 space-y-4">
+                <header class="flex items-center justify-between gap-2">
+                  <div>
+                    <h2 class="text-[15px] font-semibold text-slate-800">
+                      Báo cáo liên quan
+                    </h2>
+                    <p class="text-[12.5px] text-slate-500">
+                      Dữ liệu xuất báo cáo
+                    </p>
+                  </div>
+                  <button
+                    class="h-9 rounded-md border border-slate-200 px-3 text-sm font-medium text-slate-700 hover:bg-slate-50"
+                  >
+                    Xuất PDF
+                  </button>
+                </header>
+                <ul class="space-y-3 text-[13px]">
+                  <li
+                    class="rounded-lg border border-slate-100 p-3 flex items-center justify-between gap-3"
+                  >
+                    <div>
+                      <div class="font-medium text-slate-700">
+                        Danh sách đại biểu tham dự lễ kỷ niệm
+                      </div>
+                      <div class="text-[12px] text-slate-500">
+                        PDF • Tải bởi Văn phòng UBND • 2024-01-24
+                      </div>
+                    </div>
+                    <button
+                      class="btn-icon"
+                      title="Tải xuống"
+                      aria-label="Tải xuống Danh sách đại biểu"
+                    >
+                      ⬇
+                    </button>
+                  </li>
+                  <li
+                    class="rounded-lg border border-slate-100 p-3 flex items-center justify-between gap-3"
+                  >
+                    <div>
+                      <div class="font-medium text-slate-700">
+                        Kịch bản chương trình lễ
+                      </div>
+                      <div class="text-[12px] text-slate-500">
+                        DOCX • Tải bởi Phòng Văn hóa • 2024-01-24
+                      </div>
+                    </div>
+                    <button
+                      class="btn-icon"
+                      title="Tải xuống"
+                      aria-label="Tải xuống Kịch bản chương trình"
+                    >
+                      ⬇
+                    </button>
+                  </li>
+                </ul>
+              </article>
+            </section>
+
+            <!-- Comments -->
+            <article class="card p-5 space-y-4 mt-6">
+              <header class="flex items-center justify-between gap-2">
+                <div>
+                  <h2 class="text-[15px] font-semibold text-slate-800">
+                    Trao đổi &amp; ghi chú
+                  </h2>
+                  <p class="text-[12.5px] text-slate-500">
+                    BÌnh luận (đối tượng = văn bản)
+                  </p>
+                </div>
+                <button
+                  class="h-9 rounded-md border border-slate-200 px-3 text-sm font-medium text-slate-700 hover:bg-slate-50"
+                >
+                  Thêm bình luận
+                </button>
+              </header>
+              <ul class="space-y-3 text-[13px]">
+                <li class="rounded-lg border border-slate-100 p-3">
+                  <div class="flex items-center justify-between">
+                    <span class="font-medium text-slate-700"
+                      >Phòng Văn hóa</span
+                    >
+                    <span class="text-[12px] text-slate-400"
+                      >2024-01-23 15:30</span
+                    >
+                  </div>
+                  <p class="mt-1 text-[12.5px] text-slate-600">
+                    Đã cập nhật kịch bản chương trình và danh sách đại biểu.
+                  </p>
+                </li>
+                <li class="rounded-lg border border-slate-100 p-3">
+                  <div class="flex items-center justify-between">
+                    <span class="font-medium text-slate-700"
+                      >Nguyễn Văn An</span
+                    >
+                    <span class="text-[12px] text-slate-400"
+                      >2024-01-24 08:20</span
+                    >
+                  </div>
+                  <p class="mt-1 text-[12.5px] text-slate-600">
+                    Đề nghị Phòng Tài chính duyệt kinh phí trước 24/01 để kịp
+                    phát hành.
+                  </p>
+                </li>
+              </ul>
+            </article>
+          </div>
+        </main>
+      </div>
+    </div>
+
+    <!-- ================= FOOTER ================= -->
+    <div data-include="footer"></div>
+  </body>
+</html>

@@ -1,0 +1,330 @@
+﻿<!-- File: quantri/nguoidung-detail.html -->
+<!DOCTYPE html>
+<html lang="vi">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Quản trị • Chi tiết người dùng</title>
+
+
+    <!-- App theme overrides -->
+    <link rel="stylesheet" href="../assets/css/styles.css" />
+  </head>
+  <body class="bg-slate-100 text-slate-800" data-page="nguoidung-detail" data-role="quantri" data-root="..">
+    <!-- ================= HEADER ================= -->
+    <div data-include="header"></div>
+
+    <!-- ================= LAYOUT ================= -->
+    <div class="pt-14">
+      <div class="flex">
+        <!-- Sidebar -->
+        <div data-include="sidebar"></div>
+
+        <!-- Main -->
+        <main class="w-full">
+          <div class="max-w-6xl mx-auto px-6 lg:px-10 py-6 lg:py-8 space-y-6">
+            <!-- Top bar: back + actions -->
+            <div
+              class="flex flex-col gap-3 md:flex-row md:items-center md:justify-between"
+            >
+              <div class="flex items-center gap-2">
+                <a
+                  href="nguoidung.html"
+                  class="inline-flex items-center gap-2 h-9 px-3 rounded-md border border-slate-200 text-sm font-medium text-slate-700 hover:bg-slate-50 focus:outline-none focus:ring-2 focus:ring-blue-500/20"
+                  aria-label="Quay lại danh sách người dùng"
+                >
+                  <span aria-hidden="true">&larr;</span>
+                  <span>Danh sách người dùng</span>
+                </a>
+                <span class="text-[13px] text-slate-500"
+                  >ND-201 • Chi tiết người dùng</span
+                >
+              </div>
+              <div class="flex items-center gap-2">
+                <button
+                  class="h-9 rounded-md border border-slate-200 px-3 text-sm font-medium text-slate-700 hover:bg-slate-50"
+                >
+                  Đặt lại mật khẩu
+                </button>
+                <button
+                  class="h-9 rounded-md bg-blue-600 px-3 text-sm font-medium text-white hover:bg-blue-700 shadow-sm"
+                >
+                  Chỉnh sửa
+                </button>
+              </div>
+            </div>
+
+            <!-- Profile -->
+            <article class="card p-5 space-y-4">
+              <header class="flex items-center gap-4">
+                <div
+                  class="w-14 h-14 rounded-full bg-blue-600 text-white grid place-items-center text-lg font-semibold"
+                >
+                  NVA
+                </div>
+                <div>
+                  <h1 class="text-[18px] font-semibold text-slate-800">
+                    Nguyễn Văn An
+                  </h1>
+                  <p class="text-[13px] text-slate-500">
+                    Chuyên viên • Phòng Hành chính
+                  </p>
+                </div>
+              </header>
+
+              <dl class="grid gap-4 md:grid-cols-2 text-[13px] text-slate-600">
+                <div class="flex flex-col gap-1">
+                  <dt class="font-semibold text-slate-700">Mã người dùng</dt>
+                  <dd>ND-201</dd>
+                </div>
+                <div class="flex flex-col gap-1">
+                  <dt class="font-semibold text-slate-700">Mã đăng nhập</dt>
+                  <dd>nvan</dd>
+                </div>
+                <div class="flex flex-col gap-1">
+                  <dt class="font-semibold text-slate-700">Thư điện tử</dt>
+                  <dd>nvan@thanhkhedong.gov.vn</dd>
+                </div>
+                <div class="flex flex-col gap-1">
+                  <dt class="font-semibold text-slate-700">Điện thoại</dt>
+                  <dd>0905 123 456</dd>
+                </div>
+                <div class="flex flex-col gap-1">
+                  <dt class="font-semibold text-slate-700">Phòng ban</dt>
+                  <dd>Phòng Hành chính</dd>
+                </div>
+                <div class="flex flex-col gap-1">
+                  <dt class="font-semibold text-slate-700">Trạng thái</dt>
+                  <dd class="text-emerald-600 font-semibold">Đang hoạt động</dd>
+                </div>
+                <div class="flex flex-col gap-1">
+                  <dt class="font-semibold text-slate-700">Ngày tạo</dt>
+                  <dd>2022-10-05 07:45</dd>
+                </div>
+                <div class="flex flex-col gap-1">
+                  <dt class="font-semibold text-slate-700">
+                    Đăng nhập gần nhất
+                  </dt>
+                  <dd>2024-02-08 07:28</dd>
+                </div>
+              </dl>
+            </article>
+
+            <!-- Roles & Sessions -->
+            <section class="grid gap-6 lg:grid-cols-2">
+              <article class="card p-5 space-y-4">
+                <header
+                  class="flex items-center justify-between gap-2 border-b border-slate-100 pb-3"
+                >
+                  <div>
+                    <h2 class="text-[15px] font-semibold text-slate-800">
+                      Vai trò &amp; quyền hạn
+                    </h2>
+                    <p class="text-[12.5px] text-slate-500">
+                      user_roles • role_permissions
+                    </p>
+                  </div>
+                  <button
+                    class="h-9 rounded-md border border-slate-200 px-3 text-sm font-medium text-slate-700 hover:bg-slate-50"
+                  >
+                    Gán vai trò
+                  </button>
+                </header>
+                <ul class="space-y-3 text-[13px]">
+                  <li class="rounded-lg border border-slate-100 p-3">
+                    <div class="flex items-center justify-between">
+                      <div>
+                        <div class="font-medium text-slate-700">
+                          Chuyên viên xử lý văn bản
+                        </div>
+                        <div class="text-[12px] text-slate-500">
+                          Quyền: Tạo văn bản, Duyệt văn bản, Phân công văn bản,
+                          Cập nhật hồ sơ
+                        </div>
+                      </div>
+                      <span class="chip chip--blue"
+                        >Nhóm quyền chuyên viên</span
+                      >
+                    </div>
+                  </li>
+                  <li class="rounded-lg border border-slate-100 p-3">
+                    <div class="flex items-center justify-between">
+                      <div>
+                        <div class="font-medium text-slate-700">
+                          Người phụ trách hồ sơ
+                        </div>
+                        <div class="text-[12px] text-slate-500">
+                          Quyền: Phân công hồ sơ, Kết thúc hồ sơ, Quản lý nhắc
+                          việc
+                        </div>
+                      </div>
+                      <span class="chip chip--green"
+                        >Nhóm quyền chủ trì hồ sơ</span
+                      >
+                    </div>
+                  </li>
+                </ul>
+              </article>
+
+              <article class="card p-5 space-y-4">
+                <header
+                  class="flex items-center justify-between gap-2 border-b border-slate-100 pb-3"
+                >
+                  <div>
+                    <h2 class="text-[15px] font-semibold text-slate-800">
+                      Lịch sử đăng nhập
+                    </h2>
+                    <p class="text-[12.5px] text-slate-500">Phiên xác thực</p>
+                  </div>
+                  <button
+                    class="h-9 rounded-md border border-slate-200 px-3 text-sm font-medium text-slate-700 hover:bg-slate-50"
+                  >
+                    Xuất CSV
+                  </button>
+                </header>
+                <ul class="space-y-3 text-[13px]">
+                  <li
+                    class="rounded-lg border border-slate-100 p-3 flex items-center justify-between"
+                  >
+                    <div>
+                      <div class="font-medium text-slate-700">
+                        08/02/2024 07:28 • Chrome / Windows 11
+                      </div>
+                      <div class="text-[12px] text-slate-500">
+                        IP: 10.5.10.12 • Token còn hiệu lực tới 12/02/2024
+                      </div>
+                    </div>
+                    <span class="chip chip--green">Hợp lệ</span>
+                  </li>
+                  <li
+                    class="rounded-lg border border-slate-100 p-3 flex items-center justify-between"
+                  >
+                    <div>
+                      <div class="font-medium text-slate-700">
+                        06/02/2024 21:05 • Mobile / Android
+                      </div>
+                      <div class="text-[12px] text-slate-500">
+                        IP: 10.5.22.4 • Đăng nhập từ ứng dụng di động
+                      </div>
+                    </div>
+                    <span class="chip chip--default">Thành công</span>
+                  </li>
+                  <li
+                    class="rounded-lg border border-slate-100 p-3 flex items-center justify-between"
+                  >
+                    <div>
+                      <div class="font-medium text-slate-700">
+                        05/02/2024 22:16 • Edge / Windows
+                      </div>
+                      <div class="text-[12px] text-slate-500">
+                        IP: 10.5.21.9 • Sai mật khẩu 1 lần
+                      </div>
+                    </div>
+                    <span class="chip chip--amber">Cảnh báo</span>
+                  </li>
+                </ul>
+              </article>
+            </section>
+
+            <!-- Participation & Audit -->
+            <section class="grid gap-6 lg:grid-cols-2">
+              <article class="card p-5 space-y-4">
+                <header class="flex items-center justify-between gap-2">
+                  <div>
+                    <h2 class="text-[15px] font-semibold text-slate-800">
+                      Hồ sơ &amp; văn bản tham gia
+                    </h2>
+                    <p class="text-[12.5px] text-slate-500">
+                      Thành viên tham gia hồ sơ • Dữ liệu phân công văn bản
+                    </p>
+                  </div>
+                  <a
+                    href="../chuyenvien/hosocongviec.html"
+                    class="h-9 rounded-md border border-slate-200 px-3 inline-flex items-center text-sm font-medium text-slate-700 hover:bg-slate-50"
+                  >
+                    Xem chi tiết
+                  </a>
+                </header>
+                <ul class="space-y-3 text-[13px]">
+                  <li class="rounded-lg border border-slate-100 p-3">
+                    <div class="flex items-center justify-between">
+                      <div>
+                        <div class="font-medium text-slate-700">
+                          HS-2024-02 • Kiểm tra ATTP dịp Tết
+                        </div>
+                        <div class="text-[12px] text-slate-500">
+                          Vai trò: Chủ trì • Hạn: 2024-02-15
+                        </div>
+                      </div>
+                      <span class="chip chip--amber">Đang xử lý</span>
+                    </div>
+                  </li>
+                  <li class="rounded-lg border border-slate-100 p-3">
+                    <div class="flex items-center justify-between">
+                      <div>
+                        <div class="font-medium text-slate-700">
+                          VB-Đi 006/TB-UBND • Lễ kỷ niệm
+                        </div>
+                        <div class="text-[12px] text-slate-500">
+                          Vai trò: Soạn thảo • Phát hành 25/01/2024
+                        </div>
+                      </div>
+                      <span class="chip chip--green">Hoàn thành</span>
+                    </div>
+                  </li>
+                </ul>
+              </article>
+
+              <article class="card p-5 space-y-4">
+                <header class="flex items-center justify-between gap-2">
+                  <div>
+                    <h2 class="text-[15px] font-semibold text-slate-800">
+                      Nhật ký thao tác
+                    </h2>
+                    <p class="text-[12.5px] text-slate-500">Nhật ký giám sát</p>
+                  </div>
+                  <button
+                    class="h-9 rounded-md border border-slate-200 px-3 text-sm font-medium text-slate-700 hover:bg-slate-50"
+                  >
+                    Phát hiện bất thường
+                  </button>
+                </header>
+                <ul class="space-y-3 text-[13px]">
+                  <li class="rounded-lg border border-slate-100 p-3">
+                    <div class="flex items-center justify-between">
+                      <span class="font-semibold text-slate-700"
+                        >2024-02-06 16:20 • DUYỆT VĂN BẢN</span
+                      >
+                      <span class="text-[12px] text-slate-500"
+                        >IP: 10.5.10.12</span
+                      >
+                    </div>
+                    <p class="mt-1 text-[12.5px] text-slate-600">
+                      Phê duyệt văn bản 024/CV-UBND.
+                    </p>
+                  </li>
+                  <li class="rounded-lg border border-slate-100 p-3">
+                    <div class="flex items-center justify-between">
+                      <span class="font-semibold text-slate-700"
+                        >2024-02-05 09:10 • CậP NHẬT HỒ Sơ</span
+                      >
+                      <span class="text-[12px] text-slate-500"
+                        >IP: 10.5.10.12</span
+                      >
+                    </div>
+                    <p class="mt-1 text-[12.5px] text-slate-600">
+                      Cập nhật trạng thái hồ sơ HS-2024-02 sang "Đang tổng hợp".
+                    </p>
+                  </li>
+                </ul>
+              </article>
+            </section>
+          </div>
+        </main>
+      </div>
+    </div>
+
+    <!-- ================= FOOTER ================= -->
+    <div data-include="footer"></div>
+  </body>
+</html>

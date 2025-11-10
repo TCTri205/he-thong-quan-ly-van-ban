@@ -1,0 +1,704 @@
+﻿<!-- File: quantri/thongbaonhacviec.html -->
+<!DOCTYPE html>
+<html lang="vi">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1.0" />
+    <title>
+      Hệ thống Quản lý Văn bản &amp; Điều hành • Thông báo - Nhắc việc
+    </title>
+    <!-- App theme overrides -->
+    <link rel="stylesheet" href="../assets/css/styles.css" />
+    <style>
+      /* Sidebar utilities (khớp trang dashboard) */
+    </style>
+  </head>
+  <body class="bg-slate-100 text-slate-800" data-role="quantri" data-root="..">
+    <!-- ===========================
+      HEADER
+  ============================ -->
+    <div data-include="header"></div>
+
+    <!-- ===========================
+      SHELL
+  ============================ -->
+    <div class="pt-14">
+      <div class="flex">
+        <!-- ====== SIDEBAR (from vanthu/dashboard.html pattern) ====== -->
+        <div data-include="sidebar"></div>
+
+        <!-- ====== MAIN ====== -->
+        <main class="w-full">
+          <div class="max-w-none px-6 lg:px-8 py-6 lg:py-7">
+            <!-- ====== TOP METRICS ====== -->
+            <section
+              class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 lg:gap-6"
+            >
+              <article class="bg-white border border-slate-200 rounded-xl p-4">
+                <div class="flex items-center justify-between">
+                  <h3 class="text-[13px] font-semibold text-slate-600">
+                    Kênh hoạt động
+                  </h3>
+                  <span class="text-blue-600">📶</span>
+                </div>
+                <div class="pt-2">
+                  <div class="text-3xl font-bold">2/3</div>
+                </div>
+              </article>
+              <article class="bg-white border border-slate-200 rounded-xl p-4">
+                <div class="flex items-center justify-between">
+                  <h3 class="text-[13px] font-semibold text-slate-600">
+                    Đã gửi (30 ngày)
+                  </h3>
+                  <span class="text-emerald-600">✔</span>
+                </div>
+                <div class="pt-2">
+                  <div class="text-3xl font-bold">2.103</div>
+                  <div class="text-[12.5px] text-slate-500">
+                    69.5% tổng dung lượng
+                  </div>
+                </div>
+              </article>
+              <article class="bg-white border border-slate-200 rounded-xl p-4">
+                <div class="flex items-center justify-between">
+                  <h3 class="text-[13px] font-semibold text-slate-600">
+                    Lỗi (30 ngày)
+                  </h3>
+                  <span class="text-rose-600">✖</span>
+                </div>
+                <div class="pt-2">
+                  <div class="text-3xl font-bold">15</div>
+                </div>
+              </article>
+              <article class="bg-white border border-slate-200 rounded-xl p-4">
+                <div class="flex items-center justify-between">
+                  <h3 class="text-[13px] font-semibold text-slate-600">
+                    Tự động hóa
+                  </h3>
+                  <span class="text-purple-600">⏱</span>
+                </div>
+                <div class="pt-2">
+                  <div class="text-3xl font-bold">5/6</div>
+                </div>
+              </article>
+            </section>
+
+            <!-- ====== SWITCHED TABS ====== -->
+            <div
+              class="mt-5 bg-white border border-slate-200 rounded-xl overflow-hidden"
+            >
+              <!-- Tabs -->
+              <div class="grid grid-cols-3 text-center text-[14px]">
+                <button
+                  data-tab="tab-channels"
+                  class="tab-btn col-span-1 py-2.5 border-b-2 border-blue-600 font-medium text-blue-600"
+                >
+                  <span class="align-middle mr-2">🔔</span>Kênh thông báo
+                </button>
+                <button
+                  data-tab="tab-automation"
+                  class="tab-btn col-span-1 py-2.5 border-b-2 border-transparent hover:bg-slate-50"
+                >
+                  <span class="align-middle mr-2">⚙️</span>Tự động hóa
+                </button>
+                <button
+                  data-tab="tab-logs"
+                  class="tab-btn col-span-1 py-2.5 border-b-2 border-transparent hover:bg-slate-50"
+                >
+                  <span class="align-middle mr-2">⚡</span>Nhật ký gửi
+                </button>
+              </div>
+
+              <!-- CHANNELS -->
+              <section id="tab-channels" class="p-4 lg:p-6 space-y-4">
+                <!-- Email -->
+                <article class="rounded-xl border border-slate-200 p-4">
+                  <div class="flex items-start justify-between gap-4">
+                    <div class="flex items-center gap-3">
+                      <div
+                        class="w-10 h-10 rounded-lg bg-blue-50 grid place-items-center text-blue-600"
+                      >
+                        📧
+                      </div>
+                      <div>
+                        <h4 class="font-semibold leading-6">Thư điện tử</h4>
+                        <div
+                          class="flex flex-wrap items-center gap-3 text-[12.5px] text-slate-500"
+                        >
+                          <span
+                            >Đã gửi
+                            <span class="font-medium text-slate-700"
+                              >1.247</span
+                            ></span
+                          >
+                          <span class="text-rose-600">Lỗi 12</span>
+                          <span class="text-blue-600"
+                            >Tỷ lệ thành công 99%</span
+                          >
+                        </div>
+                        <p class="text-[12px] text-slate-500 mt-1">
+                          Cấu hình: smtp: smtp.gmail.com • port: 587 • username:
+                          noreply@thanhkhe.gov.vn
+                        </p>
+                      </div>
+                    </div>
+                    <div class="flex flex-wrap items-center gap-2">
+                      <span
+                        class="inline-flex px-2 py-1 rounded-full text-[12px] font-semibold bg-emerald-50 text-emerald-700"
+                        >Hoạt động</span
+                      >
+                      <span class="hidden sm:block text-[12.5px] text-slate-500"
+                        >Sử dụng gần nhất 2024-01-22 10:30</span
+                      >
+                      <button
+                        class="px-3 py-1.5 rounded-md border border-slate-200 text-[12.5px] hover:bg-slate-50"
+                        data-action="detail"
+                        data-channel="email"
+                      >
+                        Chi tiết
+                      </button>
+                      <button
+                        class="px-3 py-1.5 rounded-md bg-slate-900 text-white text-[12.5px] hover:opacity-90"
+                        data-action="test"
+                        data-channel="email"
+                      >
+                        Kiểm thử
+                      </button>
+                      <label
+                        class="ml-1 inline-flex items-center cursor-pointer"
+                      >
+                        <input type="checkbox" class="sr-only peer" checked />
+                        <span
+                          class="w-10 h-5 bg-slate-300 rounded-full peer-checked:bg-blue-600 relative after:absolute after:top-0.5 after:left-0.5 after:w-4 after:h-4 after:bg-white after:rounded-full peer-checked:after:translate-x-5 transition-all"
+                        ></span>
+                      </label>
+                    </div>
+                  </div>
+                </article>
+
+                <!-- Push -->
+                <article class="rounded-xl border border-slate-200 p-4">
+                  <div class="flex items-start justify-between gap-4">
+                    <div class="flex items-center gap-3">
+                      <div
+                        class="w-10 h-10 rounded-lg bg-indigo-50 grid place-items-center text-indigo-600"
+                      >
+                        📳
+                      </div>
+                      <div>
+                        <h4 class="font-semibold leading-6">Thông báo đẩy</h4>
+                        <div
+                          class="flex flex-wrap items-center gap-3 text-[12.5px] text-slate-500"
+                        >
+                          <span
+                            >Đã gửi
+                            <span class="font-medium text-slate-700"
+                              >856</span
+                            ></span
+                          >
+                          <span class="text-rose-600">Lỗi 3</span>
+                          <span class="text-blue-600"
+                            >Tỷ lệ thành công 99,6%</span
+                          >
+                        </div>
+                        <p class="text-[12px] text-slate-500 mt-1">
+                          Cấu hình: firebase: enabled • webpush: enabled
+                        </p>
+                      </div>
+                    </div>
+                    <div class="flex flex-wrap items-center gap-2">
+                      <span
+                        class="inline-flex px-2 py-1 rounded-full text-[12px] font-semibold bg-emerald-50 text-emerald-700"
+                        >Hoạt động</span
+                      >
+                      <span class="hidden sm:block text-[12.5px] text-slate-500"
+                        >Sử dụng gần nhất 2024-01-22 09:15</span
+                      >
+                      <button
+                        class="px-3 py-1.5 rounded-md border border-slate-200 text-[12.5px] hover:bg-slate-50"
+                        data-action="detail"
+                        data-channel="push"
+                      >
+                        Chi tiết
+                      </button>
+                      <button
+                        class="px-3 py-1.5 rounded-md bg-slate-900 text-white text-[12.5px] hover:opacity-90"
+                        data-action="test"
+                        data-channel="push"
+                      >
+                        Kiểm thử
+                      </button>
+                      <label
+                        class="ml-1 inline-flex items-center cursor-pointer"
+                      >
+                        <input type="checkbox" class="sr-only peer" checked />
+                        <span
+                          class="w-10 h-5 bg-slate-300 rounded-full peer-checked:bg-blue-600 relative after:absolute after:top-0.5 after:left-0.5 after:w-4 after:h-4 after:bg-white after:rounded-full peer-checked:after:translate-x-5 transition-all"
+                        ></span>
+                      </label>
+                    </div>
+                  </div>
+                </article>
+
+                <!-- SMS -->
+                <article class="rounded-xl border border-slate-200 p-4">
+                  <div class="flex items-start justify-between gap-4">
+                    <div class="flex items-center gap-3">
+                      <div
+                        class="w-10 h-10 rounded-lg bg-amber-50 grid place-items-center text-amber-600"
+                      >
+                        📱
+                      </div>
+                      <div>
+                        <h4 class="font-semibold leading-6">SMS</h4>
+                        <div
+                          class="flex flex-wrap items-center gap-3 text-[12.5px] text-slate-500"
+                        >
+                          <span
+                            >Đã gửi
+                            <span class="font-medium text-slate-700"
+                              >0</span
+                            ></span
+                          >
+                          <span class="text-blue-600">Tỷ lệ thành công 0%</span>
+                        </div>
+                        <p class="text-[12px] text-slate-500 mt-1">
+                          Cấu hình: provider Viettel • brandname: UBND_TK
+                        </p>
+                      </div>
+                    </div>
+                    <div class="flex flex-wrap items-center gap-2">
+                      <span
+                        class="inline-flex px-2 py-1 rounded-full text-[12px] font-semibold bg-slate-100 text-slate-700"
+                        >Tạm dừng</span
+                      >
+                      <span class="hidden sm:block text-[12.5px] text-slate-500"
+                        >Chưa sử dụng</span
+                      >
+                      <button
+                        class="px-3 py-1.5 rounded-md border border-slate-200 text-[12.5px] hover:bg-slate-50"
+                        data-action="detail"
+                        data-channel="sms"
+                      >
+                        Chi tiết
+                      </button>
+                      <button
+                        class="px-3 py-1.5 rounded-md bg-slate-900 text-white text-[12.5px] hover:opacity-90"
+                        data-action="test"
+                        data-channel="sms"
+                      >
+                        Kiểm thử
+                      </button>
+                      <label
+                        class="ml-1 inline-flex items-center cursor-pointer"
+                      >
+                        <input type="checkbox" class="sr-only peer" />
+                        <span
+                          class="w-10 h-5 bg-slate-300 rounded-full peer-checked:bg-blue-600 relative after:absolute after:top-0.5 after:left-0.5 after:w-4 after:h-4 after:bg-white after:rounded-full peer-checked:after:translate-x-5 transition-all"
+                        ></span>
+                      </label>
+                    </div>
+                  </div>
+                </article>
+              </section>
+
+              <!-- AUTOMATION -->
+              <section id="tab-automation" class="hidden p-4 lg:p-6 space-y-4">
+                <!-- Rule card 1 -->
+                <article class="border border-slate-200 rounded-xl p-4">
+                  <div class="flex items-start justify-between gap-4">
+                    <div>
+                      <div class="flex items-center gap-2">
+                        <h4 class="font-semibold">Nhắc hạn 2 giờ</h4>
+                        <span
+                          class="px-2 py-0.5 rounded-full text-[12px] bg-slate-100 text-slate-700"
+                          >Văn bản</span
+                        >
+                        <span
+                          class="px-2 py-0.5 rounded-full text-[12px] bg-emerald-50 text-emerald-700"
+                          >Đang hoạt động</span
+                        >
+                      </div>
+                      <p class="text-[12.5px] text-slate-500 mt-1">
+                        Tự động nhắc nhở trước hạn xử lý văn bản 2 giờ
+                      </p>
+                      <div class="mt-2 text-[12.5px] text-slate-500">
+                        <span class="mr-4"
+                          >Kênh gửi:
+                          <span class="text-slate-700"
+                            >thư điện tử, thông báo đẩy</span
+                          ></span
+                        >
+                        <span class="mr-4"
+                          >Đã gửi:
+                          <span class="text-blue-700 font-medium"
+                            >145</span
+                          ></span
+                        >
+                        <span>Chạy gần nhất: 2024-01-22 14:00</span>
+                      </div>
+                    </div>
+                    <div class="flex items-center gap-2">
+                      <button
+                        class="px-3 py-1.5 rounded-md border border-slate-200 text-[12.5px] hover:bg-slate-50"
+                        data-action="run-now"
+                      >
+                        Chạy ngay
+                      </button>
+                      <label class="inline-flex items-center cursor-pointer">
+                        <input type="checkbox" class="sr-only peer" checked />
+                        <span
+                          class="w-10 h-5 bg-slate-300 rounded-full peer-checked:bg-blue-600 relative after:absolute after:top-0.5 after:left-0.5 after:w-4 after:h-4 after:bg-white after:rounded-full peer-checked:after:translate-x-5 transition-all"
+                        ></span>
+                      </label>
+                    </div>
+                  </div>
+                </article>
+
+                <!-- Rule card 2 -->
+                <article class="border border-slate-200 rounded-xl p-4">
+                  <div class="flex items-start justify-between gap-4">
+                    <div>
+                      <div class="flex items-center gap-2">
+                        <h4 class="font-semibold">Nhắc hạn 1 ngày</h4>
+                        <span
+                          class="px-2 py-0.5 rounded-full text-[12px] bg-slate-100 text-slate-700"
+                          >Văn bản</span
+                        >
+                        <span
+                          class="px-2 py-0.5 rounded-full text-[12px] bg-emerald-50 text-emerald-700"
+                          >Đang hoạt động</span
+                        >
+                      </div>
+                      <p class="text-[12.5px] text-slate-500 mt-1">
+                        Tự động nhắc nhở trước hạn xử lý văn bản 1 ngày
+                      </p>
+                      <div class="mt-2 text-[12.5px] text-slate-500">
+                        <span class="mr-4"
+                          >Kênh gửi:
+                          <span class="text-slate-700">thư điện tử</span></span
+                        >
+                        <span class="mr-4"
+                          >Đã gửi:
+                          <span class="text-blue-700 font-medium"
+                            >89</span
+                          ></span
+                        >
+                        <span>Chạy gần nhất: 2024-01-21 08:00</span>
+                      </div>
+                    </div>
+                    <div class="flex items-center gap-2">
+                      <button
+                        class="px-3 py-1.5 rounded-md border border-slate-200 text-[12.5px] hover:bg-slate-50"
+                        data-action="run-now"
+                      >
+                        Chạy ngay
+                      </button>
+                      <label class="inline-flex items-center cursor-pointer">
+                        <input type="checkbox" class="sr-only peer" checked />
+                        <span
+                          class="w-10 h-5 bg-slate-300 rounded-full peer-checked:bg-blue-600 relative after:absolute after:top-0.5 after:left-0.5 after:w-4 after:h-4 after:bg-white after:rounded-full peer-checked:after:translate-x-5 transition-all"
+                        ></span>
+                      </label>
+                    </div>
+                  </div>
+                </article>
+
+                <!-- Rule card 3 -->
+                <article class="border border-slate-200 rounded-xl p-4">
+                  <div class="flex items-start justify-between gap-4">
+                    <div>
+                      <div class="flex items-center gap-2">
+                        <h4 class="font-semibold">Văn bản đến chưa xử lý</h4>
+                        <span
+                          class="px-2 py-0.5 rounded-full text-[12px] bg-slate-100 text-slate-700"
+                          >Văn bản đến</span
+                        >
+                        <span
+                          class="px-2 py-0.5 rounded-full text-[12px] bg-emerald-50 text-emerald-700"
+                          >Đang hoạt động</span
+                        >
+                      </div>
+                      <p class="text-[12.5px] text-slate-500 mt-1">
+                        Nhắc việc cho Văn thư về văn bản đến chưa được xử lý sau
+                        24h
+                      </p>
+                      <div class="mt-2 text-[12.5px] text-slate-500">
+                        <span class="mr-4"
+                          >Kênh gửi:
+                          <span class="text-slate-700"
+                            >thư điện tử, thông báo đẩy</span
+                          ></span
+                        >
+                        <span class="mr-4"
+                          >Đã gửi:
+                          <span class="text-blue-700 font-medium"
+                            >23</span
+                          ></span
+                        >
+                        <span>Chạy gần nhất: 2024-01-22 08:00</span>
+                      </div>
+                    </div>
+                    <div class="flex items-center gap-2">
+                      <button
+                        class="px-3 py-1.5 rounded-md border border-slate-200 text-[12.5px] hover:bg-slate-50"
+                        data-action="run-now"
+                      >
+                        Chạy ngay
+                      </button>
+                      <label class="inline-flex items-center cursor-pointer">
+                        <input type="checkbox" class="sr-only peer" checked />
+                        <span
+                          class="w-10 h-5 bg-slate-300 rounded-full peer-checked:bg-blue-600 relative after:absolute after:top-0.5 after:left-0.5 after:w-4 after:h-4 after:bg-white after:rounded-full peer-checked:after:translate-x-5 transition-all"
+                        ></span>
+                      </label>
+                    </div>
+                  </div>
+                </article>
+
+                <!-- Rule card 4 -->
+                <article class="border border-slate-200 rounded-xl p-4">
+                  <div class="flex items-start justify-between gap-4">
+                    <div>
+                      <div class="flex items-center gap-2">
+                        <h4 class="font-semibold">Văn bản đi chưa phát hành</h4>
+                        <span
+                          class="px-2 py-0.5 rounded-full text-[12px] bg-slate-100 text-slate-700"
+                          >Văn bản đi</span
+                        >
+                        <span
+                          class="px-2 py-0.5 rounded-full text-[12px] bg-emerald-50 text-emerald-700"
+                          >Đang hoạt động</span
+                        >
+                      </div>
+                      <p class="text-[12.5px] text-slate-500 mt-1">
+                        Nhắc việc cho Văn thư về văn bản đã ký nhưng chưa phát
+                        hành
+                      </p>
+                      <div class="mt-2 text-[12.5px] text-slate-500">
+                        <span class="mr-4"
+                          >Kênh gửi:
+                          <span class="text-slate-700"
+                            >thư điện tử, thông báo đẩy</span
+                          ></span
+                        >
+                        <span class="mr-4"
+                          >Đã gửi:
+                          <span class="text-blue-700 font-medium"
+                            >15</span
+                          ></span
+                        >
+                        <span>Chạy gần nhất: 2024-01-22 09:00</span>
+                      </div>
+                    </div>
+                    <div class="flex items-center gap-2">
+                      <button
+                        class="px-3 py-1.5 rounded-md border border-slate-200 text-[12.5px] hover:bg-slate-50"
+                        data-action="run-now"
+                      >
+                        Chạy ngay
+                      </button>
+                      <label class="inline-flex items-center cursor-pointer">
+                        <input type="checkbox" class="sr-only peer" checked />
+                        <span
+                          class="w-10 h-5 bg-slate-300 rounded-full peer-checked:bg-blue-600 relative after:absolute after:top-0.5 after:left-0.5 after:w-4 after:h-4 after:bg-white after:rounded-full peer-checked:after:translate-x-5 transition-all"
+                        ></span>
+                      </label>
+                    </div>
+                  </div>
+                </article>
+
+                <!-- Rule card 5 (paused) -->
+                <article
+                  class="border border-slate-200 rounded-xl p-4 opacity-70"
+                >
+                  <div class="flex items-start justify-between gap-4">
+                    <div>
+                      <div class="flex items-center gap-2">
+                        <h4 class="font-semibold">Báo cáo tuần</h4>
+                        <span
+                          class="px-2 py-0.5 rounded-full text-[12px] bg-amber-50 text-amber-700"
+                          >Báo cáo</span
+                        >
+                        <span
+                          class="px-2 py-0.5 rounded-full text-[12px] bg-slate-100 text-slate-700"
+                          >Tạm dừng</span
+                        >
+                      </div>
+                      <p class="text-[12.5px] text-slate-500 mt-1">
+                        Gửi báo cáo tình hình xử lý văn bản hàng tuần
+                      </p>
+                      <div class="mt-2 text-[12.5px] text-slate-500">
+                        <span class="mr-4"
+                          >Kênh gửi:
+                          <span class="text-slate-700">thư điện tử</span></span
+                        >
+                        <span class="mr-4"
+                          >Đã gửi:
+                          <span class="text-blue-700 font-medium">0</span></span
+                        >
+                        <span>Chạy gần nhất: Chưa chạy</span>
+                      </div>
+                    </div>
+                    <div class="flex items-center gap-2">
+                      <button
+                        class="px-3 py-1.5 rounded-md border border-slate-200 text-[12.5px] hover:bg-slate-50"
+                        disabled
+                      >
+                        Chạy ngay
+                      </button>
+                      <label class="inline-flex items-center cursor-pointer">
+                        <input type="checkbox" class="sr-only peer" />
+                        <span
+                          class="w-10 h-5 bg-slate-300 rounded-full peer-checked:bg-blue-600 relative after:absolute after:top-0.5 after:left-0.5 after:w-4 after:h-4 after:bg-white after:rounded-full peer-checked:after:translate-x-5 transition-all"
+                        ></span>
+                      </label>
+                    </div>
+                  </div>
+                </article>
+              </section>
+
+              <!-- LOGS -->
+              <section id="tab-logs" class="hidden p-4 lg:p-6 space-y-4">
+                <div class="text-[13px] text-slate-600 font-semibold mb-1">
+                  Nhật ký gửi thông báo
+                </div>
+
+                <article class="border border-slate-200 rounded-xl p-4">
+                  <div class="flex items-start justify-between gap-4">
+                    <div>
+                      <div class="flex flex-wrap items-center gap-2">
+                        <span
+                          class="px-2 py-0.5 rounded-full text-[12px] bg-amber-50 text-amber-700"
+                          >Nhắc việc</span
+                        >
+                        <span
+                          class="px-2 py-0.5 rounded-full text-[12px] bg-emerald-50 text-emerald-700"
+                          >Thành công</span
+                        >
+                        <h4 class="font-semibold">Nhắc hạn 2 giờ</h4>
+                      </div>
+                      <p class="text-[12.5px] text-slate-500 mt-1">
+                        Người nhận:
+                        <span class="text-slate-700">Nguyễn Văn An</span>
+                        <span class="mx-2">•</span>
+                        Kênh: <span class="text-slate-700">Thư điện tử</span>
+                      </p>
+                    </div>
+                    <div class="text-[12.5px] text-slate-500">
+                      2024-01-22 14:00:15
+                    </div>
+                  </div>
+                </article>
+
+                <article class="border border-slate-200 rounded-xl p-4">
+                  <div class="flex items-start justify-between gap-4">
+                    <div>
+                      <div class="flex flex-wrap items-center gap-2">
+                        <span
+                          class="px-2 py-0.5 rounded-full text-[12px] bg-emerald-50 text-emerald-700"
+                          >Thông báo</span
+                        >
+                        <span
+                          class="px-2 py-0.5 rounded-full text-[12px] bg-emerald-50 text-emerald-700"
+                          >Thành công</span
+                        >
+                        <h4 class="font-semibold">Văn bản mới được giao</h4>
+                      </div>
+                      <p class="text-[12.5px] text-slate-500 mt-1">
+                        Người nhận:
+                        <span class="text-slate-700">Hoàng Văn Đức</span>
+                        <span class="mx-2">•</span>
+                        Kênh: <span class="text-slate-700">Đẩy</span>
+                      </p>
+                    </div>
+                    <div class="text-[12.5px] text-slate-500">
+                      2024-01-22 13:45:22
+                    </div>
+                  </div>
+                </article>
+
+                <article class="border border-slate-200 rounded-xl p-4">
+                  <div class="flex items-start justify-between gap-4 w-full">
+                    <div class="w-full">
+                      <div class="flex flex-wrap items-center gap-2">
+                        <span
+                          class="px-2 py-0.5 rounded-full text-[12px] bg-amber-50 text-amber-700"
+                          >Nhắc việc</span
+                        >
+                        <span
+                          class="px-2 py-0.5 rounded-full text-[12px] bg-rose-50 text-rose-700"
+                          >Lỗi</span
+                        >
+                        <h4 class="font-semibold">Văn bản đến chưa xử lý</h4>
+                      </div>
+                      <p class="text-[12.5px] text-slate-500 mt-1">
+                        Người nhận:
+                        <span class="text-slate-700">Lê Văn Cường</span>
+                        <span class="mx-2">•</span>
+                        Kênh: <span class="text-slate-700">Thư điện tử</span>
+                      </p>
+                      <div
+                        class="mt-2 text-[12.5px] text-rose-700 bg-rose-50 border border-rose-100 rounded-lg px-3 py-2"
+                      >
+                        Lỗi: Không thể kết nối SMTP server
+                      </div>
+                    </div>
+                    <div class="text-[12.5px] text-slate-500">
+                      2024-01-22 08:15:33
+                    </div>
+                  </div>
+                </article>
+
+                <article class="border border-slate-200 rounded-xl p-4">
+                  <div class="flex items-start justify-between gap-4">
+                    <div>
+                      <div class="flex flex-wrap items-center gap-2">
+                        <span
+                          class="px-2 py-0.5 rounded-full text-[12px] bg-amber-50 text-amber-700"
+                          >Nhắc việc</span
+                        >
+                        <span
+                          class="px-2 py-0.5 rounded-full text-[12px] bg-emerald-50 text-emerald-700"
+                          >Thành công</span
+                        >
+                        <h4 class="font-semibold">Nhắc lịch họp</h4>
+                      </div>
+                      <p class="text-[12.5px] text-slate-500 mt-1">
+                        Người nhận:
+                        <span class="text-slate-700">Trần Thị Bình</span>
+                        <span class="mx-2">•</span>
+                        Kênh: <span class="text-slate-700">Đẩy</span>
+                      </p>
+                    </div>
+                    <div class="text-[12.5px] text-slate-500">
+                      2024-01-22 13:30:10
+                    </div>
+                  </div>
+                </article>
+              </section>
+            </div>
+          </div>
+        </main>
+      </div>
+    </div>
+
+    <!-- ===========================
+      FOOTER
+  ============================ -->
+    <footer
+      class="border-t border-slate-200 bg-white text-center text-[12.5px] text-slate-500 py-3"
+    >
+      © UBND Phường Thanh Khê Đông — Phiên bản 1.0
+    </footer>
+
+    <!-- App script -->
+    <script src="../assets/js/quantri.js" defer></script>
+    
+
+    <!-- ===========================
+      FOOTER
+  ============================ -->
+    <div data-include="footer"></div>
+  </body>
+</html>

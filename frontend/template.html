@@ -1,0 +1,48 @@
+<!-- File: template.html (đã fix footer) -->
+<!DOCTYPE html>
+<html lang="vi">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title><!-- ĐẶT TIÊU ĐỀ TRANG Ở ĐÂY --></title>
+
+
+    <!-- App theme overrides -->
+    <link rel="stylesheet" href="assets/css/styles.css" />
+  </head>
+
+  <body class="bg-slate-100 text-slate-800" data-page="__page_key__" data-role="template" data-root=".">
+    <!-- ========== HEADER (fixed) ========== -->
+    <div data-include="header"></div>
+
+    <!-- ========== WRAPPER: flex-col để giữ footer đúng chỗ ========== -->
+    <div class="pt-14 min-h-screen flex flex-col">
+      <!-- Hàng 2 cột chiếm hết phần còn lại -->
+      <div class="flex flex-1">
+        <!-- Sidebar (ẩn mobile, hiện từ md) -->
+        <div data-include="sidebar"></div>
+
+        <!-- Main -->
+        <main class="w-full">
+          <div class="max-w-none px-6 lg:px-8 py-6 lg:py-7">
+            <section id="content" class="space-y-4">
+              <div class="bg-white border border-slate-200 rounded-xl p-4">
+                <p class="text-sm text-slate-700">Nội dung trang…</p>
+              </div>
+            </section>
+          </div>
+        </main>
+      </div>
+
+      <!-- Footer: luôn full-width, bám đáy khi nội dung ít -->
+      <div data-include="footer"></div>
+    </div>
+
+    <!-- Toast -->
+    <div id="toast" class="toast" aria-live="polite"></div>
+
+    <!-- App script -->
+    <script src="assets/js/api.js"></script>
+    <script src="assets/js/layout.js"></script>
+  </body>
+</html>

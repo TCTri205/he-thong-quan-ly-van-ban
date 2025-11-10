@@ -1,0 +1,416 @@
+﻿<!-- File: quantri/quanlyhethong.html -->
+<!DOCTYPE html>
+<html lang="vi">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Hệ thống Quản lý Văn bản &amp; Điều hành • Quản lý hệ thống</title>
+    <!-- App theme overrides -->
+    <link rel="stylesheet" href="../assets/css/styles.css" />
+  </head>
+  <body class="bg-slate-100 text-slate-800" data-role="quantri" data-root="..">
+    <!-- ===========================
+      HEADER (đồng nhất toàn hệ thống)
+  ============================ -->
+    <div data-include="header"></div>
+
+    <!-- ===========================
+      LAYOUT
+  ============================ -->
+    <div class="pt-14">
+      <div class="flex">
+        <!-- ====== SIDEBAR (from vanthu/dashboard.html pattern) ====== -->
+        <div data-include="sidebar"></div>
+
+        <!-- ====== MAIN ====== -->
+        <main class="w-full">
+          <div class="max-w-none px-6 lg:px-8 py-6 lg:py-7">
+            <!-- Page header -->
+            <header class="space-y-1">
+              <h1 class="text-[17px] font-semibold text-slate-800">
+                Trung tâm điều phối hệ thống
+              </h1>
+              <p class="text-[13px] text-slate-500">
+                Tổng quan trạng thái hoạt động, cấu hình và bảo trì của hạ tầng
+                điều hành
+              </p>
+            </header>
+
+            <!-- KPI row -->
+            <section
+              class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-4 lg:gap-6"
+            >
+              <article
+                class="bg-white border border-slate-200 rounded-xl p-4 sm:p-5 shadow-sm"
+              >
+                <div class="flex items-center justify-between">
+                  <h3 class="text-sm font-medium text-slate-600">
+                    Trạng thái server
+                  </h3>
+                  <span
+                    class="w-9 h-9 rounded-lg bg-slate-100 grid place-items-center text-lg"
+                    >🖥️</span
+                  >
+                </div>
+                <p class="mt-2 text-sm text-emerald-600 font-semibold">
+                  Hoạt động ổn định
+                </p>
+                <p class="text-xs text-slate-500">Uptime 15 ngày 08 giờ</p>
+              </article>
+              <article
+                class="bg-white border border-slate-200 rounded-xl p-4 sm:p-5 shadow-sm"
+              >
+                <div class="flex items-center justify-between">
+                  <h3 class="text-sm font-medium text-slate-600">
+                    Cơ sở dữ liệu
+                  </h3>
+                  <span
+                    class="w-9 h-9 rounded-lg bg-slate-100 grid place-items-center text-lg"
+                    >🗄️</span
+                  >
+                </div>
+                <p class="mt-2 text-sm text-slate-700">
+                  23 kết nối đang hoạt động
+                </p>
+                <p class="text-xs text-slate-500">Dung lượng 234.5 GB</p>
+              </article>
+              <article
+                class="bg-white border border-slate-200 rounded-xl p-4 sm:p-5 shadow-sm"
+              >
+                <div class="flex items-center justify-between">
+                  <h3 class="text-sm font-medium text-slate-600">Bảo mật</h3>
+                  <span
+                    class="w-9 h-9 rounded-lg bg-slate-100 grid place-items-center text-lg"
+                    >🛡️</span
+                  >
+                </div>
+                <p class="mt-2 text-sm text-emerald-600 font-semibold">
+                  0 cảnh báo rủi ro
+                </p>
+                <p class="text-xs text-slate-500">2 lớp xác thực bắt buộc</p>
+              </article>
+              <article
+                class="bg-white border border-slate-200 rounded-xl p-4 sm:p-5 shadow-sm"
+              >
+                <div class="flex items-center justify-between">
+                  <h3 class="text-sm font-medium text-slate-600">
+                    Dung lượng lưu trữ
+                  </h3>
+                  <span
+                    class="w-9 h-9 rounded-lg bg-slate-100 grid place-items-center text-lg"
+                    >💽</span
+                  >
+                </div>
+                <p class="mt-2 text-sm text-amber-600 font-semibold">
+                  72% đã sử dụng
+                </p>
+                <p class="text-xs text-slate-500">Đề xuất mở rộng quý I</p>
+              </article>
+            </section>
+
+            <!-- Performance + Maintenance -->
+            <section class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+              <!-- System performance -->
+              <article
+                class="bg-white border border-slate-200 rounded-xl p-5 space-y-4"
+              >
+                <header class="flex items-center gap-2">
+                  <span
+                    class="w-5 h-5 rounded-sm bg-slate-100 grid place-items-center text-sm"
+                    >📊</span
+                  >
+                  <h2 class="text-sm font-semibold text-slate-700">
+                    Hiệu suất hệ thống
+                  </h2>
+                </header>
+                <div class="space-y-4 text-sm text-slate-600">
+                  <div>
+                    <div class="flex items-center justify-between mb-1">
+                      <span>Mức sử dụng CPU</span>
+                      <span class="font-medium text-slate-700">45%</span>
+                    </div>
+                    <div class="h-2 rounded-full bg-slate-100 overflow-hidden">
+                      <div
+                        class="h-2 bg-blue-500 rounded-full"
+                        style="width: 45%"
+                      ></div>
+                    </div>
+                  </div>
+                  <div>
+                    <div class="flex items-center justify-between mb-1">
+                      <span>Mức sử dụng bộ nhớ</span>
+                      <span class="font-medium text-slate-700">68%</span>
+                    </div>
+                    <div class="h-2 rounded-full bg-slate-100 overflow-hidden">
+                      <div
+                        class="h-2 bg-indigo-500 rounded-full"
+                        style="width: 68%"
+                      ></div>
+                    </div>
+                  </div>
+                  <div>
+                    <div class="flex items-center justify-between mb-1">
+                      <span>Tốc độ I/O đĩa</span>
+                      <span class="font-medium text-slate-700">120 MB/s</span>
+                    </div>
+                    <div class="h-2 rounded-full bg-slate-100 overflow-hidden">
+                      <div
+                        class="h-2 bg-emerald-500 rounded-full"
+                        style="width: 60%"
+                      ></div>
+                    </div>
+                  </div>
+                  <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <div
+                      class="rounded-lg border border-slate-200 p-4 bg-slate-50"
+                    >
+                      <p class="text-xs text-slate-500 uppercase tracking-wide">
+                        Sao lưu gần nhất
+                      </p>
+                      <p class="mt-1 text-sm font-semibold text-slate-700">
+                        19/01/2024 • 23:45
+                      </p>
+                    </div>
+                    <div
+                      class="rounded-lg border border-slate-200 p-4 bg-slate-50"
+                    >
+                      <p class="text-xs text-slate-500 uppercase tracking-wide">
+                        Bản vá bảo mật
+                      </p>
+                      <p class="mt-1 text-sm font-semibold text-slate-700">
+                        18/01/2024 • 21:00
+                      </p>
+                    </div>
+                  </div>
+
+                  <div class="pt-1 flex flex-wrap gap-2">
+                    <button
+                      class="inline-flex items-center justify-center gap-2 h-10 px-3 rounded-lg border border-slate-200 bg-white text-[13px] font-medium text-slate-600 hover:bg-slate-50 hover:text-slate-700 transition-colors"
+                      data-action="health"
+                    >
+                      🩺 Kiểm tra sức khỏe
+                    </button>
+                    <button
+                      class="inline-flex items-center justify-center gap-2 h-10 px-3 rounded-lg border border-slate-200 bg-white text-[13px] font-medium text-slate-600 hover:bg-slate-50 hover:text-slate-700 transition-colors"
+                      data-action="optimize-db"
+                    >
+                      🧮 Tối ưu CSDL
+                    </button>
+                    <button
+                      class="inline-flex items-center justify-center gap-2 h-10 px-3 rounded-lg bg-slate-900 text-white text-[13px] font-semibold hover:bg-slate-800 transition-colors"
+                      data-action="backup"
+                    >
+                      💾 Chạy sao lưu
+                    </button>
+                  </div>
+                </div>
+              </article>
+
+              <!-- Maintenance schedule -->
+              <article class="bg-white border border-slate-200 rounded-xl p-5">
+                <header class="flex items-center gap-2 mb-4">
+                  <span
+                    class="w-5 h-5 rounded-sm bg-slate-100 grid place-items-center text-sm"
+                    >🧰</span
+                  >
+                  <h2 class="text-sm font-semibold text-slate-700">
+                    Lịch bảo trì định kỳ
+                  </h2>
+                </header>
+                <div class="overflow-x-auto">
+                  <table class="min-w-full text-sm text-left">
+                    <thead class="text-slate-500">
+                      <tr>
+                        <th class="py-2 pr-4 font-semibold">Hạng mục</th>
+                        <th class="py-2 pr-4 font-semibold">Thời gian</th>
+                        <th class="py-2 pr-4 font-semibold">Trạng thái</th>
+                        <th class="py-2 pr-2 font-semibold text-right">
+                          Thao tác
+                        </th>
+                      </tr>
+                    </thead>
+                    <tbody class="divide-y divide-slate-200 text-slate-700">
+                      <tr>
+                        <td class="py-2 pr-4">Sao lưu toàn bộ</td>
+                        <td class="py-2 pr-4">Thứ 6 hàng tuần</td>
+                        <td class="py-2 pr-4 text-emerald-600 font-medium">
+                          Hoàn tất
+                        </td>
+                        <td class="py-2 pr-2 text-right">
+                          <button
+                            class="inline-flex items-center justify-center gap-2 h-8 px-3 rounded-md border border-slate-200 bg-white text-[12px] font-medium text-slate-600 hover:bg-slate-50 transition-colors"
+                            data-action="run-maint"
+                            data-name="backup_weekly"
+                          >
+                            Chạy ngay
+                          </button>
+                        </td>
+                      </tr>
+                      <tr>
+                        <td class="py-2 pr-4">
+                          Kiểm tra tính toàn vẹn dữ liệu
+                        </td>
+                        <td class="py-2 pr-4">Tuần 3 mỗi tháng</td>
+                        <td class="py-2 pr-4 text-emerald-600 font-medium">
+                          Đang thực hiện
+                        </td>
+                        <td class="py-2 pr-2 text-right">
+                          <button
+                            class="inline-flex items-center justify-center gap-2 h-8 px-3 rounded-md border border-slate-200 bg-white text-[12px] font-medium text-slate-600 hover:bg-slate-50 transition-colors"
+                            data-action="run-maint"
+                            data-name="integrity_check"
+                          >
+                            Chạy ngay
+                          </button>
+                        </td>
+                      </tr>
+                      <tr>
+                        <td class="py-2 pr-4">Nâng cấp phần mềm</td>
+                        <td class="py-2 pr-4">05/03/2024</td>
+                        <td class="py-2 pr-4 text-amber-600 font-medium">
+                          Chuẩn bị
+                        </td>
+                        <td class="py-2 pr-2 text-right">
+                          <button
+                            class="inline-flex items-center justify-center gap-2 h-8 px-3 rounded-md border border-slate-200 bg-white text-[12px] font-medium text-slate-600 hover:bg-slate-50 transition-colors"
+                            data-action="run-maint"
+                            data-name="app_upgrade"
+                          >
+                            Kiểm tra trước
+                          </button>
+                        </td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+              </article>
+            </section>
+
+            <!-- Security + Logs -->
+            <section class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+              <article
+                class="bg-white border border-slate-200 rounded-xl p-5 space-y-4 lg:col-span-2"
+              >
+                <header class="flex items-center gap-2">
+                  <span
+                    class="w-5 h-5 rounded-sm bg-slate-100 grid place-items-center text-sm"
+                    >🔐</span
+                  >
+                  <h2 class="text-sm font-semibold text-slate-700">
+                    Tường lửa &amp; bảo mật
+                  </h2>
+                </header>
+                <ul class="space-y-3 text-sm text-slate-600">
+                  <li class="flex items-start gap-3">
+                    <span
+                      class="mt-1 w-2 h-2 rounded-full bg-emerald-500"
+                    ></span>
+                    <div>
+                      <p class="font-medium text-slate-700">
+                        Chế độ bảo vệ nâng cao
+                      </p>
+                      <p>Chặn 12 yêu cầu nghi ngờ trong tuần qua</p>
+                    </div>
+                  </li>
+                  <li class="flex items-start gap-3">
+                    <span
+                      class="mt-1 w-2 h-2 rounded-full bg-emerald-500"
+                    ></span>
+                    <div>
+                      <p class="font-medium text-slate-700">Xác thực hai lớp</p>
+                      <p>100% tài khoản quản trị đã bật 2FA</p>
+                    </div>
+                  </li>
+                  <li class="flex items-start gap-3">
+                    <span class="mt-1 w-2 h-2 rounded-full bg-amber-500"></span>
+                    <div>
+                      <p class="font-medium text-slate-700">
+                        Cảnh báo đăng nhập
+                      </p>
+                      <p>02 cảnh báo từ IP lạ (15/01) đã bị khóa 24 giờ</p>
+                    </div>
+                  </li>
+                </ul>
+                <div class="pt-1 flex flex-wrap gap-2">
+                  <button
+                    class="inline-flex items-center justify-center gap-2 h-10 px-3 rounded-lg border border-slate-200 bg-white text-[13px] font-medium text-slate-600 hover:bg-slate-50 hover:text-slate-700 transition-colors"
+                    data-action="audit"
+                  >
+                    🔎 Quét audit
+                  </button>
+                  <button
+                    class="inline-flex items-center justify-center gap-2 h-10 px-3 rounded-lg border border-slate-200 bg-white text-[13px] font-medium text-slate-600 hover:bg-slate-50 hover:text-slate-700 transition-colors"
+                    data-action="fw-reload"
+                  >
+                    🧱 Nạp lại tường lửa
+                  </button>
+                  <button
+                    class="inline-flex items-center justify-center gap-2 h-10 px-3 rounded-lg bg-slate-900 text-white text-[13px] font-semibold hover:bg-slate-800 transition-colors"
+                    data-action="security-patch"
+                  >
+                    🛠 Cập nhật bản vá
+                  </button>
+                </div>
+              </article>
+
+              <article
+                class="bg-white border border-slate-200 rounded-xl p-5 space-y-4"
+              >
+                <header class="flex items-center gap-2">
+                  <span
+                    class="w-5 h-5 rounded-sm bg-slate-100 grid place-items-center text-sm"
+                    >📝</span
+                  >
+                  <h2 class="text-sm font-semibold text-slate-700">
+                    Nhật ký gần đây
+                  </h2>
+                </header>
+                <ul class="divide-y divide-slate-200 text-sm text-slate-600">
+                  <li class="py-3">
+                    <span class="font-medium text-slate-700"
+                      >20/01 • 08:21</span
+                    >
+                    — Admin đăng nhập thành công
+                  </li>
+                  <li class="py-3">
+                    <span class="font-medium text-slate-700"
+                      >19/01 • 23:45</span
+                    >
+                    — Sao lưu dữ liệu hoàn tất
+                  </li>
+                  <li class="py-3">
+                    <span class="font-medium text-slate-700"
+                      >18/01 • 21:00</span
+                    >
+                    — Cảnh báo dung lượng &gt;70% (đã khắc phục)
+                  </li>
+                </ul>
+                <div class="flex items-center gap-2">
+                  <button
+                    class="inline-flex items-center justify-center gap-2 h-10 px-3 rounded-lg border border-slate-200 bg-white text-[13px] font-medium text-slate-600 hover:bg-slate-50 hover:text-slate-700 transition-colors w-full"
+                    data-action="view-logs"
+                  >
+                    Xem toàn bộ nhật ký
+                  </button>
+                </div>
+              </article>
+            </section>
+
+            <footer class="pt-2 text-xs text-slate-400 text-center">
+              © UBND Phường Thanh Khê Đông — Trung tâm quản lý hệ thống
+            </footer>
+          </div>
+        </main>
+      </div>
+    </div>
+
+    <!-- ===========================
+      FOOTER
+  ============================ -->
+    <div data-include="footer"></div>
+
+    <!-- Scripts -->
+    <script src="../assets/js/quantri.js" defer></script>
+    
+  </body>
+</html>

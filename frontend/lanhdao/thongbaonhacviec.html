@@ -1,0 +1,390 @@
+﻿<!-- File: lanhdao/thongbaonhacviec.html -->
+<!DOCTYPE html>
+<html lang="vi">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>
+      Hệ thống Quản lý Văn bản &amp; Điều hành • Thông báo - Nhắc việc (Lãnh đạo)
+    </title>
+    <!-- App theme overrides (card, chip, btn-icon, toast, …) -->
+    <link rel="stylesheet" href="../assets/css/styles.css" />
+  </head>
+  <body class="bg-slate-100 text-slate-800" data-role="lanhdao" data-root="..">
+    <!-- ========================= HEADER ========================= -->
+    <div data-include="header"></div>
+
+    <!-- ========================= SHELL ========================= -->
+    <div class="pt-14">
+      <div class="flex">
+        <!-- ====== SIDEBAR ====== -->
+        <div data-include="sidebar"></div>
+
+        <!-- ====== MAIN ====== -->
+        <main class="w-full">
+          <div class="max-w-none px-6 lg:px-8 py-6 lg:py-7">
+            <!-- ====== FILTER BAR ====== -->
+            <section class="bg-white border border-slate-200 rounded-xl p-4">
+              <h3 class="text-sm font-semibold text-slate-700 mb-3">
+                Tìm kiếm và lọc
+              </h3>
+              <div class="grid grid-cols-1 md:grid-cols-12 gap-3">
+                <div class="md:col-span-5">
+                  <input
+                    id="q"
+                    type="text"
+                    class="w-full border border-slate-200 rounded-md px-3 py-2 text-sm"
+                    placeholder="Tìm kiếm thông báo…"
+                    autocomplete="off"
+                  />
+                </div>
+                <div class="md:col-span-3">
+                  <select
+                    id="type"
+                    class="w-full border border-slate-200 rounded-md px-3 py-2 text-sm"
+                  >
+                    <option value="">Tất cả loại</option>
+                    <option value="vb">Văn bản</option>
+                    <option value="cv">Công việc</option>
+                    <option value="sys">Hệ thống</option>
+                    <option value="other">Khác</option>
+                  </select>
+                </div>
+                <div class="md:col-span-2">
+                  <select
+                    id="status"
+                    class="w-full border border-slate-200 rounded-md px-3 py-2 text-sm"
+                  >
+                    <option value="">Tất cả</option>
+                    <option value="unread">Chưa đọc</option>
+                    <option value="read">Đã đọc</option>
+                    <option value="pinned">Đã ghim</option>
+                  </select>
+                </div>
+                <div class="md:col-span-2">
+                  <button
+                    type="button"
+                    class="w-full flex items-center justify-center gap-2 border border-slate-200 rounded-md px-3 py-2 text-sm hover:bg-slate-50"
+                    title="Lọc nâng cao"
+                  >
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      class="w-4 h-4"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      stroke-width="2"
+                      aria-hidden="true"
+                    >
+                      <path d="M3 5h18M6 12h12M10 19h4" />
+                    </svg>
+                    Lọc nâng cao
+                  </button>
+                </div>
+              </div>
+            </section>
+
+            <!-- ====== LIST ====== -->
+            <section class="mt-6">
+              <h2 class="text-base font-semibold mb-2">Danh sách thông báo</h2>
+              <p class="text-sm text-slate-500 mb-4">
+                Hiển thị <span id="count">0</span> thông báo
+              </p>
+
+              <ul id="notifList" class="space-y-3">
+                <!-- item 1 -->
+                <li
+                  class="card p-0 overflow-hidden notif-item"
+                  data-type="vb"
+                  data-status="unread"
+                >
+                  <div
+                    class="flex items-start gap-3 px-4 py-3 bg-blue-50/70 border-l-4 border-blue-200"
+                  >
+                    <div class="text-blue-600 mt-0.5">🔔</div>
+                    <div class="flex-1 min-w-0">
+                      <div class="flex items-start justify-between gap-3">
+                        <h4 class="font-semibold truncate">
+                          Văn bản VB008 sắp hết hạn xử lý
+                        </h4>
+                        <span class="chip chip--default shrink-0" data-chip
+                          >Văn bản</span
+                        >
+                      </div>
+                      <p class="text-sm text-slate-600">
+                        Thông báo về việc kiểm tra an toàn thực phẩm sẽ hết hạn
+                        xử lý vào ngày 05/02/2024
+                      </p>
+                      <div class="text-xs text-slate-400 mt-1">
+                        Từ: UBND Quận Thanh Khê • 2024-02-03
+                      </div>
+                    </div>
+                    <div class="shrink-0 flex items-center gap-2">
+                      <button
+                        class="btn-icon"
+                        data-action="mark"
+                        data-tooltip="Đánh dấu đã đọc"
+                        title="Đánh dấu đã đọc"
+                      >
+                        ✔
+                      </button>
+                      <button
+                        class="btn-icon"
+                        data-action="pin"
+                        data-tooltip="Ghim"
+                        title="Ghim"
+                      >
+                        📌
+                      </button>
+                      <button
+                        class="btn-icon"
+                        data-action="del"
+                        data-tooltip="Xoá"
+                        title="Xoá"
+                      >
+                        🗑
+                      </button>
+                    </div>
+                  </div>
+                </li>
+
+                <!-- item 2 -->
+                <li
+                  class="card p-0 overflow-hidden notif-item"
+                  data-type="vb"
+                  data-status="unread"
+                >
+                  <div
+                    class="flex items-start gap-3 px-4 py-3 bg-blue-50/70 border-l-4 border-blue-200"
+                  >
+                    <div class="text-blue-600 mt-0.5">🔔</div>
+                    <div class="flex-1 min-w-0">
+                      <div class="flex items-start justify-between gap-3">
+                        <h4 class="font-semibold truncate">
+                          Có văn bản mới cần xử lý
+                        </h4>
+                        <span class="chip chip--default shrink-0" data-chip
+                          >Văn bản</span
+                        >
+                      </div>
+                      <p class="text-sm text-slate-600">
+                        Chỉ thị về công tác chuẩn bị bầu cử vừa được tiếp nhận
+                      </p>
+                      <div class="text-xs text-slate-400 mt-1">
+                        Từ: Văn phòng UBND • 2024-02-07
+                      </div>
+                    </div>
+                    <div class="shrink-0 flex items-center gap-2">
+                      <button
+                        class="btn-icon"
+                        data-action="mark"
+                        data-tooltip="Đánh dấu đã đọc"
+                        title="Đánh dấu đã đọc"
+                      >
+                        ✔
+                      </button>
+                      <button
+                        class="btn-icon"
+                        data-action="pin"
+                        data-tooltip="Ghim"
+                        title="Ghim"
+                      >
+                        📌
+                      </button>
+                      <button
+                        class="btn-icon"
+                        data-action="del"
+                        data-tooltip="Xoá"
+                        title="Xoá"
+                      >
+                        🗑
+                      </button>
+                    </div>
+                  </div>
+                </li>
+
+                <!-- item 3 -->
+                <li
+                  class="card p-0 overflow-hidden notif-item"
+                  data-type="cv"
+                  data-status="unread"
+                >
+                  <div
+                    class="flex items-start gap-3 px-4 py-3 bg-blue-50/70 border-l-4 border-blue-200"
+                  >
+                    <div class="text-blue-600 mt-0.5">🔔</div>
+                    <div class="flex-1 min-w-0">
+                      <div class="flex items-start justify-between gap-3">
+                        <h4 class="font-semibold truncate">
+                          Nhiệm vụ T006 đã quá hạn
+                        </h4>
+                        <span class="chip chip--default shrink-0" data-chip
+                          >Công việc</span
+                        >
+                      </div>
+                      <p class="text-sm text-slate-600">
+                        Nhiệm vụ "Xử lý chỉ thị về kỷ luật kỷ cương" đã quá hạn
+                        hoàn thành
+                      </p>
+                      <div class="text-xs text-slate-400 mt-1">
+                        Từ: Hệ thống nhắc việc • 2024-02-08
+                      </div>
+                    </div>
+                    <div class="shrink-0 flex items-center gap-2">
+                      <button
+                        class="btn-icon"
+                        data-action="mark"
+                        data-tooltip="Đánh dấu đã đọc"
+                        title="Đánh dấu đã đọc"
+                      >
+                        ✔
+                      </button>
+                      <button
+                        class="btn-icon"
+                        data-action="pin"
+                        data-tooltip="Ghim"
+                        title="Ghim"
+                      >
+                        📌
+                      </button>
+                      <button
+                        class="btn-icon"
+                        data-action="del"
+                        data-tooltip="Xoá"
+                        title="Xoá"
+                      >
+                        🗑
+                      </button>
+                    </div>
+                  </div>
+                </li>
+
+                <!-- item 4 -->
+                <li
+                  class="card p-0 overflow-hidden notif-item"
+                  data-type="sys"
+                  data-status="read"
+                >
+                  <div class="flex items-start gap-3 px-4 py-3">
+                    <div class="text-blue-600 mt-0.5">🔔</div>
+                    <div class="flex-1 min-w-0">
+                      <div class="flex items-start justify-between gap-3">
+                        <h4 class="font-semibold truncate">
+                          Thông báo bảo trì hệ thống
+                        </h4>
+                        <span class="chip chip--default shrink-0" data-chip
+                          >Hệ thống</span
+                        >
+                      </div>
+                      <p class="text-sm text-slate-600">
+                        Hệ thống sẽ bảo trì từ 22:00 ngày 10/02 đến 02:00 ngày
+                        11/02
+                      </p>
+                      <div class="text-xs text-slate-400 mt-1">
+                        Từ: Ban QLHT • 2024-02-09
+                      </div>
+                    </div>
+                    <div class="shrink-0 flex items-center gap-2">
+                      <button
+                        class="btn-icon"
+                        data-action="pin"
+                        data-tooltip="Ghim"
+                        title="Ghim"
+                      >
+                        📌
+                      </button>
+                      <button
+                        class="btn-icon"
+                        data-action="del"
+                        data-tooltip="Xoá"
+                        title="Xoá"
+                      >
+                        🗑
+                      </button>
+                    </div>
+                  </div>
+                </li>
+
+                <!-- item 5 -->
+                <li
+                  class="card p-0 overflow-hidden notif-item"
+                  data-type="cv"
+                  data-status="pinned"
+                >
+                  <div class="flex items-start gap-3 px-4 py-3">
+                    <div class="text-blue-600 mt-0.5">🔔</div>
+                    <div class="flex-1 min-w-0">
+                      <div class="flex items-start justify-between gap-3">
+                        <h4 class="font-semibold truncate">
+                          Nhắc nhớ hoàn thành báo cáo
+                        </h4>
+                        <span class="chip chip--default shrink-0" data-chip
+                          >Công việc</span
+                        >
+                      </div>
+                      <p class="text-sm text-slate-600">
+                        Báo cáo an ninh trật tự quý I/2024 cần hoàn thành trước
+                        10/02
+                      </p>
+                      <div class="text-xs text-slate-400 mt-1">
+                        Từ: Văn phòng UBND • 2024-02-06
+                      </div>
+                    </div>
+                    <div class="shrink-0 flex items-center gap-2">
+                      <button
+                        class="btn-icon"
+                        data-action="mark"
+                        data-tooltip="Đánh dấu đã đọc"
+                        title="Đánh dấu đã đọc"
+                      >
+                        ✔
+                      </button>
+                      <button
+                        class="btn-icon"
+                        data-action="pin"
+                        data-tooltip="Bỏ ghim/Ghim"
+                        title="Bỏ ghim/Ghim"
+                      >
+                        📌
+                      </button>
+                      <button
+                        class="btn-icon"
+                        data-action="del"
+                        data-tooltip="Xoá"
+                        title="Xoá"
+                      >
+                        🗑
+                      </button>
+                    </div>
+                  </div>
+                </li>
+              </ul>
+
+              <!-- Empty state -->
+              <div id="emptyState" class="hidden text-center py-12">
+                <div class="text-4xl mb-2">📭</div>
+                <p class="text-slate-600 font-medium">
+                  Không có thông báo phù hợp bộ lọc
+                </p>
+                <p class="text-slate-500 text-sm mt-1">
+                  Hãy thay đổi điều kiện tìm kiếm/lọc để xem thêm.
+                </p>
+              </div>
+            </section>
+          </div>
+        </main>
+      </div>
+    </div>
+
+    <!-- ========================= FOOTER ========================= -->
+    <div data-include="footer"></div>
+
+    <!-- Toast placeholder -->
+    <div class="toast" aria-live="polite"></div>
+
+    <!-- Base app helpers for Lãnh đạo -->
+    <script src="../assets/js/api.js"></script>
+    <script src="../assets/js/layout.js"></script>
+    <script src="../assets/js/lanhdao.js"></script>
+</body>
+</html>

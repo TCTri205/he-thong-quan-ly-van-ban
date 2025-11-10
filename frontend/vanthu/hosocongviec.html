@@ -1,0 +1,417 @@
+﻿<!-- File: vanthu/hosocongviec.html -->
+<!DOCTYPE html>
+<html lang="vi">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="Content-Language" content="vi" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>
+      Hệ thống Quản lý Văn bản &amp; Điều hành • Hồ sơ công việc (Văn thư)
+    </title>
+
+
+    <!-- App theme overrides -->
+    <link rel="stylesheet" href="../assets/css/styles.css" />
+  </head>
+  <body class="bg-slate-100 text-slate-800" data-page="hosocongviec" data-role="vanthu" data-root="..">
+    <!-- =========================== HEADER =========================== -->
+    <div data-include="header"></div>
+
+    <!-- =========================== SHELL =========================== -->
+    <div class="pt-14">
+      <div class="flex">
+        <!-- ====== SIDEBAR ====== -->
+        <div data-include="sidebar"></div>
+
+        <!-- ====== MAIN ====== -->
+        <main class="w-full">
+          <div class="max-w-none px-6 lg:px-8 py-6 lg:py-7">
+            <!-- ===== KPI CARDS ===== -->
+            <section class="grid grid-cols-1 md:grid-cols-4 gap-4 lg:gap-6">
+              <!-- Tổng hồ sơ -->
+              <article class="bg-white border border-slate-200 rounded-xl p-4">
+                <div class="flex items-start justify-between">
+                  <h3 class="text-[13px] font-semibold text-slate-600">
+                    Tổng hồ sơ
+                  </h3>
+                  <span
+                    class="inline-grid w-7 h-7 rounded-full place-items-center border border-slate-200"
+                    aria-hidden="true"
+                    >📁</span
+                  >
+                </div>
+                <div class="pt-1">
+                  <div id="kpi-total" class="text-3xl font-bold text-blue-700">
+                    0
+                  </div>
+                </div>
+              </article>
+
+              <!-- Đang thu thập -->
+              <article class="bg-white border border-slate-200 rounded-xl p-4">
+                <div class="flex items-start justify-between">
+                  <h3 class="text-[13px] font-semibold text-slate-600">
+                    Đang thu thập
+                  </h3>
+                  <span
+                    class="inline-grid w-7 h-7 rounded-full place-items-center border border-slate-200"
+                    aria-hidden="true"
+                    >🗃️</span
+                  >
+                </div>
+                <div class="pt-1">
+                  <div
+                    id="kpi-collect"
+                    class="text-3xl font-bold text-amber-600"
+                  >
+                    0
+                  </div>
+                </div>
+              </article>
+
+              <!-- Hoàn thành -->
+              <article class="bg-white border border-slate-200 rounded-xl p-4">
+                <div class="flex items-start justify-between">
+                  <h3 class="text-[13px] font-semibold text-slate-600">
+                    Hoàn thành
+                  </h3>
+                  <span
+                    class="inline-grid w-7 h-7 rounded-full place-items-center border border-slate-200"
+                    aria-hidden="true"
+                    >✅</span
+                  >
+                </div>
+                <div class="pt-1">
+                  <div
+                    id="kpi-done"
+                    class="text-3xl font-bold text-emerald-600"
+                  >
+                    0
+                  </div>
+                </div>
+              </article>
+
+              <!-- Tổng văn bản -->
+              <article class="bg-white border border-slate-200 rounded-xl p-4">
+                <div class="flex items-start justify-between">
+                  <h3 class="text-[13px] font-semibold text-slate-600">
+                    Tổng văn bản
+                  </h3>
+                  <span
+                    class="inline-grid w-7 h-7 rounded-full place-items-center border border-slate-200"
+                    aria-hidden="true"
+                    >📄</span
+                  >
+                </div>
+                <div class="pt-1">
+                  <div id="kpi-docs" class="text-3xl font-bold">0</div>
+                </div>
+              </article>
+            </section>
+
+            <!-- ===== TOOLBAR / FILTER ===== -->
+            <section
+              class="mt-5 bg-white border border-slate-200 rounded-xl p-4"
+            >
+              <div
+                class="flex flex-col md:flex-row md:items-center md:justify-between gap-3"
+              >
+                <div class="flex-1 flex items-center gap-2">
+                  <label class="relative flex-1 max-w-xl" for="txtSearch">
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      class="pointer-events-none absolute left-3 top-2.5 h-5 w-5 text-slate-400"
+                      viewBox="0 0 20 20"
+                      fill="currentColor"
+                      aria-hidden="true"
+                    >
+                      <path
+                        fill-rule="evenodd"
+                        d="M8 4a4 4 0 102.83 6.83l3.44 3.44a1 1 0 001.41-1.41l-3.44-3.44A4 4 0 008 4zm-6 4a6 6 0 1110.89 3.476l3.817 3.817a3 3 0 11-4.243 4.243l-3.817-3.817A6 6 0 012 8z"
+                        clip-rule="evenodd"
+                      />
+                    </svg>
+                    <input
+                      id="txtSearch"
+                      class="w-full h-10 pl-10 pr-4 rounded-lg border border-slate-200 focus:outline-none focus:ring-2 focus:ring-blue-600/20 focus:border-blue-500 text-[14px] placeholder-slate-400"
+                      type="search"
+                      placeholder="Tìm kiếm theo tiêu đề hồ sơ, phòng ban…"
+                      autocomplete="off"
+                    />
+                  </label>
+
+                  <div class="relative">
+                    <select
+                      id="selStatus"
+                      class="h-10 pl-3 pr-8 rounded-lg border border-slate-200 text-sm focus:outline-none focus:ring-2 focus:ring-blue-600/20"
+                    >
+                      <option value="">Tất cả trạng thái</option>
+                      <option value="collecting">Đang thu thập</option>
+                      <option value="done">Hoàn thành</option>
+                    </select>
+                  </div>
+
+                  <div class="relative">
+                    <select
+                      id="selCategory"
+                      class="h-10 pl-3 pr-8 rounded-lg border border-slate-200 text-sm focus:outline-none focus:ring-2 focus:ring-blue-600/20"
+                    >
+                      <option value="">Tất cả nhóm</option>
+                      <option value="kế hoạch">Kế hoạch</option>
+                      <option value="quản lý">Quản lý</option>
+                      <option value="hành chính">Hành chính</option>
+                      <option value="tài chính">Tài chính</option>
+                    </select>
+                  </div>
+                </div>
+
+                <div class="flex items-center gap-2">
+                  <button
+                    id="btnExport"
+                    class="px-3 h-10 rounded-md bg-slate-100 hover:bg-slate-200 text-sm font-medium flex items-center gap-1"
+                    type="button"
+                  >
+                    ⬇️ Xuất danh sách
+                  </button>
+                  <a
+                    href="hosocongviec-detail.html"
+                    class="px-3 h-10 rounded-md border border-slate-200 hover:bg-slate-50 text-sm font-medium flex items-center gap-1 text-slate-700"
+                    >👁 Xem hồ sơ mẫu</a
+                  >
+                  <button
+                    id="btnCreate"
+                    class="px-3 h-10 rounded-md bg-blue-600 hover:bg-blue-700 text-white text-sm font-medium flex items-center gap-1"
+                    type="button"
+                  >
+                    ＋ Tạo hồ sơ mới
+                  </button>
+                </div>
+              </div>
+            </section>
+
+            <!-- ===== LIST ===== -->
+            <section class="mt-6">
+              <h3 class="sr-only">Danh mục hồ sơ</h3>
+              <ul id="caseList" class="space-y-4">
+                <!-- MẪU HỒ SƠ (li có data-* để lọc/tính KPI) -->
+                <li
+                  class="bg-white border border-slate-200 rounded-xl p-4"
+                  data-status="collecting"
+                  data-category="kế hoạch"
+                  data-docs="6"
+                  data-key="Kế hoạch tổ chức lễ hội xuân 2024 Văn phòng UBND hạn 2024-02-15"
+                >
+                  <div class="flex items-start justify-between gap-4">
+                    <div class="min-w-0">
+                      <h4 class="text-[15px] font-semibold truncate">
+                        Kế hoạch tổ chức lễ hội xuân 2024
+                      </h4>
+                      <div
+                        class="mt-2 flex flex-wrap items-center gap-2 text-[12.5px] text-slate-600"
+                      >
+                        <span
+                          class="inline-flex items-center gap-1 text-slate-500"
+                          >📁 HS-001</span
+                        >
+                        <span
+                          class="inline-flex items-center gap-1 text-slate-500"
+                          >🗓 Tạo: 2024-01-05</span
+                        >
+                        <span
+                          class="inline-flex items-center gap-1 text-slate-500"
+                          >🏢 Chủ trì: Văn phòng UBND</span
+                        >
+                        <span
+                          class="inline-flex items-center gap-1 text-slate-500"
+                          >⏰ Hạn: 2024-02-15</span
+                        >
+                      </div>
+                      <div class="mt-2 flex flex-wrap items-center gap-2">
+                        <span class="chip chip-primary">Đang thu thập</span>
+                        <span class="chip chip-info">Nhóm: Kế hoạch</span>
+                        <span class="chip chip-deadline">Tài liệu: 6</span>
+                      </div>
+                      <p class="mt-2 text-[13px] text-slate-500 line-clamp-1">
+                        Tổng hợp các hạng mục, phân công nhân sự và dự toán kinh
+                        phí cho lễ hội xuân…
+                      </p>
+                    </div>
+                    <div class="shrink-0 flex items-center gap-2">
+                      <a class="btn-outline" href="hosocongviec-detail.html"
+                        >👁 Chi tiết</a
+                      >
+                    </div>
+                  </div>
+                </li>
+
+                <li
+                  class="bg-white border border-slate-200 rounded-xl p-4"
+                  data-status="done"
+                  data-category="quản lý"
+                  data-docs="12"
+                  data-key="Đề án số hóa hồ sơ chuyên ngành Tư pháp Phòng Tư pháp hạn 2024-01-31"
+                >
+                  <div class="flex items-start justify-between gap-4">
+                    <div class="min-w-0">
+                      <h4 class="text-[15px] font-semibold truncate">
+                        Đề án số hóa hồ sơ chuyên ngành Tư pháp
+                      </h4>
+                      <div
+                        class="mt-2 flex flex-wrap items-center gap-2 text-[12.5px] text-slate-600"
+                      >
+                        <span
+                          class="inline-flex items-center gap-1 text-slate-500"
+                          >📁 HS-014</span
+                        >
+                        <span
+                          class="inline-flex items-center gap-1 text-slate-500"
+                          >🗓 Tạo: 2023-12-12</span
+                        >
+                        <span
+                          class="inline-flex items-center gap-1 text-slate-500"
+                          >🏢 Chủ trì: Phòng Tư pháp</span
+                        >
+                        <span
+                          class="inline-flex items-center gap-1 text-slate-500"
+                          >⏰ Hạn: 2024-01-31</span
+                        >
+                      </div>
+                      <div class="mt-2 flex flex-wrap items-center gap-2">
+                        <span class="chip chip-success">Hoàn thành</span>
+                        <span class="chip chip-info">Nhóm: Quản lý</span>
+                        <span class="chip chip-deadline">Tài liệu: 12</span>
+                      </div>
+                      <p class="mt-2 text-[13px] text-slate-500 line-clamp-1">
+                        Triển khai hệ thống lưu trữ điện tử, quy trình chuẩn
+                        hóa, đào tạo cán bộ…
+                      </p>
+                    </div>
+                    <div class="shrink-0 flex items-center gap-2">
+                      <a class="btn-outline" href="hosocongviec-detail.html"
+                        >👁 Chi tiết</a
+                      >
+                    </div>
+                  </div>
+                </li>
+
+                <li
+                  class="bg-white border border-slate-200 rounded-xl p-4"
+                  data-status="collecting"
+                  data-category="tài chính"
+                  data-docs="4"
+                  data-key="Dự toán chi thường xuyên năm 2024 Phòng Tài chính kế hoạch hạn 2024-02-28"
+                >
+                  <div class="flex items-start justify-between gap-4">
+                    <div class="min-w-0">
+                      <h4 class="text-[15px] font-semibold truncate">
+                        Dự toán chi thường xuyên năm 2024
+                      </h4>
+                      <div
+                        class="mt-2 flex flex-wrap items-center gap-2 text-[12.5px] text-slate-600"
+                      >
+                        <span
+                          class="inline-flex items-center gap-1 text-slate-500"
+                          >📁 HS-022</span
+                        >
+                        <span
+                          class="inline-flex items-center gap-1 text-slate-500"
+                          >🗓 Tạo: 2024-01-20</span
+                        >
+                        <span
+                          class="inline-flex items-center gap-1 text-slate-500"
+                          >🏢 Chủ trì: Phòng Tài chính - KH</span
+                        >
+                        <span
+                          class="inline-flex items-center gap-1 text-slate-500"
+                          >⏰ Hạn: 2024-02-28</span
+                        >
+                      </div>
+                      <div class="mt-2 flex flex-wrap items-center gap-2">
+                        <span class="chip chip-primary">Đang thu thập</span>
+                        <span class="chip chip-info">Nhóm: Tài chính</span>
+                        <span class="chip chip-deadline">Tài liệu: 4</span>
+                      </div>
+                      <p class="mt-2 text-[13px] text-slate-500 line-clamp-1">
+                        Tổng hợp dự toán chi thường xuyên cho các đơn vị, chương
+                        trình mục tiêu…
+                      </p>
+                    </div>
+                    <div class="shrink-0 flex items-center gap-2">
+                      <a class="btn-outline" href="hosocongviec-detail.html"
+                        >👁 Chi tiết</a
+                      >
+                    </div>
+                  </div>
+                </li>
+
+                <li
+                  class="bg-white border border-slate-200 rounded-xl p-4"
+                  data-status="done"
+                  data-category="hành chính"
+                  data-docs="9"
+                  data-key="Quy chế làm việc của UBND phường Văn phòng UBND hạn 2024-01-18"
+                >
+                  <div class="flex items-start justify-between gap-4">
+                    <div class="min-w-0">
+                      <h4 class="text-[15px] font-semibold truncate">
+                        Quy chế làm việc của UBND phường
+                      </h4>
+                      <div
+                        class="mt-2 flex flex-wrap items-center gap-2 text-[12.5px] text-slate-600"
+                      >
+                        <span
+                          class="inline-flex items-center gap-1 text-slate-500"
+                          >📁 HS-030</span
+                        >
+                        <span
+                          class="inline-flex items-center gap-1 text-slate-500"
+                          >🗓 Tạo: 2023-12-28</span
+                        >
+                        <span
+                          class="inline-flex items-center gap-1 text-slate-500"
+                          >🏢 Chủ trì: Văn phòng UBND</span
+                        >
+                        <span
+                          class="inline-flex items-center gap-1 text-slate-500"
+                          >⏰ Hạn: 2024-01-18</span
+                        >
+                      </div>
+                      <div class="mt-2 flex flex-wrap items-center gap-2">
+                        <span class="chip chip-success">Hoàn thành</span>
+                        <span class="chip chip-info">Nhóm: Hành chính</span>
+                        <span class="chip chip-deadline">Tài liệu: 9</span>
+                      </div>
+                      <p class="mt-2 text-[13px] text-slate-500 line-clamp-1">
+                        Ban hành mới quy chế làm việc, quy trình phối hợp và
+                        trách nhiệm từng bộ phận…
+                      </p>
+                    </div>
+                    <div class="shrink-0 flex items-center gap-2">
+                      <a class="btn-outline" href="hosocongviec-detail.html"
+                        >👁 Chi tiết</a
+                      >
+                    </div>
+                  </div>
+                </li>
+              </ul>
+            </section>
+          </div>
+        </main>
+      </div>
+    </div>
+
+    <!-- =========================== FOOTER =========================== -->
+    <div data-include="footer"></div>
+
+    <!-- Toast (shared) -->
+    <div id="toast" class="toast" aria-live="polite"></div>
+
+    <!-- App base script -->
+    <script src="../assets/js/api.js"></script>
+    <script src="../assets/js/layout.js"></script>
+    <script src="../assets/js/vanthu.js"></script>
+
+    <!-- Inline script: đảm bảo nội dung & logic JS hoạt động đúng và đồng nhất -->
+    
+  </body>
+</html>

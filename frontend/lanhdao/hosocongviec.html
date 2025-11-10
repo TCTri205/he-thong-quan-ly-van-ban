@@ -1,0 +1,676 @@
+﻿<!-- File: lanhdao/hosocongviec.html -->
+<!DOCTYPE html>
+<html lang="vi">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>
+      Hệ thống Quản lý Văn bản &amp; Điều hành • Hồ sơ công việc (Lãnh đạo)
+    </title>
+    <!-- App theme overrides -->
+    <link rel="stylesheet" href="../assets/css/styles.css" />
+  </head>
+  <body class="bg-slate-100 text-slate-800" data-role="lanhdao" data-root="..">
+    <!-- ===========================
+        HEADER (đồng nhất)
+  ============================ -->
+    <div data-include="header"></div>
+
+    <!-- ===========================
+        SHELL (sidebar + main)
+  ============================ -->
+    <div class="pt-14">
+      <div class="flex">
+        <!-- ====== SIDEBAR ====== -->
+        <div data-include="sidebar"></div>
+
+        <!-- ====== MAIN ====== -->
+        <main class="w-full">
+          <div class="max-w-none px-6 lg:px-8 py-6 lg:py-7">
+            <!-- ======= OVERVIEW CARDS (KPI) ======= -->
+            <section class="grid grid-cols-1 md:grid-cols-4 gap-4 lg:gap-6">
+              <article class="bg-white border border-slate-200 rounded-xl p-4">
+                <div class="flex items-start justify-between">
+                  <h3 class="text-[13px] font-semibold text-slate-600">
+                    Tổng công việc
+                  </h3>
+                  <span
+                    class="inline-grid w-7 h-7 rounded-full place-items-center border border-slate-200"
+                    >📁</span
+                  >
+                </div>
+                <div class="pt-2">
+                  <div class="text-3xl font-bold" id="kpiTotal">0</div>
+                  <div class="text-[13px] text-slate-500">Được giao</div>
+                </div>
+              </article>
+
+              <article class="bg-white border border-slate-200 rounded-xl p-4">
+                <div class="flex items-start justify-between">
+                  <h3 class="text-[13px] font-semibold text-slate-600">
+                    Đang thực hiện
+                  </h3>
+                  <span
+                    class="inline-grid w-7 h-7 rounded-full place-items-center border border-slate-200"
+                    >⏳</span
+                  >
+                </div>
+                <div class="pt-2">
+                  <div class="text-3xl font-bold text-blue-700" id="kpiDoing">
+                    0
+                  </div>
+                  <div class="text-[13px] text-slate-500">Công việc</div>
+                </div>
+              </article>
+
+              <article class="bg-white border border-slate-200 rounded-xl p-4">
+                <div class="flex items-start justify-between">
+                  <h3 class="text-[13px] font-semibold text-slate-600">
+                    Đã hoàn thành
+                  </h3>
+                  <span
+                    class="inline-grid w-7 h-7 rounded-full place-items-center border border-slate-200"
+                    >✔️</span
+                  >
+                </div>
+                <div class="pt-2">
+                  <div class="text-3xl font-bold" id="kpiDone">0</div>
+                  <div class="text-[13px] text-slate-500">Công việc</div>
+                </div>
+              </article>
+
+              <article class="bg-white border border-slate-200 rounded-xl p-4">
+                <div class="flex items-start justify-between">
+                  <h3 class="text-[13px] font-semibold text-slate-600">
+                    Trễ hạn
+                  </h3>
+                  <span
+                    class="inline-grid w-7 h-7 rounded-full place-items-center border border-slate-200"
+                    >⚠️</span
+                  >
+                </div>
+                <div class="pt-2">
+                  <div class="text-3xl font-bold text-rose-600" id="kpiLate">
+                    0
+                  </div>
+                  <div class="text-[13px] text-slate-500">Cần xử lý gấp</div>
+                </div>
+              </article>
+            </section>
+
+            <!-- ======= FILTERS + CREATE ======= -->
+            <section
+              class="mt-6 bg-white border border-slate-200 rounded-xl p-4"
+            >
+              <!-- Header row: giữ bố cục, thêm nút Tạo mới bên phải -->
+              <div class="mb-3 flex items-center justify-between gap-2">
+                <h3 class="text-sm font-semibold text-slate-700">
+                  Tìm kiếm và lọc
+                </h3>
+                <a
+                  id="btnCreateCase"
+                  type="button"
+                  class="h-9 rounded-md bg-blue-600 px-3 text-sm font-medium text-white hover:bg-blue-700 shadow-sm"
+                  data-action="create-case"
+                  aria-label="Tạo hồ sơ công việc mới"
+                  title="Tạo hồ sơ công việc mới"
+                  href="hosocongviec-taomoi.html"
+                >
+                  + Tạo mới
+                </a>
+              </div>
+
+              <div
+                class="grid grid-cols-1 md:grid-cols-[1fr,auto,auto] gap-3 items-stretch"
+              >
+                <!-- Search by title -->
+                <label class="relative">
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    class="pointer-events-none absolute left-3 top-2.5 h-5 w-5 text-slate-400"
+                    viewBox="0 0 20 20"
+                    fill="currentColor"
+                    aria-hidden="true"
+                  >
+                    <path
+                      fill-rule="evenodd"
+                      d="M8 4a4 4 0 102.83 6.83l3.44 3.44a1 1 0 001.41-1.41l-3.44-3.44A4 4 0 008 4z"
+                      clip-rule="evenodd"
+                    />
+                  </svg>
+                  <input
+                    id="searchTitle"
+                    type="text"
+                    class="w-full h-10 pl-10 pr-4 rounded-lg border border-slate-200 focus:outline-none focus:ring-2 focus:ring-blue-600/20 focus:border-blue-500 text-[14px] placeholder-slate-400"
+                    placeholder="Tìm kiếm theo tiêu đề công việc…"
+                  />
+                </label>
+
+                <!-- Trạng thái -->
+                <div class="relative">
+                  <button
+                    id="btnStatusFilter"
+                    type="button"
+                    class="w-full md:w-44 h-10 px-3 rounded-lg border border-slate-200 text-[14px] flex items-center justify-between hover:bg-slate-50"
+                    aria-haspopup="listbox"
+                    aria-expanded="false"
+                  >
+                    <span id="statusLabel">Tất cả trạng thái</span>
+                    <svg
+                      class="w-4 h-4 text-slate-500"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      stroke-width="2"
+                      aria-hidden="true"
+                    >
+                      <path
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        d="M6 9l6 6 6-6"
+                      />
+                    </svg>
+                  </button>
+                  <div
+                    id="statusMenu"
+                    class="hidden absolute z-10 mt-1 w-full rounded-lg border border-slate-200 bg-white shadow-sm"
+                    role="listbox"
+                    aria-labelledby="btnStatusFilter"
+                  >
+                    <button
+                      data-status="all"
+                      class="filter-item block w-full rounded-md px-3 py-2 text-left text-[14px] hover:bg-slate-100"
+                    >
+                      Tất cả trạng thái
+                    </button>
+                    <button
+                      data-status="dang_thuc_hien"
+                      class="filter-item block w-full rounded-md px-3 py-2 text-left text-[14px] hover:bg-slate-100"
+                    >
+                      Đang thực hiện
+                    </button>
+                    <button
+                      data-status="hoan_thanh"
+                      class="filter-item block w-full rounded-md px-3 py-2 text-left text-[14px] hover:bg-slate-100"
+                    >
+                      Hoàn thành
+                    </button>
+                    <button
+                      data-status="tre_han"
+                      class="filter-item block w-full rounded-md px-3 py-2 text-left text-[14px] hover:bg-slate-100"
+                    >
+                      Trễ hạn
+                    </button>
+                  </div>
+                </div>
+
+                <!-- Mức độ -->
+                <div class="relative">
+                  <button
+                    id="btnPriorityFilter"
+                    type="button"
+                    class="w-full md:w-44 h-10 px-3 rounded-lg border border-slate-200 text-[14px] flex items-center justify-between hover:bg-slate-50"
+                    aria-haspopup="listbox"
+                    aria-expanded="false"
+                  >
+                    <span id="priorityLabel">Tất cả mức độ</span>
+                    <svg
+                      class="w-4 h-4 text-slate-500"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      stroke-width="2"
+                      aria-hidden="true"
+                    >
+                      <path
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        d="M6 9l6 6 6-6"
+                      />
+                    </svg>
+                  </button>
+                  <div
+                    id="priorityMenu"
+                    class="hidden absolute z-10 mt-1 w-full rounded-lg border border-slate-200 bg-white shadow-sm"
+                    role="listbox"
+                    aria-labelledby="btnPriorityFilter"
+                  >
+                    <button
+                      data-priority="all"
+                      class="filter-item block w-full rounded-md px-3 py-2 text-left text-[14px] hover:bg-slate-100"
+                    >
+                      Tất cả mức độ
+                    </button>
+                    <button
+                      data-priority="high"
+                      class="filter-item block w-full rounded-md px-3 py-2 text-left text-[14px] hover:bg-slate-100"
+                    >
+                      Cao
+                    </button>
+                    <button
+                      data-priority="medium"
+                      class="filter-item block w-full rounded-md px-3 py-2 text-left text-[14px] hover:bg-slate-100"
+                    >
+                      Trung bình
+                    </button>
+                    <button
+                      data-priority="low"
+                      class="filter-item block w-full rounded-md px-3 py-2 text-left text-[14px] hover:bg-slate-100"
+                    >
+                      Thấp
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </section>
+
+            <!-- ======= TASK TABLE ======= -->
+            <section
+              class="mt-6 bg-white border border-slate-200 rounded-xl p-4"
+            >
+              <div class="mb-3">
+                <h2 class="font-semibold">Danh sách công việc</h2>
+                <p class="text-sm text-slate-500">
+                  Hiển thị <span id="countShown">0</span> công việc
+                </p>
+              </div>
+              <div class="overflow-x-auto lg:overflow-visible">
+                <table class="w-full text-sm tbl-hover">
+                  <thead class="text-left text-slate-600">
+                    <tr class="border-b border-slate-200">
+                      <th class="py-2 pr-3">Tiêu đề công việc</th>
+                      <th class="py-2 pr-3 whitespace-nowrap">Người giao</th>
+                      <th class="py-2 pr-3 whitespace-nowrap">Ngày giao</th>
+                      <th class="py-2 pr-3 whitespace-nowrap">
+                        Hạn hoàn thành
+                      </th>
+                      <th class="py-2 pr-3">Tiến độ</th>
+                      <th class="py-2 pr-3 whitespace-nowrap">Mức độ</th>
+                      <th class="py-2 pr-3 whitespace-nowrap">Trạng thái</th>
+                      <th class="py-2 pr-0 text-right whitespace-nowrap">
+                        Thao tác
+                      </th>
+                    </tr>
+                  </thead>
+                  <tbody id="taskTableBody">
+                    <!-- 1 -->
+                    <tr
+                      class="border-b border-slate-100 bg-white"
+                      data-row
+                      data-status="dang_thuc_hien"
+                      data-priority="high"
+                    >
+                      <td class="py-3 pr-3 align-top">
+                        <div class="font-medium break-words">
+                          <a
+                            href="hosocongviec-detail.html"
+                            class="text-blue-700 hover:underline flex flex-wrap items-center gap-2 doc-title"
+                          >
+                            <span class="badge-dot bg-blue-600"></span>
+                            Chuẩn bị báo cáo tổng kết năm 2023
+                          </a>
+                        </div>
+                        <div class="text-xs text-slate-500">
+                          Tổng hợp số liệu, soạn thảo báo cáo tổng kết hoạt động
+                          năm 2023
+                        </div>
+                      </td>
+                      <td class="py-3 pr-3 whitespace-nowrap align-top">
+                        Trần Thị Bình
+                      </td>
+                      <td class="py-3 pr-3 whitespace-nowrap align-top">
+                        2024-01-15
+                      </td>
+                      <td
+                        class="py-3 pr-3 whitespace-nowrap align-top text-slate-700"
+                      >
+                        2024-01-30
+                      </td>
+                      <td class="py-3 pr-3 align-top">
+                        <div class="w-28 h-2 rounded-full bg-slate-200">
+                          <div
+                            class="h-full bg-slate-700 rounded-full"
+                            style="width: 50%"
+                          ></div>
+                        </div>
+                        <div class="text-xs text-slate-500 mt-1">50%</div>
+                      </td>
+                      <td class="py-3 pr-3 whitespace-nowrap align-top">
+                        <span class="chip chip--green">Cao</span>
+                      </td>
+                      <td class="py-3 pr-3 whitespace-nowrap align-top">
+                        <span class="chip chip--amber">Đang thực hiện</span>
+                      </td>
+                      <td class="py-3 pr-0 text-right align-top">
+                        <div class="flex items-center justify-end gap-2">
+                          <a
+                            href="hosocongviec-detail.html"
+                            class="btn-icon"
+                            data-tooltip="Xem"
+                            >👁️</a
+                          >
+                        </div>
+                      </td>
+                    </tr>
+
+                    <!-- 2 -->
+                    <tr
+                      class="border-b border-slate-100 bg-white"
+                      data-row
+                      data-status="tre_han"
+                      data-priority="low"
+                    >
+                      <td class="py-3 pr-3 align-top">
+                        <div class="font-medium break-words">
+                          <a
+                            href="hosocongviec-detail.html"
+                            class="text-blue-700 hover:underline flex flex-wrap items-center gap-2 doc-title"
+                          >
+                            <span class="badge-dot bg-slate-400"></span>
+                            Tổ chức họp Ban chỉ đạo xây dựng nông thôn mới
+                          </a>
+                        </div>
+                        <div class="text-xs text-slate-500">
+                          Chuẩn bị tài liệu, thông báo lịch họp cho các thành
+                          viên Ban chỉ đạo
+                        </div>
+                      </td>
+                      <td class="py-3 pr-3 whitespace-nowrap align-top">
+                        Trần Thị Bình
+                      </td>
+                      <td class="py-3 pr-3 whitespace-nowrap align-top">
+                        2024-01-10
+                      </td>
+                      <td
+                        class="py-3 pr-3 whitespace-nowrap align-top text-rose-600 font-medium"
+                      >
+                        2024-01-25
+                      </td>
+                      <td class="py-3 pr-3 align-top">
+                        <div class="w-28 h-2 rounded-full bg-slate-200">
+                          <div
+                            class="h-full bg-slate-700 rounded-full"
+                            style="width: 0%"
+                          ></div>
+                        </div>
+                        <div class="text-xs text-slate-500 mt-1">0%</div>
+                      </td>
+                      <td class="py-3 pr-3 whitespace-nowrap align-top">
+                        <span class="chip chip--default">Thường</span>
+                      </td>
+                      <td class="py-3 pr-3 whitespace-nowrap align-top">
+                        <span class="chip chip--rose">Trễ hạn</span>
+                      </td>
+                      <td class="py-3 pr-0 text-right align-top">
+                        <div class="flex items-center justify-end gap-2">
+                          <a
+                            href="hosocongviec-detail.html"
+                            class="btn-icon"
+                            data-tooltip="Xem"
+                            >👁️</a
+                          >
+                        </div>
+                      </td>
+                    </tr>
+
+                    <!-- 3 -->
+                    <tr
+                      class="border-b border-slate-100 bg-white"
+                      data-row
+                      data-status="tre_han"
+                      data-priority="high"
+                    >
+                      <td class="py-3 pr-3 align-top">
+                        <div class="font-medium break-words">
+                          <a
+                            href="hosocongviec-detail.html"
+                            class="text-blue-700 hover:underline flex flex-wrap items-center gap-2 doc-title"
+                          >
+                            <span class="badge-dot bg-rose-600"></span>
+                            Xử lý văn bản về an toàn thực phẩm
+                          </a>
+                        </div>
+                        <div class="text-xs text-slate-500">
+                          Phối hợp phòng Y tế xây dựng biện pháp kiểm tra ATTP
+                        </div>
+                      </td>
+                      <td class="py-3 pr-3 whitespace-nowrap align-top">
+                        Trần Thị Bình
+                      </td>
+                      <td class="py-3 pr-3 whitespace-nowrap align-top">
+                        2024-01-30
+                      </td>
+                      <td
+                        class="py-3 pr-3 whitespace-nowrap align-top text-rose-600 font-medium"
+                      >
+                        2024-02-05
+                      </td>
+                      <td class="py-3 pr-3 align-top">
+                        <div class="w-28 h-2 rounded-full bg-slate-200">
+                          <div
+                            class="h-full bg-slate-700 rounded-full"
+                            style="width: 0%"
+                          ></div>
+                        </div>
+                        <div class="text-xs text-slate-500 mt-1">0%</div>
+                      </td>
+                      <td class="py-3 pr-3 whitespace-nowrap align-top">
+                        <span class="chip chip--amber">Khẩn</span>
+                      </td>
+                      <td class="py-3 pr-3 whitespace-nowrap align-top">
+                        <span class="chip chip--amber">Trễ hạn</span>
+                      </td>
+                      <td class="py-3 pr-0 text-right align-top">
+                        <div class="flex items-center justify-end gap-2">
+                          <a
+                            href="hosocongviec-detail.html"
+                            class="btn-icon"
+                            data-tooltip="Xem"
+                            >👁️</a
+                          >
+                        </div>
+                      </td>
+                    </tr>
+
+                    <!-- 4 -->
+                    <tr
+                      class="border-b border-slate-100 bg-white"
+                      data-row
+                      data-status="tre_han"
+                      data-priority="high"
+                    >
+                      <td class="py-3 pr-3 align-top">
+                        <div class="font-medium break-words">
+                          <a
+                            href="hosocongviec-detail.html"
+                            class="text-blue-700 hover:underline flex flex-wrap items-center gap-2 doc-title"
+                          >
+                            <span class="badge-dot bg-rose-600"></span>
+                            Xử lý chỉ thị về kỷ luật kỷ cương
+                          </a>
+                        </div>
+                        <div class="text-xs text-slate-500">
+                          Nghiên cứu nội dung chỉ thị và đề xuất biện pháp thực
+                          hiện
+                        </div>
+                      </td>
+                      <td class="py-3 pr-3 whitespace-nowrap align-top">
+                        Trần Thị Bình
+                      </td>
+                      <td class="py-3 pr-3 whitespace-nowrap align-top">
+                        2024-01-31
+                      </td>
+                      <td
+                        class="py-3 pr-3 whitespace-nowrap align-top text-rose-600 font-medium"
+                      >
+                        2024-02-07
+                      </td>
+                      <td class="py-3 pr-3 align-top">
+                        <div class="w-28 h-2 rounded-full bg-slate-200">
+                          <div
+                            class="h-full bg-slate-700 rounded-full"
+                            style="width: 0%"
+                          ></div>
+                        </div>
+                        <div class="text-xs text-slate-500 mt-1">0%</div>
+                      </td>
+                      <td class="py-3 pr-3 whitespace-nowrap align-top">
+                        <span class="chip chip--amber">Khẩn</span>
+                      </td>
+                      <td class="py-3 pr-3 whitespace-nowrap align-top">
+                        <span class="chip chip--amber">Trễ hạn</span>
+                      </td>
+                      <td class="py-3 pr-0 text-right align-top">
+                        <div class="flex items-center justify-end gap-2">
+                          <a
+                            href="hosocongviec-detail.html"
+                            class="btn-icon"
+                            data-tooltip="Xem"
+                            >👁️</a
+                          >
+                        </div>
+                      </td>
+                    </tr>
+
+                    <!-- 5 -->
+                    <tr
+                      class="border-b border-slate-100 bg-white"
+                      data-row
+                      data-status="tre_han"
+                      data-priority="high"
+                    >
+                      <td class="py-3 pr-3 align-top">
+                        <div class="font-medium break-words">
+                          <a
+                            href="hosocongviec-detail.html"
+                            class="text-blue-700 hover:underline flex flex-wrap items-center gap-2 doc-title"
+                          >
+                            <span class="badge-dot bg-rose-600"></span>
+                            Xử lý văn bản trật tự xây dựng
+                          </a>
+                        </div>
+                        <div class="text-xs text-slate-500">
+                          Phối hợp Thanh tra Xây dựng xử lý các trường hợp vi
+                          phạm
+                        </div>
+                      </td>
+                      <td class="py-3 pr-3 whitespace-nowrap align-top">
+                        Trần Thị Bình
+                      </td>
+                      <td class="py-3 pr-3 whitespace-nowrap align-top">
+                        2024-02-04
+                      </td>
+                      <td
+                        class="py-3 pr-3 whitespace-nowrap align-top text-rose-600 font-medium"
+                      >
+                        2024-02-12
+                      </td>
+                      <td class="py-3 pr-3 align-top">
+                        <div class="w-28 h-2 rounded-full bg-slate-200">
+                          <div
+                            class="h-full bg-slate-700 rounded-full"
+                            style="width: 0%"
+                          ></div>
+                        </div>
+                        <div class="text-xs text-slate-500 mt-1">0%</div>
+                      </td>
+                      <td class="py-3 pr-3 whitespace-nowrap align-top">
+                        <span class="chip chip--amber">Khẩn</span>
+                      </td>
+                      <td class="py-3 pr-3 whitespace-nowrap align-top">
+                        <span class="chip chip--amber">Trễ hạn</span>
+                      </td>
+                      <td class="py-3 pr-0 text-right align-top">
+                        <div class="flex items-center justify-end gap-2">
+                          <a
+                            href="hosocongviec-detail.html"
+                            class="btn-icon"
+                            data-tooltip="Xem"
+                            >👁️</a
+                          >
+                        </div>
+                      </td>
+                    </tr>
+
+                    <!-- 6 -->
+                    <tr
+                      class="border-b border-slate-100 bg-white"
+                      data-row
+                      data-status="tre_han"
+                      data-priority="high"
+                    >
+                      <td class="py-3 pr-3 align-top">
+                        <div class="font-medium break-words">
+                          <a
+                            href="hosocongviec-detail.html"
+                            class="text-blue-700 hover:underline flex flex-wrap items-center gap-2 doc-title"
+                          >
+                            <span class="badge-dot bg-rose-600"></span>
+                            Nghiên cứu Luật Đất đai 2024
+                          </a>
+                        </div>
+                        <div class="text-xs text-slate-500">
+                          Nghiên cứu thông tư hướng dẫn và đề xuất phương án
+                          thực hiện
+                        </div>
+                      </td>
+                      <td class="py-3 pr-3 whitespace-nowrap align-top">
+                        Trần Thị Bình
+                      </td>
+                      <td class="py-3 pr-3 whitespace-nowrap align-top">
+                        2024-01-20
+                      </td>
+                      <td
+                        class="py-3 pr-3 whitespace-nowrap align-top text-rose-600 font-medium"
+                      >
+                        2024-03-01
+                      </td>
+                      <td class="py-3 pr-3 align-top">
+                        <div class="w-28 h-2 rounded-full bg-slate-200">
+                          <div
+                            class="h-full bg-slate-700 rounded-full"
+                            style="width: 0%"
+                          ></div>
+                        </div>
+                        <div class="text-xs text-slate-500 mt-1">0%</div>
+                      </td>
+                      <td class="py-3 pr-3 whitespace-nowrap align-top">
+                        <span class="chip chip--green">Cao</span>
+                      </td>
+                      <td class="py-3 pr-3 whitespace-nowrap align-top">
+                        <span class="chip chip--amber">Trễ hạn</span>
+                      </td>
+                      <td class="py-3 pr-0 text-right align-top">
+                        <div class="flex items-center justify-end gap-2">
+                          <a
+                            href="hosocongviec-detail.html"
+                            class="btn-icon"
+                            data-tooltip="Xem"
+                            >👁️</a
+                          >
+                        </div>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </section>
+          </div>
+        </main>
+      </div>
+    </div>
+
+    <!-- ===========================
+        FOOTER
+  ============================ -->
+    <div data-include="footer"></div>
+
+    <!-- App script -->
+    <script src="../assets/js/api.js"></script>
+    <script src="../assets/js/layout.js"></script>
+    <script src="../assets/js/lanhdao.js"></script>
+
+    <!-- Helper script (lọc + KPI; có thể gộp vào lanhdao.js) -->
+    
+  </body>
+</html>
