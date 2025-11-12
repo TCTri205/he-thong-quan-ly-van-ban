@@ -604,6 +604,146 @@
             applyFilters();
   };
 
+  pageHandlers['hosocongviec-detail'] = function () {
+    const api = window.ApiClient;
+    if (!api) {
+      console.warn("[vanthu] ApiClient không sẵn sàng; bỏ qua tính năng theo dõi hồ sơ.");
+      return;
+    }
+
+    const body = document.body;
+    const caseId = body?.dataset?.caseId;
+    if (!caseId) {
+      console.warn("[vanthu] Thiếu case_id trong trang chi tiết hồ sơ.");
+      return;
+    }
+
+    const watchBtn = document.getElementById("btn-case-watch");
+    const watchersList = document.getElementById("case-watchers-list");
+    const watchersCount = document.getElementById("case-watchers-count");
+    const toast = document.getElementById("toast");
+    const storedUser = api.getCurrentUser ? api.getCurrentUser() : null;
+    const currentUserId = storedUser?.id ?? storedUser?.user_id ?? storedUser?.userId;
+
+    const state = { watching: false };
+
+    function escapeHtml(value) {
+      return (value || "")
+        .toString()
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&#39;");
+    }
+
+    async function refreshWatchers() {
+      try {
+        const participants = await api.cases.participants(caseId);
+        const watchers = Array.isArray(participants)
+          ? participants.filter((item) => item?.role_on_case === "watcher")
+          : [];
+        renderWatchers(watchers);
+      } catch (error) {
+        console.error("[vanthu] lỗi tải danh sách người theo dõi:", error);
+      }
+    }
+
+    function renderWatchers(watchers) {
+      const list = Array.isArray(watchers) ? watchers : [];
+      if (watchersCount) {
+        watchersCount.textContent = String(list.length);
+      }
+      if (watchersList) {
+        if (!list.length) {
+          watchersList.innerHTML =
+            '<li class="text-[13px] text-slate-500">Chưa có người theo dõi hồ sơ.</li>';
+        } else {
+          watchersList.innerHTML = list
+            .map((entry) => {
+              const user = entry?.user;
+              const name =
+                user?.full_name || user?.username || user?.id || "Người dùng";
+              return `<li class="flex items-center justify-between gap-2 text-[13px]">
+                <span>${escapeHtml(name)}</span>
+                <span class="chip chip--info">Đang theo dõi</span>
+              </li>`;
+            })
+            .join("");
+        }
+      }
+      state.watching = list.some(
+        (entry) =>
+          entry?.user &&
+          (String(entry.user.id) === String(currentUserId) ||
+            String(entry.user.user_id) === String(currentUserId))
+      );
+      updateWatchButton();
+    }
+
+    function updateWatchButton() {
+      if (!watchBtn) return;
+      watchBtn.textContent = state.watching ? "Bỏ theo dõi" : "Theo dõi hồ sơ";
+      watchBtn.classList.toggle("bg-blue-600", !state.watching);
+      watchBtn.classList.toggle("text-white", !state.watching);
+      watchBtn.classList.toggle("bg-white", state.watching);
+      watchBtn.classList.toggle("text-slate-900", state.watching);
+    }
+
+    async function toggleWatch() {
+      if (!watchBtn) return;
+      watchBtn.disabled = true;
+      try {
+        if (state.watching) {
+          await api.cases.unwatch(caseId);
+        } else {
+          await api.cases.watch(caseId);
+        }
+        await refreshWatchers();
+        showToast(
+          state.watching ? "Bạn đang theo dõi hồ sơ." : "Đã bỏ theo dõi hồ sơ.",
+          "success"
+        );
+      } catch (error) {
+        console.error("[vanthu] lỗi thao tác theo dõi:", error);
+        showToast(resolveErrorMessage(error), "error");
+      } finally {
+        watchBtn.disabled = false;
+      }
+    }
+
+    function showToast(message, type = "info") {
+      if (!toast) {
+        console.log(message);
+        return;
+      }
+      toast.textContent = message;
+      toast.classList.remove("show", "toast--error", "toast--success", "toast--warn");
+      if (type === "error") toast.classList.add("toast--error");
+      else if (type === "success") toast.classList.add("toast--success");
+      else if (type === "warn") toast.classList.add("toast--warn");
+      toast.classList.add("show");
+      setTimeout(() => toast.classList.remove("show"), 2200);
+    }
+
+    function resolveErrorMessage(error) {
+      if (!error) return "Không thể thực hiện thao tác.";
+      if (error.data) {
+        if (typeof error.data === "string") return error.data;
+        if (error.data.detail) return String(error.data.detail);
+        if (error.data.message) return String(error.data.message);
+      }
+      if (error.message) return String(error.message);
+      return "Không thể thực hiện thao tác.";
+    }
+
+    if (watchBtn) {
+      watchBtn.addEventListener("click", toggleWatch);
+    }
+
+    refreshWatchers();
+  };
+
   pageHandlers['taikhoan'] = function () {
     const qs = (s, r = document) => r.querySelector(s);
             const qsa = (s, r = document) => Array.from(r.querySelectorAll(s));
@@ -1341,6 +1481,8 @@
     const levelLabel = document.getElementById("level-label");
     const urgentBtn = document.getElementById("btn-filter-khan");
     const searchInput = document.getElementById("search-inbox");
+    const importBtn = document.getElementById("btn-import-inbound");
+    const exportBtn = document.getElementById("btn-export-inbound");
     const toast = document.getElementById("toast");
 
     const kpi = {
@@ -1593,6 +1735,61 @@
       }
     }
 
+    if (importBtn) {
+      const fileInput = document.createElement("input");
+      fileInput.type = "file";
+      fileInput.accept = ".xlsx,.xls,.csv,.json";
+      fileInput.style.display = "none";
+      document.body.appendChild(fileInput);
+
+      importBtn.addEventListener("click", () => {
+        fileInput.value = "";
+        fileInput.click();
+      });
+
+      fileInput.addEventListener("change", async () => {
+        const file = fileInput.files?.[0];
+        if (!file) return;
+        const formData = new FormData();
+        formData.append("direction", "den");
+        formData.append("file", file);
+        try {
+          await api.request("/api/v1/inbound-docs/import/", {
+            method: "POST",
+            body: formData,
+          });
+          showToast("Đã gửi yêu cầu nhập văn bản đến.", "success");
+        } catch (error) {
+          console.error("[vanthu] import inbound docs error", error);
+          showToast(resolveErrorMessage(error), "error");
+        }
+      });
+    }
+
+    if (exportBtn) {
+      exportBtn.addEventListener("click", async () => {
+        const params = {
+          direction: "den",
+        };
+        if (state.status && state.status !== "all") params.status = state.status;
+        if (state.level && state.level !== "all") params.level = state.level;
+        if (state.keyword) params.keyword = state.keyword;
+        try {
+          const resp = await api.request(api.buildUrl("/api/v1/inbound-docs/export/", params));
+          showToast("Đã tạo bản xuất. Vui lòng tải xuống từ liên kết được cấp.", "success");
+          if (resp?.download_url) {
+            const url = /^https?:\/\//i.test(resp.download_url)
+              ? resp.download_url
+              : api.buildUrl(resp.download_url, null);
+            window.open(url, "_blank");
+          }
+        } catch (error) {
+          console.error("[vanthu] export inbound docs error", error);
+          showToast(resolveErrorMessage(error), "error");
+        }
+      });
+    }
+
     function mapStatusClass(key) {
       switch (key) {
         case "processing":
@@ -1675,6 +1872,20 @@
         return parts[2] + "/" + parts[1] + "/" + parts[0];
       }
       return value;
+    }
+
+    function showToast(message, type = "info") {
+      if (!toast) {
+        console.log(message);
+        return;
+      }
+      toast.textContent = message;
+      toast.classList.remove("show", "toast--error", "toast--success", "toast--warn");
+      if (type === "error") toast.classList.add("toast--error");
+      else if (type === "success") toast.classList.add("toast--success");
+      else if (type === "warn") toast.classList.add("toast--warn");
+      toast.classList.add("show");
+      setTimeout(() => toast.classList.remove("show"), 2200);
     }
 
     function resolveErrorMessage(error) {

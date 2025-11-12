@@ -1,4 +1,4 @@
-﻿<!-- File: vanthu/vanbanden.html -->
+<!-- File: vanthu/vanbanden.html -->
 <!DOCTYPE html>
 <html lang="vi">
   <head>
@@ -297,15 +297,32 @@
               </div>
 
               <!-- Action: Tiếp nhận -->
-              <a
-                id="btn-tiep-nhan"
-                class="h-10 px-4 rounded-lg bg-slate-900 text-white text-[14px] hover:bg-slate-800 flex items-center gap-2"
-                type="button"
-                title="Tiếp nhận văn bản mới"
-                href="vanbanden-tiepnhan.html"
-              >
-                <span class="text-[16px]">+</span> Tiếp nhận văn bản
-              </a>
+              <div class="flex items-center gap-2">
+                <button
+                  id="btn-export-inbound"
+                  type="button"
+                  class="h-10 px-3 rounded-lg border border-slate-200 bg-white text-[14px] font-medium text-slate-700 hover:bg-slate-50"
+                >
+                  Xuất văn bản
+                </button>
+
+                <button
+                  id="btn-import-inbound"
+                  type="button"
+                  class="h-10 px-3 rounded-lg bg-blue-600 text-white text-[14px] font-medium hover:bg-blue-700 flex items-center justify-center"
+                >
+                  Nhập văn bản
+                </button>
+                              <a
+                                id="btn-tiep-nhan"
+                                class="h-10 px-4 rounded-lg bg-slate-900 text-white text-[14px] hover:bg-slate-800 flex items-center gap-2"
+                                type="button"
+                                title="Tiếp nhận văn bản mới"
+                                href="vanbanden-tiepnhan.html"
+                              >
+                                <span class="text-[16px]">+</span> Tiếp nhận văn bản
+                              </a>
+              </div>
             </section>
 
             <!-- ====== LIST ====== -->

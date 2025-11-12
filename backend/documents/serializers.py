@@ -1281,6 +1281,32 @@ class RegisterExportResponseSerializer(drf_serializers.Serializer):
     total_rows = drf_serializers.IntegerField(required=False)
 
 
+class DocumentImportSerializer(drf_serializers.Serializer):
+    direction = drf_serializers.CharField(required=False, allow_blank=True)
+    items = drf_serializers.ListField(
+        child=drf_serializers.DictField(), required=False, allow_empty=True
+    )
+    file = drf_serializers.FileField(required=False, allow_empty_file=False)
+
+
+class DocumentImportResponseSerializer(drf_serializers.Serializer):
+    accepted = drf_serializers.IntegerField()
+    skipped = drf_serializers.IntegerField()
+    job_id = drf_serializers.CharField(required=False, allow_null=True)
+
+
+class DocumentExportQuerySerializer(drf_serializers.Serializer):
+    direction = drf_serializers.CharField(required=False, allow_blank=True)
+    status = drf_serializers.CharField(required=False, allow_blank=True)
+    level = drf_serializers.CharField(required=False, allow_blank=True)
+    keyword = drf_serializers.CharField(required=False, allow_blank=True)
+
+
+class DocumentExportResponseSerializer(drf_serializers.Serializer):
+    download_url = drf_serializers.CharField()
+    total_rows = drf_serializers.IntegerField(required=False)
+
+
 # ------- Inbound action request payloads (schema-only) --------
 class ReceiveInboundActionSerializer(drf_serializers.Serializer):
     note = drf_serializers.CharField(required=False, allow_blank=True)

@@ -1,19 +1,31 @@
 # documents/views_base.py
 from typing import Any, Optional, Iterable, List, Dict, Set
+from uuid import uuid4
 
 from django.conf import settings
 from django.core.exceptions import FieldDoesNotExist
 from django.db.models import Prefetch, QuerySet
-from rest_framework import viewsets
+from rest_framework import viewsets, status
 from rest_framework.exceptions import ValidationError
+from rest_framework.parsers import JSONParser, FormParser, MultiPartParser
 from rest_framework.permissions import IsAuthenticated, BasePermission
 from rest_framework.response import Response
 
+from drf_spectacular.utils import extend_schema
+
 from core.pagination import DefaultPageNumberPagination
+from core.docs import DEFAULT_ERROR_RESPONSES
 from documents.filters import DocumentFilterSet
 from documents.models import Document, DocumentAttachment
 from documents.permissions import DocumentPermission
-from documents.serializers import DocumentSlimSerializer, DocumentDetailSerializer
+from documents.serializers import (
+    DocumentSlimSerializer,
+    DocumentDetailSerializer,
+    DocumentImportSerializer,
+    DocumentImportResponseSerializer,
+    DocumentExportQuerySerializer,
+    DocumentExportResponseSerializer,
+)
 from core.exceptions import PreconditionFailedError, PreconditionRequiredError
 from core.etag import build_etag
 
@@ -252,3 +264,43 @@ class DocumentBaseViewSet(ServiceErrorMixin, viewsets.GenericViewSet):
     def _maybe_enforce_if_match(self, request, instance: Any) -> None:
         if self._has_if_match_header(request):
             self._enforce_if_match(request, instance)
+
+    @extend_schema(
+        tags=["Văn bản"],
+        operation_id="document_import",
+        summary="Nhập dữ liệu văn bản",
+        request=DocumentImportSerializer,
+        responses={202: DocumentImportResponseSerializer, **DEFAULT_ERROR_RESPONSES},
+    )
+    @action(
+        detail=False,
+        methods=["post"],
+        url_path="import",
+        parser_classes=[MultiPartParser, FormParser, JSONParser],
+    )
+    def import_documents(self, request, *args, **kwargs):
+        serializer = DocumentImportSerializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        payload = {
+            "accepted": len(serializer.validated_data.get("items") or []),
+            "skipped": 0,
+            "job_id": str(uuid4()),
+        }
+        return Response(payload, status=status.HTTP_202_ACCEPTED)
+
+    @extend_schema(
+        tags=["Văn bản"],
+        operation_id="document_export",
+        summary="Xuất dữ liệu văn bản",
+        request=DocumentExportQuerySerializer,
+        responses={200: DocumentExportResponseSerializer, **DEFAULT_ERROR_RESPONSES},
+    )
+    @action(detail=False, methods=["get"], url_path="export")
+    def export_documents(self, request, *args, **kwargs):
+        serializer = DocumentExportQuerySerializer(data=request.query_params)
+        serializer.is_valid(raise_exception=True)
+        payload = {
+            "download_url": f"/api/v1/documents/export/{uuid4()}",
+            "total_rows": 0,
+        }
+        return Response(payload)

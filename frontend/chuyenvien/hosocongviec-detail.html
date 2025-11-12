@@ -35,9 +35,9 @@
                 >
                   ← Danh sách hồ sơ
                 </a>
-                <span class="text-[13px] text-slate-500"
-                  >HS-2024-02 • Hồ sơ công việc</span
-                >
+                <span class="text-[13px] text-slate-500" data-case-code>
+                  Hồ sơ công việc
+                </span>
               </div>
               <!-- bỏ các nút 'Thêm nhiệm vụ' và 'Cập nhật trạng thái' cho CV -->
               <div class="flex items-center gap-2"></div>
@@ -49,19 +49,21 @@
                 <div class="flex flex-wrap items-center gap-2">
                   <span
                     class="px-2.5 py-1 rounded-full bg-blue-50 text-blue-700 text-xs font-semibold"
+                    data-case-status-chip
                     >Đang thực hiện</span
                   >
                   <span
                     class="px-2.5 py-1 rounded-full bg-amber-100 text-amber-700 text-xs font-semibold"
+                    data-case-priority-chip
                     >Ưu tiên cao</span
                   >
                 </div>
 
-                <h1 class="text-[19px] font-semibold text-slate-800">
+                <h1 class="text-[19px] font-semibold text-slate-800" data-case-title>
                   Hồ sơ kiểm soát an toàn thực phẩm dịp Tết Quý Tỵ 2024
                 </h1>
 
-                <p class="text-[13px] text-slate-500 leading-relaxed">
+                <p class="text-[13px] text-slate-500 leading-relaxed" data-case-description>
                   Hồ sơ tập hợp các văn bản đến, văn bản đi và nhiệm vụ liên
                   quan đến kế hoạch kiểm tra ATTP tại địa bàn phường.
                 </p>
@@ -70,32 +72,37 @@
               <dl class="grid gap-4 md:grid-cols-3 text-[13px] text-slate-600">
                 <div class="flex flex-col gap-1">
                   <dt class="font-semibold text-slate-700">Mã hồ sơ</dt>
-                  <dd>HS-2024-02</dd>
+                  <dd data-case-code>HS-2024-02</dd>
                 </div>
                 <div class="flex flex-col gap-1">
                   <dt class="font-semibold text-slate-700">Phòng phụ trách</dt>
-                  <dd>Phòng Hành chính</dd>
+                  <dd data-case-department>Phòng Hành chính</dd>
                 </div>
                 <div class="flex flex-col gap-1">
                   <dt class="font-semibold text-slate-700">Người chủ trì</dt>
-                  <dd>Trần Thị Bình</dd>
+                  <dd data-case-leader>Trần Thị Bình</dd>
                 </div>
                 <div class="flex flex-col gap-1">
                   <dt class="font-semibold text-slate-700">
                     Chuyên viên phụ trách
                   </dt>
-                  <dd>Nguyễn Văn An</dd>
+                  <dd data-case-assignee>Nguyễn Văn An</dd>
                 </div>
                 <div class="flex flex-col gap-1">
                   <dt class="font-semibold text-slate-700">Hạn hoàn thành</dt>
-                  <dd class="text-rose-600 font-medium">2024-02-15</dd>
+                  <dd class="text-rose-600 font-medium" data-case-deadline>2024-02-15</dd>
+                </div>
+                <div class="flex flex-col gap-1">
+                  <dt class="font-semibold text-slate-700">Ngày tạo</dt>
+                  <dd data-case-created>2024-01-05</dd>
                 </div>
                 <div class="flex flex-col gap-1">
                   <dt class="font-semibold text-slate-700">Số nhiệm vụ</dt>
-                  <dd>6 nhiệm vụ</dd>
+                  <dd data-case-task-count>6 nhiệm vụ</dd>
                 </div>
               </dl>
             </article>
+            <div class="text-sm text-rose-600 hidden" data-case-error role="status"></div>
 
             <!-- Members (read-only: bỏ 'Thêm thành viên') -->
             <section class="grid gap-6 lg:grid-cols-3">
@@ -132,30 +139,11 @@
                         </th>
                       </tr>
                     </thead>
-                    <tbody class="divide-y divide-slate-100">
-                      <tr>
-                        <td class="px-5 py-3">
-                          Nguyễn Văn An
-                          <div class="text-[12px] text-slate-500">
-                            Chuyên viên Hành chính
-                          </div>
+                    <tbody class="divide-y divide-slate-100" data-case-members>
+                      <tr data-case-members-placeholder>
+                        <td colspan="4" class="px-5 py-8 text-center text-sm text-slate-500">
+                          Đang tải thành viên...
                         </td>
-                        <td class="px-5 py-3">
-                          <span class="chip chip--blue">Chủ trì</span>
-                        </td>
-                        <td class="px-5 py-3">Phòng Hành chính</td>
-                        <td class="px-5 py-3">2024-01-25</td>
-                      </tr>
-                      <tr>
-                        <td class="px-5 py-3">
-                          Lê Văn Cường
-                          <div class="text-[12px] text-slate-500">Văn thư</div>
-                        </td>
-                        <td class="px-5 py-3">
-                          <span class="chip chip--default">Theo dõi</span>
-                        </td>
-                        <td class="px-5 py-3">Văn phòng UBND</td>
-                        <td class="px-5 py-3">2024-01-26</td>
                       </tr>
                     </tbody>
                   </table>
@@ -174,19 +162,19 @@
                 <ul class="space-y-3 text-[13px]">
                   <li class="flex items-center justify-between">
                     <span class="text-slate-600">Nhiệm vụ hoàn thành</span>
-                    <span class="font-semibold text-emerald-600">3 / 6</span>
+                    <span class="font-semibold text-emerald-600" data-case-metric="tasks-completed">3 / 6</span>
                   </li>
                   <li class="flex items-center justify-between">
                     <span class="text-slate-600">Nhiệm vụ quá hạn</span>
-                    <span class="font-semibold text-rose-600">2</span>
+                    <span class="font-semibold text-rose-600" data-case-metric="tasks-overdue">2</span>
                   </li>
                   <li class="flex items-center justify-between">
                     <span class="text-slate-600">Văn bản liên quan</span>
-                    <span class="font-semibold text-slate-700">5</span>
+                    <span class="font-semibold text-slate-700" data-case-metric="docs-count">5</span>
                   </li>
                   <li class="flex items-center justify-between">
                     <span class="text-slate-600">Nhắc việc đang mở</span>
-                    <span class="font-semibold text-amber-600">4</span>
+                    <span class="font-semibold text-amber-600" data-case-metric="tasks-open">4</span>
                   </li>
                 </ul>
               </aside>
@@ -208,81 +196,12 @@
                   <!-- (removed) Thêm nhiệm vụ -->
                 </header>
 
-                <ul class="space-y-3 text-[13px]">
-                  <!-- Task 1 -->
-                  <li class="rounded-lg border border-slate-100 p-3">
-                    <div class="flex items-center justify-between gap-2">
-                      <div>
-                        <div class="font-medium text-slate-700">
-                          Soạn kế hoạch kiểm tra ATTP
-                        </div>
-                        <div class="text-[12px] text-slate-500">
-                          Hạn: 2024-02-05 • Trạng thái: Đang làm
-                        </div>
-                      </div>
-                      <span class="chip chip--amber">Đang làm</span>
-                    </div>
-
-                    <!-- CV: chỉ được cập nhật tệp nhiệm vụ -->
-                    <div class="mt-2 flex items-center justify-between gap-2">
-                      <div class="text-[12px] text-slate-500">
-                        Tệp nhiệm vụ:
-                        <a
-                          href="#"
-                          class="text-blue-600 hover:underline font-medium"
-                          >Ke-hoach-ATTP.docx</a
-                        >
-                      </div>
-                      <div class="flex items-center gap-2">
-                        <button
-                          class="h-8 rounded-md border border-slate-200 px-2.5 text-xs font-medium text-slate-700 hover:bg-slate-50"
-                          data-action="task-upload-file"
-                          title="Tải lên/Cập nhật tệp nhiệm vụ"
-                          type="button"
-                        >
-                          Cập nhật tệp
-                        </button>
-                        <button
-                          class="btn-icon"
-                          title="Tải xuống"
-                          type="button"
-                        >
-                          ⬇
-                        </button>
-                      </div>
-                    </div>
-                  </li>
-
-                  <!-- Task 2 -->
-                  <li class="rounded-lg border border-slate-100 p-3">
-                    <div class="flex items-center justify-between gap-2">
-                      <div>
-                        <div class="font-medium text-slate-700">
-                          Theo dõi phản hồi Phòng Y tế
-                        </div>
-                        <div class="text-[12px] text-slate-500">
-                          Hạn: 2024-02-04 • Trạng thái: Hoàn thành
-                        </div>
-                      </div>
-                      <span class="chip chip--green">Hoàn thành</span>
-                    </div>
-
-                    <!-- CV: chỉ được cập nhật tệp nhiệm vụ -->
-                    <div class="mt-2 flex items-center justify-between gap-2">
-                      <div class="text-[12px] text-slate-500">
-                        Tệp nhiệm vụ: <span class="italic">Chưa có</span>
-                      </div>
-                      <div class="flex items-center gap-2">
-                        <button
-                          class="h-8 rounded-md border border-slate-200 px-2.5 text-xs font-medium text-slate-700 hover:bg-slate-50"
-                          data-action="task-upload-file"
-                          title="Tải lên/Cập nhật tệp nhiệm vụ"
-                          type="button"
-                        >
-                          Cập nhật tệp
-                        </button>
-                      </div>
-                    </div>
+                <ul class="space-y-3 text-[13px]" data-case-tasks>
+                  <li
+                    class="rounded-lg border border-slate-100 p-3 text-center text-sm text-slate-500"
+                    data-case-tasks-placeholder
+                  >
+                    Đang tải nhiệm vụ...
                   </li>
                 </ul>
               </article>
@@ -308,32 +227,12 @@
                   </button>
                 </header>
 
-                <ul class="space-y-3 text-[13px]">
-                  <li class="rounded-lg border border-slate-100 p-3">
-                    <div class="flex items-center justify-between">
-                      <span class="font-semibold text-slate-700"
-                        >2024-02-04 10:05 • CẬP NHẬT</span
-                      >
-                      <span class="text-[12px] text-slate-500"
-                        >Nguyễn Văn An</span
-                      >
-                    </div>
-                    <p class="mt-1 text-[12.5px] text-slate-600">
-                      Cập nhật danh sách cơ sở cần kiểm tra theo phản hồi Phòng
-                      Y tế.
-                    </p>
-                  </li>
-
-                  <li class="rounded-lg border border-slate-100 p-3">
-                    <div class="flex items-center justify-between">
-                      <span class="font-semibold text-slate-700"
-                        >2024-02-03 15:20 • BÌNH LUẬN</span
-                      >
-                      <span class="text-[12px] text-slate-500">Phòng Y tế</span>
-                    </div>
-                    <p class="mt-1 text-[12.5px] text-slate-600">
-                      Đã hoàn tất kiểm tra tại chợ Thanh Khê và Đống Đa.
-                    </p>
+                <ul class="space-y-3 text-[13px]" data-case-activity>
+                  <li
+                    class="rounded-lg border border-slate-100 p-3 text-center text-sm text-slate-500"
+                    data-case-activity-placeholder
+                  >
+                    Đang tải nhật ký hoạt động...
                   </li>
                 </ul>
               </article>
@@ -365,41 +264,12 @@
                 </div>
               </header>
 
-              <ul class="space-y-3 text-[13px]">
+              <ul class="space-y-3 text-[13px]" data-case-docs>
                 <li
-                  class="rounded-lg border border-slate-100 p-3 flex items-center justify-between gap-3"
+                  class="rounded-lg border border-slate-100 p-3 text-center text-sm text-slate-500"
+                  data-case-docs-placeholder
                 >
-                  <div>
-                    <div class="font-medium text-slate-700">
-                      008/TB-UBND • Thông báo kiểm tra ATTP
-                    </div>
-                    <div class="text-[12px] text-slate-500">
-                      Văn bản đến ngày 30/01/2024
-                    </div>
-                  </div>
-                  <a
-                    href="vanbanden.html"
-                    class="text-sm font-medium text-blue-600 hover:underline"
-                    >Xem</a
-                  >
-                </li>
-
-                <li
-                  class="rounded-lg border border-slate-100 p-3 flex items-center justify-between gap-3"
-                >
-                  <div>
-                    <div class="font-medium text-slate-700">
-                      006/TB-UBND • Thông báo phát hành
-                    </div>
-                    <div class="text-[12px] text-slate-500">
-                      Văn bản đi ngày 25/01/2024
-                    </div>
-                  </div>
-                  <a
-                    href="vanbandi.html"
-                    class="text-sm font-medium text-blue-600 hover:underline"
-                    >Xem</a
-                  >
+                  Đang tải văn bản liên quan...
                 </li>
               </ul>
             </article>

@@ -79,7 +79,7 @@ CORS_ALLOWED_ORIGIN_REGEXES = [
     r"^http://10\.\d{1,3}\.\d{1,3}\.\d{1,3}(:\d+)?$",
 ]
 
-# CSRF Trusted Origins: bao gồm cả http và https cho mỗi origin dev (phục vụ nếu có view form CSRf)
+# CSRF Trusted Origins: bao gồm cả http và https cho mỗi origin dev (phục vụ nếu có view form CSRF)
 def _both_schemes(origins: List[str]) -> List[str]:
     out: List[str] = []
     for o in origins:
@@ -170,22 +170,22 @@ WSGI_APPLICATION = "config.wsgi.application"
 # =============================================================================
 # Database (PostgreSQL)
 # =============================================================================
+# Ưu tiên DATABASE_URL (ví dụ: postgresql://postgres:postgres@127.0.0.1:55432/htvb)
 DATABASE_URL = os.getenv("DATABASE_URL")
 
 if DATABASE_URL:
-    # Dùng biến môi trường DATABASE_URL, ví dụ:
-    # postgresql://postgres:postgres@localhost:5432/htvb
-    DATABASES = {"default": env.db()}  # không truyền default => không dính NoValue
+    DATABASES = {"default": env.db("DATABASE_URL")}
 else:
-    # Fallback an toàn cho dev/local nếu chưa đặt DATABASE_URL
+    # Nếu không có DATABASE_URL → đọc bộ biến lẻ DB_HOST/DB_PORT/...
     DATABASES = {
         "default": {
             "ENGINE": "django.db.backends.postgresql",
-            "NAME": "htvb",
-            "USER": "postgres",
-            "PASSWORD": "postgres",
-            "HOST": "localhost",
-            "PORT": "5432",
+            "NAME": env("DB_NAME", default="htvb"),
+            "USER": env("DB_USER", default="postgres"),
+            "PASSWORD": env("DB_PASSWORD", default="postgres"),
+            "HOST": env("DB_HOST", default="127.0.0.1"),
+            "PORT": env.int("DB_PORT", default=5432),
+            "OPTIONS": {"connect_timeout": 5},
         }
     }
 
@@ -348,12 +348,10 @@ LOGGING = {
 }
 
 # Bật/tắt phát sự kiện (ví dụ tắt trong test)
-EVENTS_PUBLISH_ENABLED = True
+EVENTS_PUBLISH_ENABLED = get_bool("EVENTS_PUBLISH_ENABLED", True)
 
 # Ưu tiên URL; nếu không có sẽ ghép REDIS_HOST/PORT/DB
-# EVENTS_REDIS_URL = "redis://localhost:6379/0"
-# hoặc dùng REDIS_URL cho toàn hệ thống
-REDIS_URL = "redis://127.0.0.1:6379/0"
+REDIS_URL = get_str("REDIS_URL", "redis://127.0.0.1:6379/0")
 # REDIS_HOST = "localhost"
 # REDIS_PORT = 6379
 # REDIS_DB   = 0

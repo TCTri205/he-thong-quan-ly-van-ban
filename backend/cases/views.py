@@ -493,6 +493,41 @@ class CaseViewSet(viewsets.ModelViewSet):
         return Response(CaseParticipantSerializer(qs, many=True).data)
 
     @extend_schema(
+        tags=[TAG],
+        operation_id="case_watch",
+        summary="Theo dõi hồ sơ",
+        responses={200: CaseParticipantSerializer, **DEFAULT_ERROR_RESPONSES},
+    )
+    @action(detail=True, methods=["post"], url_path="watch")
+    def watch(self, request, pk=None):
+        case = self.get_object()
+        participant, created = CaseParticipant.objects.get_or_create(
+            case=case,
+            user=request.user,
+            defaults={"role_on_case": CaseParticipant.RoleOnCase.WATCHER},
+        )
+        if not created and participant.role_on_case != CaseParticipant.RoleOnCase.WATCHER:
+            return Response(CaseParticipantSerializer(participant).data)
+        serializer = CaseParticipantSerializer(participant)
+        return Response(serializer.data)
+
+    @extend_schema(
+        tags=[TAG],
+        operation_id="case_unwatch",
+        summary="Bỏ theo dõi hồ sơ",
+        responses={204: None, **DEFAULT_ERROR_RESPONSES},
+    )
+    @action(detail=True, methods=["delete"], url_path="watch")
+    def unwatch(self, request, pk=None):
+        case = self.get_object()
+        CaseParticipant.objects.filter(
+            case=case,
+            user=request.user,
+            role_on_case=CaseParticipant.RoleOnCase.WATCHER,
+        ).delete()
+        return Response(status=status.HTTP_204_NO_CONTENT)
+
+    @extend_schema(
         operation_id="case_activity_logs",
         summary="Nhật ký hoạt động hồ sơ",
         responses={200: CaseActivityLogSerializer(many=True), 404: APIErrorSchema},

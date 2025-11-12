@@ -666,7 +666,216 @@
     },
   };
 
-  const api = {
+  
+  const documentApi = {
+    list(params) {
+      return request(buildUrl("/api/v1/documents/", params));
+    },
+    retrieve(id, params) {
+      if (!id) throw new Error("Thi?u document_id");
+      return request(buildUrl(`/api/v1/documents/${id}/`, params));
+    },
+    create(payload) {
+      return request("/api/v1/documents/", {
+        method: "POST",
+        body: payload,
+      });
+    },
+    update(id, payload) {
+      if (!id) throw new Error("Thi?u document_id");
+      return request(`/api/v1/documents/${id}/`, {
+        method: "PATCH",
+        body: payload,
+      });
+    },
+    remove(id) {
+      if (!id) throw new Error("Thi?u document_id");
+      return request(`/api/v1/documents/${id}/`, {
+        method: "DELETE",
+      });
+    },
+    assignments(id, method = "GET", payload) {
+      if (!id) throw new Error("Thi?u document_id");
+      return request(`/api/v1/documents/${id}/assignments`, {
+        method,
+        body: payload,
+      });
+    },
+    approvals(id, method = "GET", payload) {
+      if (!id) throw new Error("Thi?u document_id");
+      return request(`/api/v1/documents/${id}/approvals`, {
+        method,
+        body: payload,
+      });
+    },
+    approvalsDecision(id, step, payload) {
+      if (!id) throw new Error("Thi?u document_id");
+      if (!step) throw new Error("Thi?u step");
+      return request(`/api/v1/documents/${id}/approvals/${step}/decision`, {
+        method: "POST",
+        body: payload,
+      });
+    },
+    versions(id, method = "GET", payload) {
+      if (!id) throw new Error("Thi?u document_id");
+      return request(`/api/v1/documents/${id}/versions`, {
+        method,
+        body: payload,
+      });
+    },
+    attachments(id, method = "GET", payload) {
+      if (!id) throw new Error("Thi?u document_id");
+      return request(`/api/v1/documents/${id}/attachments`, {
+        method,
+        body: payload,
+      });
+    },
+    deleteAttachment(documentId, attachmentId) {
+      if (!documentId || !attachmentId) throw new Error("Thi?u document_id / attachment_id");
+      return request(`/api/v1/documents/${documentId}/attachments/${attachmentId}`, {
+        method: "DELETE",
+      });
+    },
+    downloadAttachment(documentId, attachmentId) {
+      if (!documentId || !attachmentId) throw new Error("Thi?u document_id / attachment_id");
+      return request(`/api/v1/documents/${documentId}/attachments/${attachmentId}/download`);
+    },
+    workflowLogs(id) {
+      if (!id) throw new Error("Thi?u document_id");
+      return request(`/api/v1/documents/${id}/workflow-logs/`);
+    },
+    dispatchList(id, params) {
+      if (!id) throw new Error("Thi?u document_id");
+      return request(buildUrl(`/api/v1/documents/${id}/dispatches`, params));
+    },
+    dispatchCreate(id, payload) {
+      if (!id) throw new Error("Thi?u document_id");
+      return request(`/api/v1/documents/${id}/dispatches`, {
+        method: "POST",
+        body: payload,
+      });
+    },
+    submit(id, payload) {
+      if (!id) throw new Error("Thi?u document_id");
+      return request(`/api/v1/documents/${id}/submit`, {
+        method: "POST",
+        body: payload,
+      });
+    },
+    approve(id, payload) {
+      if (!id) throw new Error("Thi?u document_id");
+      return request(`/api/v1/documents/${id}/approve`, {
+        method: "POST",
+        body: payload,
+      });
+    },
+    reject(id, payload) {
+      if (!id) throw new Error("Thi?u document_id");
+      return request(`/api/v1/documents/${id}/reject`, {
+        method: "POST",
+        body: payload,
+      });
+    },
+    sign(id, payload) {
+      if (!id) throw new Error("Thi?u document_id");
+      return request(`/api/v1/documents/${id}/sign`, {
+        method: "POST",
+        body: payload,
+      });
+    },
+    publish(id, payload) {
+      if (!id) throw new Error("Thi?u document_id");
+      return request(`/api/v1/documents/${id}/publish`, {
+        method: "POST",
+        body: payload,
+      });
+    },
+    recall(id, payload) {
+      if (!id) throw new Error("Thi?u document_id");
+      return request(`/api/v1/documents/${id}/recall`, {
+        method: "POST",
+        body: payload,
+      });
+    },
+  };
+
+  const caseApi = {
+    list(params) {
+      return request(buildUrl("/api/v1/cases/", params));
+    },
+    retrieve(id) {
+      if (!id) throw new Error("Thi?u case_id");
+      return request(`/api/v1/cases/${id}/`);
+    },
+    create(payload) {
+      return request("/api/v1/cases/", {
+        method: "POST",
+        body: payload,
+      });
+    },
+    update(id, payload, method = "PATCH") {
+      if (!id) throw new Error("Thi?u case_id");
+      return request(`/api/v1/cases/${id}/`, {
+        method,
+        body: payload,
+      });
+    },
+    participants(id, method = "GET", payload) {
+      if (!id) throw new Error("Thi?u case_id");
+      return request(`/api/v1/cases/${id}/participants`, {
+        method,
+        body: payload,
+      });
+    },
+    tasks(id, method = "GET", payload) {
+      if (!id) throw new Error("Thi?u case_id");
+      return request(`/api/v1/cases/${id}/tasks`, {
+        method,
+        body: payload,
+      });
+    },
+    updateTask(taskId, payload) {
+      if (!taskId) throw new Error("Thi?u task_id");
+      return request(`/api/v1/case-tasks/${taskId}/`, {
+        method: "PATCH",
+        body: payload,
+      });
+    },
+    attachments(id, method = "GET", payload) {
+      if (!id) throw new Error("Thi?u case_id");
+      return request(`/api/v1/cases/${id}/attachments`, {
+        method,
+        body: payload,
+      });
+    },
+    documents(id, payload) {
+      if (!id) throw new Error("Thi?u case_id");
+      return request(`/api/v1/cases/${id}/documents`, {
+        method: payload ? "PUT" : "GET",
+        body: payload,
+      });
+    },
+    activityLogs(id) {
+      if (!id) throw new Error("Thi?u case_id");
+      return request(`/api/v1/cases/${id}/activity-logs`);
+    },
+    close(id, payload) {
+      if (!id) throw new Error("Thi?u case_id");
+      return request(`/api/v1/cases/${id}/close`, {
+        method: "POST",
+        body: payload,
+      });
+    },
+    watch(id) {
+      if (!id) throw new Error("Thi?u case_id");
+      return request(`/api/v1/cases/${id}/watch`, { method: "POST" });
+    },
+    unwatch(id) {
+      if (!id) throw new Error("Thi?u case_id");
+      return request(`/api/v1/cases/${id}/watch`, { method: "DELETE" });
+    },
+  };
+const api = {
     init(config) {
       const cfg = config || {};
       if (cfg.baseUrl) {
@@ -700,7 +909,9 @@
     registerBooks: registerBookApi,
     numberingRules: numberingRuleApi,
     documentTemplates: documentTemplateApi,
-    workflowTransitions: workflowTransitionApi,
+        documents: documentApi,
+    cases: caseApi,
+workflowTransitions: workflowTransitionApi,
   };
 
   global.ApiClient = api;
