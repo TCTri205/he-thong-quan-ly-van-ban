@@ -6,6 +6,7 @@ from django.conf import settings
 from django.core.exceptions import FieldDoesNotExist
 from django.db.models import Prefetch, QuerySet
 from rest_framework import viewsets, status
+from rest_framework.decorators import action
 from rest_framework.exceptions import ValidationError
 from rest_framework.parsers import JSONParser, FormParser, MultiPartParser
 from rest_framework.permissions import IsAuthenticated, BasePermission
