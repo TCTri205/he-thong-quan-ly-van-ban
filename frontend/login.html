@@ -183,6 +183,16 @@
 
         const params = new URLSearchParams(window.location.search || "");
         const sanitizedNext = sanitizeNext(params.get("next"));
+        const ROLE_REDIRECT = {
+          CHUYEN_VIEN: "chuyenvien/dashboard.html",
+          CV: "chuyenvien/dashboard.html",
+          LANH_DAO: "lanhdao/dashboard.html",
+          LD: "lanhdao/dashboard.html",
+          VAN_THU: "vanthu/dashboard.html",
+          VT: "vanthu/dashboard.html",
+          QUAN_TRI: "quantri/dashboard.html",
+          QT: "quantri/dashboard.html",
+        };
         const DEFAULT_REDIRECT = sanitizedNext || "chuyenvien/dashboard.html";
 
         if (sanitizedNext) {
@@ -270,7 +280,21 @@
           if (user && user.default_redirect) {
             return user.default_redirect;
           }
+          const rolePath = resolveRoleRedirect(user);
+          if (rolePath) {
+            return rolePath;
+          }
           return DEFAULT_REDIRECT;
+        }
+
+        function resolveRoleRedirect(user) {
+          const raw =
+            (user?.role || user?.roleName || user?.role_name || "")
+              .toString()
+              .trim()
+              .toUpperCase();
+          if (!raw) return null;
+          return ROLE_REDIRECT[raw] || null;
         }
 
         function redirectTo(target) {

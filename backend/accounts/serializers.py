@@ -1,13 +1,43 @@
 # accounts/serializers.py
 from __future__ import annotations
 
-from typing import Any, Dict
+import unicodedata
+from typing import Any, Dict, Optional
+
 from django.contrib.auth import get_user_model
 from rest_framework import serializers
 from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
 
+from .models import UserRole
+
 
 User = get_user_model()
+
+ROLE_REDIRECT = {
+    "CV": "chuyenvien/dashboard.html",
+    "CHUYEN_VIEN": "chuyenvien/dashboard.html",
+    "VT": "vanthu/dashboard.html",
+    "VAN_THU": "vanthu/dashboard.html",
+    "LD": "lanhdao/dashboard.html",
+    "LANH_DAO": "lanhdao/dashboard.html",
+    "QT": "quantri/dashboard.html",
+    "QUAN_TRI": "quantri/dashboard.html",
+}
+
+ROLE_ALIASES = {
+    "CHUYEN_VIEN": "CV",
+    "CHUYENVIEN": "CV",
+    "LANH_DAO": "LD",
+    "LANHDAO": "LD",
+    "VAN_THU": "VT",
+    "VANTHU": "VT",
+    "QUAN_TRI": "QT",
+    "QUANTRI": "QT",
+}
+
+DEFAULT_ROLE = "CV"
+_ROLE_CACHE_ATTR = "_htvb_role_code_cache"
+_ROLE_CACHE_MISS = object()
 
 
 def _display_full_name(u: Any) -> str:
@@ -36,20 +66,100 @@ def _display_full_name(u: Any) -> str:
     return name or str(getattr(u, "username", "") or "")
 
 
+def _strip_accents(value: str) -> str:
+    normalized = unicodedata.normalize("NFD", value)
+    return "".join(ch for ch in normalized if unicodedata.category(ch) != "Mn")
+
+
+def _normalize_role_value(value: Any) -> Optional[str]:
+    if value is None:
+        return None
+    raw = value.name if hasattr(value, "name") else value
+    text = str(raw).strip()
+    if not text:
+        return None
+    key = _strip_accents(text).replace(" ", "_").replace("-", "_").upper()
+    if key in ROLE_REDIRECT:
+        return key if key in ("CV", "VT", "LD", "QT") else ROLE_ALIASES.get(key, key)
+    return ROLE_ALIASES.get(key)
+
+
+def _resolve_role_code(user: Any) -> Optional[str]:
+    if not user:
+        return None
+    cached = getattr(user, _ROLE_CACHE_ATTR, _ROLE_CACHE_MISS)
+    if cached is not _ROLE_CACHE_MISS:
+        return cached
+
+    # 1) Direct hints on the user instance
+    for attr in ("role_code", "role", "role_name", "primary_role"):
+        if not hasattr(user, attr):
+            continue
+        code = _normalize_role_value(getattr(user, attr))
+        if code:
+            setattr(user, _ROLE_CACHE_ATTR, code)
+            return code
+
+    # 2) Django auth groups
+    try:
+        group_names = list(user.groups.values_list("name", flat=True))
+    except Exception:
+        group_names = []
+    for name in group_names:
+        code = _normalize_role_value(name)
+        if code:
+            setattr(user, _ROLE_CACHE_ATTR, code)
+            return code
+
+    # 3) UserRole relation (RBAC)
+    try:
+        user_pk = getattr(user, "pk", None)
+        if user_pk:
+            qs = UserRole.objects.select_related("role").filter(user_id=user_pk)
+            for raw in qs.values_list("role__name", flat=True):
+                code = _normalize_role_value(raw)
+                if code:
+                    setattr(user, _ROLE_CACHE_ATTR, code)
+                    return code
+    except Exception:
+        pass
+
+    # 4) Fallback for superuser -> QT
+    if getattr(user, "is_superuser", False):
+        setattr(user, _ROLE_CACHE_ATTR, "QT")
+        return "QT"
+
+    setattr(user, _ROLE_CACHE_ATTR, None)
+    return None
+
+
+def _default_redirect(user: Any) -> str:
+    role = _resolve_role_code(user) or DEFAULT_ROLE
+    return ROLE_REDIRECT.get(role, ROLE_REDIRECT[DEFAULT_ROLE])
+
+
 class UserSlimSerializer(serializers.ModelSerializer):
     """
     Dùng cho /auth/me và có thể tái sử dụng ở các nơi cần user nhẹ.
     """
     id = serializers.IntegerField(read_only=True)
     full_name = serializers.SerializerMethodField()
+    role = serializers.SerializerMethodField()
+    default_redirect = serializers.SerializerMethodField()
 
     class Meta:
         model = User
-        fields = ("id", "username", "email", "full_name")
+        fields = ("id", "username", "email", "full_name", "role", "default_redirect")
 
     def get_full_name(self, obj: Any) -> str:  # noqa: D401
         # Trả về full name hiển thị thân thiện
         return _display_full_name(obj)
+
+    def get_role(self, obj: Any) -> Optional[str]:
+        return _resolve_role_code(obj)
+
+    def get_default_redirect(self, obj: Any) -> str:
+        return _default_redirect(obj)
 
 
 class TokenObtainPairWithProfileSerializer(TokenObtainPairSerializer):

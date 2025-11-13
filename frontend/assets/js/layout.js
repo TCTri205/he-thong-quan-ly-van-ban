@@ -310,6 +310,10 @@
     })
     .then(() => {
       if (Layout.user) {
+        const inferred = deriveRoleFromUser(Layout.user);
+        if (inferred && inferred !== Layout.role) {
+          applyRoleData(inferred);
+        }
         applyUser(Layout.user, Layout.fallbackUser);
       }
       setupLogoutHandler();
@@ -514,6 +518,31 @@
     }
   }
 
+  const ROLE_ALIAS = {
+    CHUYEN_VIEN: "chuyenvien",
+    CV: "chuyenvien",
+    LANH_DAO: "lanhdao",
+    LD: "lanhdao",
+    VAN_THU: "vanthu",
+    VT: "vanthu",
+    QUAN_TRI: "quantri",
+    QT: "quantri",
+  };
+
+  function deriveRoleFromUser(user) {
+    if (!user || typeof user !== "object") {
+      return null;
+    }
+    const raw =
+      (user.role || user.roleName || user.role_name || user.role_name?.toString?.()) ||
+      "";
+    const normalized = String(raw || "")
+      .trim()
+      .replace(/\s+/g, "_")
+      .toUpperCase();
+    return ROLE_ALIAS[normalized] || null;
+  }
+
   function applyRoleData(roleKey) {
     const config = ROLE_CONFIG[roleKey] || ROLE_CONFIG.chuyenvien;
     Layout.role = roleKey;
@@ -523,6 +552,9 @@
     applyUser(Layout.user, Layout.fallbackUser);
     applyCounters(config.counters);
     buildSidebarNav(config.nav, config.navLabel);
+    if (body) {
+      body.dataset.role = roleKey;
+    }
   }
 
   function applyUser(user, fallback) {

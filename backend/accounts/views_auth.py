@@ -44,11 +44,31 @@ class JWTVerifyRequestSerializer(drf_serializers.Serializer):
     token = drf_serializers.CharField()
 
 
+ROLE_REDIRECT = {
+    "CHUYEN_VIEN": "chuyenvien/dashboard",
+    "CV": "chuyenvien/dashboard",
+    "LANH_DAO": "lanhdao/dashboard",
+    "LD": "lanhdao/dashboard",
+    "VAN_THU": "vanthu/dashboard",
+    "VT": "vanthu/dashboard",
+    "QUAN_TRI": "quantri/dashboard",
+    "QT": "quantri/dashboard",
+}
+
+
+def _normalize_role(raw: Optional[str]) -> Optional[str]:
+    if not raw:
+        return None
+    key = str(raw).strip().upper()
+    return key if key in ROLE_REDIRECT else None
+
+
 class MeSerializer(drf_serializers.Serializer):
     id = drf_serializers.IntegerField()
     username = drf_serializers.CharField(allow_null=True)
     full_name = drf_serializers.CharField(allow_null=True, required=False)
     role = drf_serializers.CharField(allow_null=True, required=False)
+    default_redirect = drf_serializers.CharField(allow_null=True, required=False)
 
 
 # =======================================
@@ -196,10 +216,12 @@ class MeView(APIView):
             except Exception:
                 role = None
 
+        normalized_role = _normalize_role(role) or "CHUYEN_VIEN"
         data = {
             "id": user.id,
             "username": getattr(user, "username", None),
             "full_name": full_name,
-            "role": role or "unknown",
+            "role": normalized_role,
+            "default_redirect": ROLE_REDIRECT.get(normalized_role),
         }
         return Response(data)
