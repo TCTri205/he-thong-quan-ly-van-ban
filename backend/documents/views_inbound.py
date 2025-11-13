@@ -3,6 +3,8 @@ from __future__ import annotations
 
 from typing import Any, Optional, cast, List, Dict
 from datetime import date
+from urllib.parse import urlencode
+from uuid import uuid4
 
 from django.conf import settings as dj_settings
 from django.db.models import Prefetch
@@ -10,6 +12,7 @@ from django.utils.dateparse import parse_date, parse_datetime
 from django.contrib.auth import get_user_model
 from rest_framework import status, serializers as drf_serializers
 from rest_framework.decorators import action
+from rest_framework.parsers import MultiPartParser, FormParser, JSONParser
 from rest_framework.response import Response
 from rest_framework.views import APIView  # dùng trong initial()
 
@@ -31,6 +34,10 @@ from documents.models import Document, DocumentAttachment
 from documents.serializers import (
     DocumentSlimSerializer,
     DocumentDetailSerializer,
+    DocumentImportSerializer,
+    DocumentImportResponseSerializer,
+    DocumentExportQuerySerializer,
+    DocumentExportResponseSerializer,
 )
 from documents.filters import DocumentFilterSet
 
@@ -41,7 +48,7 @@ from common.schema import (
 )
 
 # ===== Helper Docs (phân trang) =================================================
-from core.docs import paged_of
+from core.docs import paged_of, DEFAULT_ERROR_RESPONSES
 from core.exceptions import ForbiddenError
 
 # ===== RBAC & Service layer =====================================================
@@ -282,6 +289,8 @@ class InboundDocumentViewSet(DocumentBaseViewSet):
         "complete": Act.IN_COMPLETE,
         "archive": Act.IN_ARCHIVE,
         "withdraw_": Act.IN_WITHDRAW,
+        "import_documents": Act.IN_IMPORT_EXPORT,
+        "export_documents": Act.IN_IMPORT_EXPORT,
     }
 
     def initial(self, request, *args, **kwargs):  # type: ignore[override]
@@ -361,6 +370,67 @@ class InboundDocumentViewSet(DocumentBaseViewSet):
         data = list(ser.data)
         self._ensure_id_alias(data)
         return Response(data)
+
+    @extend_schema(
+        tags=[_TAG],
+        operation_id="inbound_import",
+        summary="Nhập văn bản đến",
+        request=cast(Any, DocumentImportSerializer),
+        responses={202: DocumentImportResponseSerializer, **DEFAULT_ERROR_RESPONSES},
+    )
+    @action(
+        detail=False,
+        methods=["post"],
+        url_path="import",
+        parser_classes=[MultiPartParser, FormParser, JSONParser],
+    )
+    def import_documents(self, request, *args, **kwargs):
+        serializer = DocumentImportSerializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        items = serializer.validated_data.get("items") or []
+        uploaded_file = serializer.validated_data.get("file")
+        accepted = len(items)
+        if uploaded_file is not None:
+            accepted = max(accepted, 1)
+        payload = {
+            "accepted": accepted,
+            "skipped": 0,
+            "job_id": str(uuid4()),
+            "filename": getattr(uploaded_file, "name", None),
+        }
+        return Response(payload, status=status.HTTP_202_ACCEPTED)
+
+    @extend_schema(
+        tags=[_TAG],
+        operation_id="inbound_export",
+        summary="Xuất văn bản đến",
+        request=cast(Any, DocumentExportQuerySerializer),
+        responses={200: DocumentExportResponseSerializer, **DEFAULT_ERROR_RESPONSES},
+    )
+    @action(detail=False, methods=["get"], url_path="export")
+    def export_documents(self, request, *args, **kwargs):
+        serializer = DocumentExportQuerySerializer(data=request.query_params)
+        serializer.is_valid(raise_exception=True)
+        params: Dict[str, Any] = {}
+        for key in ("direction", "status", "level", "keyword"):
+            val = serializer.validated_data.get(key)
+            if val:
+                params[key] = val
+        qs = self.filter_queryset(self.get_queryset())
+        if params.get("direction"):
+            qs = qs.filter(doc_direction=params["direction"])
+        ordering = serializer.validated_data.get("ordering") or "-created_at"
+        qs = qs.order_by(ordering)
+        page_size = serializer.validated_data.get("page_size") or 200
+        limited_qs = qs[:page_size]
+        data = DocumentSlimSerializer(limited_qs, many=True).data
+        payload = {
+            "download_url": request.build_absolute_uri(request.get_full_path()),
+            "total_rows": qs.count(),
+            "filters": params,
+            "items": data,
+        }
+        return Response(payload)
 
     # ====== Actions ===========================================================
     @extend_schema(

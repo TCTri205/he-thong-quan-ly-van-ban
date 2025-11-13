@@ -34,6 +34,7 @@
     const handlers = {
       dashboard: animateDashboardProgress,
       vanbanden: initVanBanDen,
+      "vanbanden-detail": initVanBanDenDetailPage,
       vanbandi: initVanBanDi,
       "vanbandi-taomoi": initVanBanDiCreate,
       hosocongviec: initHoSoCongViec,
@@ -315,21 +316,31 @@
     }
 
     function loadDocuments() {
+      const docApi = api.documents;
+      if (!docApi) {
+        renderErrorRow('Chua cau hinh Document API.');
+        return Promise.resolve();
+      }
       renderLoading();
-      return api
-        .request("/api/v1/inbound-docs/?ordering=-created_at&page_size=50")
+      return docApi
+        .list({
+          doc_direction: 'den',
+          ordering: '-created_at',
+          page_size: 50,
+        })
         .then((data) => {
-          const payload = api.extractItems(data);
+          const payload = api.extractItems(data) || [];
           normalizedDocs = payload.map((item) =>
             helpers.normalizeInboundDoc(item)
           );
           applyFilters();
         })
         .catch((error) => {
-          console.error("[chuyenvien] L?i t?i v�n b?n �?n:", error);
+          console.error('[chuyenvien] Loi tai van ban den:', error);
           renderErrorRow(helpers.resolveErrorMessage(error));
         });
     }
+
 
     function applyFilters() {
       if (!normalizedDocs.length) {
@@ -536,13 +547,8 @@
     }
 
     function mapStatusFilter(raw) {
-      const value = helpers.normalizeText(raw);
-      if (!value || value.includes("tat")) return "all";
-      if (value.includes("duyet")) return "approved";
-      if (value.includes("dang")) return "processing";
-      if (value.includes("da")) return "done";
-      if (value.includes("chua")) return "new";
-      return "all";
+      if (!raw) return "all";
+      return helpers.normalizeText(raw) || "all";
     }
 
     function mapUrgencyFilter(raw) {
@@ -557,12 +563,16 @@
 
     function inboundStatusClass(key) {
       switch (key) {
-        case "processing":
+        case "phan-cong":
+          return "bg-violet-100 text-violet-700";
+        case "dang-xu-ly":
           return "bg-amber-100 text-amber-700";
-        case "done":
-          return "bg-emerald-50 text-emerald-700";
-        case "approved":
-          return "bg-blue-100 text-blue-700";
+        case "hoan-tat":
+          return "bg-emerald-100 text-emerald-700";
+        case "luu-tru":
+          return "bg-slate-100 text-slate-700";
+        case "thu-hoi":
+          return "bg-rose-100 text-rose-700";
         default:
           return "bg-slate-900 text-white";
       }
@@ -855,21 +865,41 @@
     }
 
     function loadDocuments() {
+      const docApi = api.documents;
+      if (!docApi) {
+        renderErrorRow('Chua cau hinh Document API.');
+        return Promise.resolve();
+      }
       renderLoading();
-      return api
-        .request("/api/v1/outbound-docs/?ordering=-created_at&page_size=50")
-        .then((data) => {
-          const payload = api.extractItems(data);
-          normalizedDocs = payload.map((item) =>
+      const baseParams = {
+        ordering: '-updated_at',
+        page_size: 50,
+      };
+      return Promise.all([
+        docApi.list(Object.assign({}, baseParams, { doc_direction: 'du_thao' })),
+        docApi.list(Object.assign({}, baseParams, { doc_direction: 'di' })),
+      ])
+        .then(([draftResp, outboundResp]) => {
+          const drafts = (api.extractItems(draftResp) || []).map((item) => {
+            const normalized = helpers.normalizeOutboundDoc(item);
+            normalized.statusKey = normalized.statusKey || 'draft';
+            if (!normalized.statusLabel || normalized.statusKey === 'draft') {
+              normalized.statusLabel = 'Soan thao';
+            }
+            return normalized;
+          });
+          const published = (api.extractItems(outboundResp) || []).map((item) =>
             helpers.normalizeOutboundDoc(item)
           );
+          normalizedDocs = drafts.concat(published);
           applyFilters();
         })
         .catch((error) => {
-          console.error("[chuyenvien] L?i t?i v�n b?n �i:", error);
+          console.error('[chuyenvien] Loi tai van ban di:', error);
           renderErrorRow(helpers.resolveErrorMessage(error));
         });
     }
+
 
     function applyFilters() {
       if (!normalizedDocs.length) {
@@ -1931,6 +1961,270 @@
 
     document.addEventListener("keydown", handleShortcut);
     document.body.dataset.cvDraftShortcut = "true";
+
+    const api = window.ApiClient;
+    const helpers = window.DocHelpers;
+    const form = document.getElementById("draftForm");
+    const feedbackEl = document.getElementById("draftFeedback");
+    const saveBtn = document.querySelector('[data-action="save-draft"]');
+    const submitBtn = document.querySelector('[data-action="submit-approval"]');
+    const previewBtn = document.querySelector('[data-action="preview-draft"]');
+    const docIdInput = document.getElementById("draftDocumentId");
+    if (!api || !helpers || !form || !saveBtn || !submitBtn) {
+      return;
+    }
+
+    let saving = false;
+
+    const setFeedback = (message, tone = "info") => {
+      if (!feedbackEl) return;
+      const toneClass =
+        tone === "error"
+          ? "text-rose-600"
+          : tone === "success"
+          ? "text-emerald-600"
+          : "text-slate-600";
+      feedbackEl.className =
+        "rounded-md border px-3 py-2 text-[13px] " +
+        (tone === "error"
+          ? "border-rose-100 bg-rose-50"
+          : tone === "success"
+          ? "border-emerald-100 bg-emerald-50"
+          : "border-slate-100 bg-slate-50");
+      feedbackEl.classList.add(toneClass);
+      if (!message) {
+        feedbackEl.classList.add("hidden");
+        feedbackEl.textContent = "";
+        return;
+      }
+      feedbackEl.classList.remove("hidden");
+      feedbackEl.textContent = message;
+    };
+
+    const collectPayload = () => {
+      const formData = new FormData(form);
+      const title = (formData.get("title") || "").toString().trim();
+      const docCode = (formData.get("code") || "").toString().trim();
+      return {
+        doc_direction: "du_thao",
+        title,
+        document_code: docCode,
+      };
+    };
+
+    const validatePayload = (payload) => {
+      const result = helpers.validateDocumentPayload
+        ? helpers.validateDocumentPayload(payload)
+        : { isValid: Boolean(payload.title) };
+      if (!result.isValid) {
+        const message = Array.isArray(result.errors)
+          ? result.errors.join(" ")
+          : "Thông tin dự thảo chưa hợp lệ.";
+        setFeedback(message, "error");
+        return false;
+      }
+      return true;
+    };
+
+    const getDocId = () => docIdInput?.value?.trim();
+    const setDocId = (value) => {
+      if (docIdInput) {
+        docIdInput.value = value || "";
+      }
+    };
+
+    async function persistDraft(showToastOnSuccess = true) {
+      if (saving) {
+        return getDocId();
+      }
+      const payload = collectPayload();
+      if (!validatePayload(payload)) {
+        return null;
+      }
+      saving = true;
+      setFeedback("Đang lưu dự thảo...", "info");
+      try {
+        const currentId = getDocId();
+        let response;
+        if (currentId) {
+          response = await api.documents.update(currentId, payload);
+        } else {
+          response = await api.documents.create(payload);
+        }
+        const newId = response?.id ?? response?.document_id ?? currentId;
+        if (newId) {
+          setDocId(String(newId));
+        }
+        if (showToastOnSuccess) {
+          setFeedback("Đã lưu dự thảo.", "success");
+          showToast("Đã lưu dự thảo văn bản.");
+        } else {
+          setFeedback("", "info");
+        }
+        return newId;
+      } catch (error) {
+        console.error("[chuyenvien] Lỗi lưu dự thảo:", error);
+        setFeedback(helpers.resolveErrorMessage(error), "error");
+        return null;
+      } finally {
+        saving = false;
+      }
+    }
+
+    saveBtn.addEventListener("click", async (event) => {
+      event.preventDefault();
+      await persistDraft();
+    });
+
+    submitBtn.addEventListener("click", async (event) => {
+      event.preventDefault();
+      const draftId = await persistDraft(false);
+      if (!draftId) {
+        setFeedback("Chưa có dữ liệu để trình ký.", "error");
+        return;
+      }
+      try {
+        await api.documents.submit(draftId, {
+          comment:
+            form.elements?.abstract?.value?.trim() ||
+            "Trình duyệt dự thảo từ giao diện chuyên viên.",
+        });
+        showToast("Đã trình ký văn bản.");
+        setFeedback("Đã trình lãnh đạo phê duyệt.", "success");
+      } catch (error) {
+        console.error("[chuyenvien] Lỗi trình ký:", error);
+        setFeedback(helpers.resolveErrorMessage(error), "error");
+      }
+    });
+
+    form.addEventListener("submit", (event) => {
+      event.preventDefault();
+      saveBtn.click();
+    });
+
+    previewBtn?.addEventListener("click", async (event) => {
+      event.preventDefault();
+      const draftId = await persistDraft(false);
+      if (draftId) {
+        showToast("Đã cập nhật dự thảo, vui lòng mở bản PDF để xem trước.");
+      }
+    });
+  }
+
+  function initVanBanDenDetailPage() {
+    const api = window.ApiClient;
+    const helpers = window.DocHelpers || {};
+    if (!api || !helpers) {
+      console.warn("[chuyenvien] ApiClient hoặc DocHelpers chưa sẵn sàng; bỏ qua trang chi tiết văn bản đến.");
+      return;
+    }
+    const docApi = api.documents;
+    if (!docApi) {
+      console.warn("[chuyenvien] ApiClient.documents chưa sẵn sàng.");
+      return;
+    }
+    const params = new URLSearchParams(window.location.search);
+    const docId = params.get("id");
+    if (!docId) {
+      console.warn("[chuyenvien] Thiếu document_id khi mở chi tiết văn bản đến.");
+      return;
+    }
+
+    const workflowLib = window.DocWorkflow || null;
+    const workflowContainer = document.getElementById("doc-workflow-panel");
+    const inboundApi =
+      workflowLib && typeof workflowLib.ensureInboundDocsClient === "function"
+        ? workflowLib.ensureInboundDocsClient(api)
+        : api.inboundDocs || null;
+    const roleName = document.body?.dataset?.role || "chuyenvien";
+    const currentUser = typeof api.getCurrentUser === "function" ? api.getCurrentUser() : null;
+    const currentUserId = currentUser?.id || currentUser?.user_id || currentUser?.userId || null;
+    let workflowInstance = null;
+    let assignmentsCache = [];
+
+    function buildPrefill(doc, normalized) {
+      return {
+        received_number: doc?.received_number || normalized?.incomingNumber || "",
+        received_date: normalized?.receivedDate || doc?.received_date || "",
+        sender: doc?.sender || normalized?.sender || "",
+      };
+    }
+
+    function isCurrentAssignee(list) {
+      if (!currentUserId) return false;
+      const source = Array.isArray(list) ? list : assignmentsCache;
+      return source.some((item) => {
+        const userId = item?.user_id || item?.user?.user_id || item?.user?.id;
+        return userId && String(userId) === String(currentUserId);
+      });
+    }
+
+    function loadAssignments() {
+      if (!docApi.assignments) {
+        assignmentsCache = [];
+        return Promise.resolve([]);
+      }
+      return docApi
+        .assignments(docId, "GET")
+        .then((items) => {
+          const list = Array.isArray(items) ? items : [];
+          assignmentsCache = list;
+          return list;
+        })
+        .catch((error) => {
+          console.error("[chuyenvien] Lỗi tải phân công văn bản đến:", error);
+          assignmentsCache = [];
+          return [];
+        });
+    }
+
+    function updateWorkflow(doc, normalized, assignments) {
+      if (!workflowContainer || !workflowLib || typeof workflowLib.mount !== "function" || !inboundApi) {
+        return;
+      }
+      const payload = {
+        stateKey: normalized.statusKey,
+        prefill: buildPrefill(doc, normalized),
+        isAssignee: isCurrentAssignee(assignments),
+      };
+      if (!workflowInstance) {
+        workflowInstance = workflowLib.mount({
+          container: workflowContainer,
+          docId,
+          role: roleName,
+          api: inboundApi,
+          stateKey: payload.stateKey,
+          prefill: payload.prefill,
+          isAssignee: payload.isAssignee,
+          onStateChange: () => refreshDetail(),
+        });
+      } else {
+        workflowInstance.update(payload);
+      }
+    }
+
+    function refreshDetail() {
+      return docApi
+        .retrieve(docId)
+        .then((doc) => {
+          const normalized = helpers.normalizeInboundDoc
+            ? helpers.normalizeInboundDoc(doc)
+            : {
+                statusKey: doc?.status?.code || "tiep-nhan",
+                incomingNumber: doc?.incoming_number,
+                receivedDate: doc?.received_date,
+                sender: doc?.sender,
+              };
+          return loadAssignments().then((assignments) => {
+            updateWorkflow(doc, normalized, assignments);
+          });
+        })
+        .catch((error) => {
+          console.error("[chuyenvien] Lỗi tải chi tiết văn bản đến:", error);
+        });
+    }
+
+    refreshDetail();
   }
 
   function initDanhMuc() {

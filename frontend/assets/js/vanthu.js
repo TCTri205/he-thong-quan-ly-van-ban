@@ -68,6 +68,90 @@
     });
   }
 
+  function resolveInboundApi(client) {
+    if (!client) return null;
+    if (client.inboundDocs) {
+      return client.inboundDocs;
+    }
+    const workflowLib = window.DocWorkflow;
+    if (workflowLib && typeof workflowLib.ensureInboundDocsClient === "function") {
+      try {
+        return workflowLib.ensureInboundDocsClient(client);
+      } catch (error) {
+        console.warn("[vanthu] Không thể khởi tạo inboundDocs client:", error);
+      }
+    }
+    return buildInboundDocsFallback(client);
+  }
+
+  function buildInboundDocsFallback(client) {
+    if (!client || typeof client.request !== "function") return null;
+    const buildUrl = (path, params) => {
+      if (typeof client.buildUrl === "function") {
+        return client.buildUrl(path, params);
+      }
+      if (!params) return path;
+      const query = Object.entries(params || {})
+        .filter(([, value]) => value !== undefined && value !== null && value !== "")
+        .map(([key, value]) => `${encodeURIComponent(key)}=${encodeURIComponent(value)}`)
+        .join("&");
+      return query ? `${path}${path.includes("?") ? "&" : "?"}${query}` : path;
+    };
+
+    const post = (path, payload) =>
+      client.request(buildUrl(path), {
+        method: "POST",
+        body: payload,
+      });
+
+    return {
+      list(params) {
+        return client.request(buildUrl("/api/v1/inbound-docs/", params));
+      },
+      retrieve(id, params) {
+        if (!id) throw new Error("Thiếu document_id");
+        return client.request(buildUrl(`/api/v1/inbound-docs/${id}/`, params));
+      },
+      receive(id, payload) {
+        if (!id) throw new Error("Thiếu document_id");
+        return post(`/api/v1/inbound-docs/${id}/receive/`, payload);
+      },
+      register(id, payload) {
+        if (!id) throw new Error("Thiếu document_id");
+        return post(`/api/v1/inbound-docs/${id}/register/`, payload);
+      },
+      assign(id, payload) {
+        if (!id) throw new Error("Thiếu document_id");
+        return post(`/api/v1/inbound-docs/${id}/assign/`, payload);
+      },
+      start(id, payload) {
+        if (!id) throw new Error("Thiếu document_id");
+        return post(`/api/v1/inbound-docs/${id}/start/`, payload);
+      },
+      complete(id, payload) {
+        if (!id) throw new Error("Thiếu document_id");
+        return post(`/api/v1/inbound-docs/${id}/complete/`, payload);
+      },
+      archive(id, payload) {
+        if (!id) throw new Error("Thiếu document_id");
+        return post(`/api/v1/inbound-docs/${id}/archive/`, payload);
+      },
+      withdraw(id, payload) {
+        if (!id) throw new Error("Thiếu document_id");
+        return post(`/api/v1/inbound-docs/${id}/withdraw/`, payload);
+      },
+      import(payload) {
+        return client.request("/api/v1/inbound-docs/import/", {
+          method: "POST",
+          body: payload,
+        });
+      },
+      export(params) {
+        return client.request(buildUrl("/api/v1/inbound-docs/export/", params));
+      },
+    };
+  }
+
   pageHandlers['baocaothongke'] = function () {
     const qs = (s, r = document) => r.querySelector(s);
 
@@ -1641,6 +1725,14 @@
           const validList = document.getElementById("validList");
           const upload = document.getElementById("fldUpload");
           const lstFiles = document.getElementById("lstFiles");
+          const noteField = document.getElementById("fldGhiChu");
+
+          const api = window.ApiClient;
+          const inboundApi = api?.inboundDocs;
+          const helpers = window.DocHelpers || {};
+          let currentDocId = null;
+          let registerLock = false;
+          let assignLock = false;
 
           // Defaults
           (function initDefaults() {
@@ -1771,25 +1863,22 @@
 
           btnAddAssignee.addEventListener("click", addAssignRow);
 
-          // Register (mock): assign incoming number and unlock assign
-          btnRegister.addEventListener("click", () => {
-            if (!checkValidity()) return;
-
-            // mock generate: 3-digit/in-year
+          // Register helper + API integration
+          function generateIncomingNumber() {
             const year = (
               req.ngayDen.value || new Date().toISOString().slice(0, 10)
             ).slice(0, 4);
             const rand = Math.floor(50 + Math.random() * 50); // 50-99
-            const soDen = String(rand).padStart(3, "0") + "/" + year;
+            return String(rand).padStart(3, "0") + "/" + year;
+          }
 
+          function applyPreview(soDen) {
             fldSoDen.value = soDen;
             pv.soDen.textContent = soDen;
 
-            // Enable assignment & forward
             btnAssign.disabled = false;
             btnAddAssignee.disabled = false;
 
-            // Lock key fields to avoid accidental edits post-register (UI only)
             [
               req.soKyHieu,
               req.ngayBanHanh,
@@ -1798,14 +1887,122 @@
               req.ngayDen,
               req.soDangKy,
             ].forEach((el) => el.setAttribute("disabled", "disabled"));
+            checkValidity();
+          }
 
-            // Simple toast
-            toast("Đã tiếp nhận & ghi số: " + soDen);
+          function resolveErrorMessage(error) {
+            if (helpers.resolveErrorMessage) {
+              return helpers.resolveErrorMessage(error);
+            }
+            if (!error) return "Không thể kết nối tới máy chủ.";
+            if (error.data) {
+              if (typeof error.data === "string") return error.data;
+              if (error.data.detail) return String(error.data.detail);
+              if (error.data.message) return String(error.data.message);
+            }
+            return error.message || "Đã xảy ra lỗi.";
+          }
+
+          function getCurrentUserId() {
+            const user = api?.getCurrentUser ? api.getCurrentUser() : null;
+            return user?.id || user?.user_id || user?.userId || null;
+          }
+
+          async function syncWithInbound(soDen) {
+            if (!api || !inboundApi || !api.documents) {
+              return;
+            }
+            if (registerLock) {
+              return;
+            }
+            registerLock = true;
+            try {
+              const sender = req.coQuan.value.trim() || undefined;
+              const receivedDate = req.ngayDen.value || undefined;
+              const payload = {
+                doc_direction: "den",
+                document_code: req.soKyHieu.value.trim() || undefined,
+                title: req.trichYeu.value.trim() || "Văn bản đến",
+                received_number: soDen,
+                received_date: receivedDate,
+                sender,
+                summary: req.trichYeu.value.trim() || undefined,
+              };
+
+              const created = await api.documents.create(payload);
+              currentDocId = created?.id || created?.document_id;
+              if (!currentDocId) {
+                throw new Error("Không xác định được ID văn bản.");
+              }
+
+              const note = noteField?.value?.trim();
+              await inboundApi.receive(currentDocId, { note });
+              await inboundApi.register(currentDocId, {
+                received_number: soDen,
+                received_date: receivedDate,
+                sender,
+              });
+
+              const userId = getCurrentUserId();
+              if (userId) {
+                await inboundApi.assign(currentDocId, {
+                  assignees: [userId],
+                  instruction: note || undefined,
+                });
+                await inboundApi.start(currentDocId);
+              }
+
+              toast("Đã đồng bộ văn bản đến với hệ thống.", "success");
+            } catch (error) {
+              console.error("[vanthu] register inbound doc error", error);
+              toast(resolveErrorMessage(error), "error");
+            } finally {
+              registerLock = false;
+            }
+          }
+
+          // Register (API-aware)
+          btnRegister.addEventListener("click", async () => {
+            if (!checkValidity()) return;
+            const soDen = generateIncomingNumber();
+            applyPreview(soDen);
+            if (api && inboundApi && api.documents) {
+              await syncWithInbound(soDen);
+            } else {
+              toast("Đã tiếp nhận & ghi số: " + soDen);
+            }
           });
 
-          // Assign (mock)
-          btnAssign.addEventListener("click", () => {
-            toast("Đã lưu phân công và chuyển xử lý.");
+          // Assign (API-aware)
+          btnAssign.addEventListener("click", async () => {
+            if (assignLock) return;
+            if (!currentDocId) {
+              toast("Chưa có văn bản để chuyển xử lý.", "warn");
+              return;
+            }
+            if (!api || !inboundApi) {
+              toast("Đã lưu phân công và chuyển xử lý.", "success");
+              return;
+            }
+            assignLock = true;
+            try {
+              const note = noteField?.value?.trim();
+              const userId = getCurrentUserId();
+              if (!userId) {
+                throw new Error("Không xác định người dùng hiện tại.");
+              }
+              await inboundApi.assign(currentDocId, {
+                assignees: [userId],
+                instruction: note || undefined,
+              });
+              await inboundApi.start(currentDocId);
+              toast("Đã lưu phân công và chuyển xử lý.", "success");
+            } catch (error) {
+              console.error("[vanthu] assign inbound doc error", error);
+              toast(resolveErrorMessage(error), "error");
+            } finally {
+              assignLock = false;
+            }
           });
 
           // Save draft (mock)
@@ -1857,6 +2054,13 @@
       return;
     }
 
+    const helpers = window.DocHelpers || {};
+    const inboundApi = resolveInboundApi(api);
+    if (!inboundApi) {
+      console.warn("[vanthu] ApiClient.inboundDocs chưa được cấu hình.");
+      return;
+    }
+
     const layout = window.Layout || {};
     const listEl = document.getElementById("inbox-list");
     if (!listEl) {
@@ -1873,19 +2077,22 @@
     const urgentBtn = document.getElementById("btn-filter-khan");
     const searchInput = document.getElementById("search-inbox");
     const importBtn = document.getElementById("btn-import-inbound");
-    const exportBtn = document.getElementById("btn-export-inbound");
     const toast = document.getElementById("toast");
 
     const kpi = {
-      new: document.getElementById("kpi-chua-xu-ly"),
-      processing: document.getElementById("kpi-dang-xu-ly"),
-      done: document.getElementById("kpi-da-xu-ly"),
-      approved: document.getElementById("kpi-da-duyet"),
+      "tiep-nhan": document.getElementById("kpi-tiep-nhan"),
+      "dang-ky": document.getElementById("kpi-dang-ky"),
+      "phan-cong": document.getElementById("kpi-phan-cong"),
+      "dang-xu-ly": document.getElementById("kpi-dang-xu-ly"),
+      "hoan-tat": document.getElementById("kpi-hoan-tat"),
+      "luu-tru": document.getElementById("kpi-luu-tru"),
       urgent: document.getElementById("kpi-khan-cap"),
     };
 
     const state = { keyword: "", status: "all", level: "all" };
     let normalizedDocs = [];
+    const importApiAvailable = () => typeof inboundApi?.import === "function";
+    const exportApiAvailable = () => typeof inboundApi?.export === "function";
 
     attachMenu(statusButton, statusMenu, statusLabel, (value) => {
       state.status = value;
@@ -1928,9 +2135,13 @@
       });
 
     function loadDocuments() {
+      if (!api.documents) {
+        renderError("Chưa cấu hình Document API.");
+        return Promise.resolve();
+      }
       renderLoading();
-      return api
-        .request("/api/v1/inbound-docs/?ordering=-created_at&page_size=50")
+      return api.documents
+        .list({ doc_direction: "den", ordering: "-created_at", page_size: 50 })
         .then((data) => {
           const docs = api.extractItems(data);
           normalizedDocs = docs.map(normalizeDoc);
@@ -1944,8 +2155,15 @@
     }
 
     function normalizeDoc(raw) {
-      const statusRaw = String(raw?.status_name || raw?.status?.name || raw?.status?.code || "");
-      const statusKey = mapStatusKey(statusRaw);
+      if (helpers.normalizeInboundDoc) {
+        const normalized = helpers.normalizeInboundDoc(raw);
+        normalized.searchValue =
+          normalized.searchText ||
+          normalizeText([normalized.title, normalized.number, normalized.sender, normalized.department].join(" "));
+        normalized.raw = raw;
+        return normalized;
+      }
+      const statusKey = mapStatusKey(raw?.status_name || raw?.status?.name || raw?.status?.code || "");
       const urgencyRaw = String(raw?.urgency?.name || raw?.urgency?.code || "");
       const urgencyKey = mapUrgencyKey(urgencyRaw);
       const receivedDate = raw?.received_date || (raw?.created_at ? raw.created_at.slice(0, 10) : "");
@@ -1956,7 +2174,7 @@
       return {
         raw,
         statusKey,
-        statusLabel: mapStatusLabel(statusKey, statusRaw),
+        statusLabel: mapStatusLabel(statusKey, raw?.status_name),
         urgencyKey,
         urgencyLabel: mapUrgencyLabel(urgencyKey, urgencyRaw),
         receivedDate,
@@ -2014,13 +2232,13 @@
 
       const statusClass = mapStatusClass(doc.statusKey);
       const urgencyClass = mapUrgencyClass(doc.urgencyKey);
-      const detailHref = "vanbanden-detail.html?id=" + encodeURIComponent(doc.raw?.id ?? "");
+      const detailHref = "vanbanden-detail.html?id=" + encodeURIComponent(doc.id ?? doc.raw?.id ?? "");
 
       li.innerHTML = [
         '<div class="p-4">',
         '  <div class="flex items-start justify-between gap-4">',
         '    <div class="min-w-0">',
-        '      <h4 class="text-[15px] font-semibold truncate">' + escapeHtml(doc.raw?.title || "Văn bản") + '</h4>',
+        '      <h4 class="text-[15px] font-semibold truncate">' + escapeHtml(doc.title || doc.raw?.title || "Văn bản") + '</h4>',
         '      <div class="mt-2 flex flex-wrap items-center gap-2 text-[12.5px] text-slate-600">',
         doc.number ? '        <span class="inline-flex items-center gap-1 text-slate-500">' + escapeHtml(doc.number) + '</span>' : '',
         doc.receivedDate ? '        <span class="inline-flex items-center gap-1 text-slate-500">' + escapeHtml(formatDate(doc.receivedDate)) + '</span>' : '',
@@ -2061,19 +2279,43 @@
     }
 
     function updateKPIs() {
-      const counts = { new: 0, processing: 0, done: 0, approved: 0, urgent: 0 };
+      const summary = helpers.computeInboundKPIs
+        ? helpers.computeInboundKPIs(normalizedDocs)
+        : fallbackKPIs();
+      if (summary && summary.states) {
+        Object.keys(kpi).forEach((key) => {
+          const el = kpi[key];
+          if (!el) return;
+          if (key === "urgent") {
+            el.textContent = String(summary.urgent || 0);
+          } else {
+            el.textContent = String(summary.states[key] || 0);
+          }
+        });
+      }
+      if (countEl) countEl.textContent = String(summary?.total ?? normalizedDocs.length);
+    }
+
+    function fallbackKPIs() {
+      const template = {
+        "tiep-nhan": 0,
+        "dang-ky": 0,
+        "phan-cong": 0,
+        "dang-xu-ly": 0,
+        "hoan-tat": 0,
+        "luu-tru": 0,
+        "thu-hoi": 0,
+      };
+      const result = { total: normalizedDocs.length, urgent: 0, states: { ...template } };
       normalizedDocs.forEach((doc) => {
-        counts[doc.statusKey] = (counts[doc.statusKey] || 0) + 1;
+        if (Object.prototype.hasOwnProperty.call(result.states, doc.statusKey)) {
+          result.states[doc.statusKey] += 1;
+        }
         if (doc.urgencyKey === "khan" || doc.urgencyKey === "ratkhan") {
-          counts.urgent += 1;
+          result.urgent += 1;
         }
       });
-      if (kpi.new) kpi.new.textContent = String(counts.new || 0);
-      if (kpi.processing) kpi.processing.textContent = String(counts.processing || 0);
-      if (kpi.done) kpi.done.textContent = String(counts.done || 0);
-      if (kpi.approved) kpi.approved.textContent = String(counts.approved || 0);
-      if (kpi.urgent) kpi.urgent.textContent = String(counts.urgent || 0);
-      if (countEl) countEl.textContent = String(normalizedDocs.length);
+      return result;
     }
 
     function attachMenu(button, menu, label, onSelect) {
@@ -2105,92 +2347,114 @@
     }
 
     function mapStatusKey(raw) {
+      if (helpers.mapInboundStatusKey) {
+        return helpers.mapInboundStatusKey(raw);
+      }
       const value = normalizeText(raw);
-      if (!value) return "new";
-      if (/duyet|approve|approved|phe_duyet/.test(value)) return "approved";
-      if (/hoan_thanh|done|complete|completed/.test(value)) return "done";
-      if (/dang_xu_ly|processing|process|assign|assigned/.test(value)) return "processing";
-      return "new";
+      if (/hoan_tat|done|complete/.test(value)) return "hoan-tat";
+      if (/dang_xu_ly|processing/.test(value)) return "dang-xu-ly";
+      if (/phan_cong|assign/.test(value)) return "phan-cong";
+      if (/dang_ky|register/.test(value)) return "dang-ky";
+      if (/luu_tru|archive/.test(value)) return "luu-tru";
+      if (/thu_hoi|withdraw/.test(value)) return "thu-hoi";
+      return "tiep-nhan";
     }
 
     function mapStatusLabel(key, fallback) {
+      if (helpers.mapInboundStatusLabel) {
+        return helpers.mapInboundStatusLabel(key, fallback);
+      }
       switch (key) {
-        case "processing":
+        case "tiep-nhan":
+          return "Tiếp nhận";
+        case "dang-ky":
+          return "Đăng ký";
+        case "phan-cong":
+          return "Phân công";
+        case "dang-xu-ly":
           return "Đang xử lý";
-        case "done":
-          return "Đã xử lý";
-        case "approved":
-          return "Đã duyệt";
+        case "hoan-tat":
+          return "Hoàn tất";
+        case "luu-tru":
+          return "Lưu trữ";
+        case "thu-hoi":
+          return "Thu hồi";
         default:
-          return fallback || "Chưa xử lý";
+          return fallback || "Chưa xác định";
       }
     }
 
     if (importBtn) {
-      const fileInput = document.createElement("input");
-      fileInput.type = "file";
-      fileInput.accept = ".xlsx,.xls,.csv,.json";
-      fileInput.style.display = "none";
-      document.body.appendChild(fileInput);
+      const importInput = document.createElement("input");
+      importInput.type = "file";
+      importInput.accept = ".xlsx,.xls,.csv,.json";
+      importInput.style.display = "none";
+      document.body.appendChild(importInput);
 
       importBtn.addEventListener("click", () => {
-        fileInput.value = "";
-        fileInput.click();
+        if (!importApiAvailable()) {
+          showToast("Không thể nhập văn bản đến: thiếu API.", "error");
+          return;
+        }
+        importInput.value = "";
+        importInput.click();
       });
 
-      fileInput.addEventListener("change", async () => {
-        const file = fileInput.files?.[0];
+      importInput.addEventListener("change", async () => {
+        const file = importInput.files?.[0];
         if (!file) return;
+        if (!importApiAvailable()) {
+          showToast("Không thể nhập văn bản đến: thiếu API.", "error");
+          return;
+        }
         const formData = new FormData();
         formData.append("direction", "den");
         formData.append("file", file);
+        importBtn.disabled = true;
         try {
-          await api.request("/api/v1/inbound-docs/import/", {
-            method: "POST",
-            body: formData,
-          });
-          showToast("Đã gửi yêu cầu nhập văn bản đến.", "success");
+          const resp = await inboundApi.import(formData);
+          const accepted = Number(resp?.accepted ?? 0);
+          const skipped = Number(resp?.skipped ?? 0);
+          const filename = resp?.filename || file.name;
+          const jobId = resp?.job_id ? ` (mã: ${resp.job_id})` : "";
+          let message;
+          if (accepted > 0) {
+            message = `Đã tiếp nhận ${accepted} bản ghi từ ${filename}${jobId}.`;
+          } else {
+            message = `Đã gửi yêu cầu xử lý ${filename}${jobId}.`;
+          }
+          if (skipped > 0) {
+            message += ` Bỏ qua ${skipped} bản ghi.`;
+          }
+          showToast(message, "success");
         } catch (error) {
           console.error("[vanthu] import inbound docs error", error);
           showToast(resolveErrorMessage(error), "error");
-        }
-      });
-    }
-
-    if (exportBtn) {
-      exportBtn.addEventListener("click", async () => {
-        const params = {
-          direction: "den",
-        };
-        if (state.status && state.status !== "all") params.status = state.status;
-        if (state.level && state.level !== "all") params.level = state.level;
-        if (state.keyword) params.keyword = state.keyword;
-        try {
-          const resp = await api.request(api.buildUrl("/api/v1/inbound-docs/export/", params));
-          showToast("Đã tạo bản xuất. Vui lòng tải xuống từ liên kết được cấp.", "success");
-          if (resp?.download_url) {
-            const url = /^https?:\/\//i.test(resp.download_url)
-              ? resp.download_url
-              : api.buildUrl(resp.download_url, null);
-            window.open(url, "_blank");
-          }
-        } catch (error) {
-          console.error("[vanthu] export inbound docs error", error);
-          showToast(resolveErrorMessage(error), "error");
+        } finally {
+          importBtn.disabled = false;
+          importInput.value = "";
         }
       });
     }
 
     function mapStatusClass(key) {
       switch (key) {
-        case "processing":
-          return "chip chip-warn";
-        case "done":
-          return "chip chip-success";
-        case "approved":
-          return "chip chip-info";
+        case "tiep-nhan":
+          return "inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-slate-100 text-slate-700 text-[12px] font-semibold";
+        case "dang-ky":
+          return "inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-sky-100 text-sky-700 text-[12px] font-semibold";
+        case "phan-cong":
+          return "inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-violet-100 text-violet-700 text-[12px] font-semibold";
+        case "dang-xu-ly":
+          return "inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-amber-100 text-amber-700 text-[12px] font-semibold";
+        case "hoan-tat":
+          return "inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-emerald-100 text-emerald-700 text-[12px] font-semibold";
+        case "luu-tru":
+          return "inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-slate-200 text-slate-700 text-[12px] font-semibold";
+        case "thu-hoi":
+          return "inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-rose-100 text-rose-700 text-[12px] font-semibold";
         default:
-          return "chip chip-muted";
+          return "inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-slate-100 text-slate-600 text-[12px] font-semibold";
       }
     }
 
@@ -2291,6 +2555,676 @@
     }
   };
 
+  pageHandlers['vanbanden-detail'] = function () {
+    const api = window.ApiClient;
+    if (!api) {
+      console.warn("[vanthu] ApiClient không sẵn sàng; bỏ qua chi tiết văn bản đến.");
+      return;
+    }
+
+    const docApi = api.documents;
+    if (!docApi) {
+      console.warn("[vanthu] ApiClient.documents chưa sẵn sàng.");
+      return;
+    }
+
+    const params = new URLSearchParams(window.location.search);
+    const docId = params.get("id");
+    const workflowLib = window.DocWorkflow || null;
+    const inboundApi = resolveInboundApi(api);
+    const workflowContainer = document.getElementById("doc-workflow-panel");
+    const roleName = document.body?.dataset?.role || "vanthu";
+    const currentUser = typeof api.getCurrentUser === "function" ? api.getCurrentUser() : null;
+    const currentUserId = currentUser?.id || currentUser?.user_id || currentUser?.userId || null;
+    let workflowInstance = null;
+    let assignmentCache = [];
+    let currentDoc = null;
+    const helpers = window.DocHelpers || {};
+    const errorEl = document.getElementById("doc-detail-error");
+    const titleEl = document.getElementById("doc-title");
+    const summaryEl = document.getElementById("doc-summary");
+    const directionBadge = document.getElementById("doc-badge-direction");
+    const urgencyBadge = document.getElementById("doc-badge-urgency");
+    const statusBadge = document.getElementById("doc-badge-status");
+    const metaCode = document.getElementById("doc-meta-code");
+    const metaNumber = document.getElementById("doc-meta-number");
+    const metaReceived = document.getElementById("doc-meta-received");
+    const metaIssued = document.getElementById("doc-meta-issued");
+    const metaSender = document.getElementById("doc-meta-sender");
+    const metaReceivedBy = document.getElementById("doc-meta-received-by");
+    const metaField = document.getElementById("doc-meta-field");
+    const metaDeadline = document.getElementById("doc-meta-deadline");
+    const assignmentsBody = document.getElementById("doc-assignments-body");
+    const logsList = document.getElementById("doc-log-list");
+    const attachmentsList = document.getElementById("doc-attachment-list");
+
+    function clearError() {
+      if (!errorEl) return;
+      errorEl.textContent = "";
+      errorEl.classList.add("hidden");
+    }
+
+    function showErrorMessage(message) {
+      if (!errorEl) return;
+      errorEl.textContent = message;
+      errorEl.classList.remove("hidden");
+    }
+
+    function resolveDetailError(error) {
+      if (helpers.resolveErrorMessage) {
+        return helpers.resolveErrorMessage(error);
+      }
+      if (!error) return "Không thể tải dữ liệu từ máy chủ.";
+      if (error.data) {
+        if (typeof error.data === "string") return error.data;
+        if (error.data.detail) return String(error.data.detail);
+        if (error.data.message) return String(error.data.message);
+      }
+      return error.message || "Không thể tải dữ liệu từ máy chủ.";
+    }
+
+    function escapeHtml(value) {
+      return (value || "")
+        .toString()
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&#39;");
+    }
+
+    function formatIsoDate(value) {
+      if (!value) return "";
+      if (typeof value === "string" && /^\d{4}-\d{2}-\d{2}/.test(value)) {
+        return value.slice(0, 10);
+      }
+      const date = new Date(value);
+      if (!Number.isNaN(date.getTime())) {
+        const month = String(date.getMonth() + 1).padStart(2, "0");
+        const day = String(date.getDate()).padStart(2, "0");
+        return `${date.getFullYear()}-${month}-${day}`;
+      }
+      return String(value);
+    }
+
+    function formatDateLabel(value) {
+      if (!value) return "";
+      if (helpers.formatDate) {
+        const formatted = helpers.formatDate(value);
+        if (formatted) return formatted;
+      }
+      return formatIsoDate(value) || String(value);
+    }
+
+    function formatUserName(user) {
+      if (!user) return "";
+      return user.full_name || user.name || user.username || user.user_id || user.id || "";
+    }
+
+    function formatBytes(value) {
+      if (typeof value !== "number" || Number.isNaN(value)) {
+        return "";
+      }
+      if (value < 1024) return `${value} B`;
+      const units = ["KB", "MB", "GB"];
+      let idx = 0;
+      let size = value / 1024;
+      while (size >= 1024 && idx < units.length - 1) {
+        size /= 1024;
+        idx += 1;
+      }
+      return `${size.toFixed(1)} ${units[idx]}`;
+    }
+
+    function fallbackNormalized(doc) {
+      const statusKey = helpers.mapInboundStatusKey
+        ? helpers.mapInboundStatusKey(doc.status_name || doc.status?.name || "")
+        : "new";
+      const urgencyKey = helpers.mapUrgencyKey
+        ? helpers.mapUrgencyKey(doc.urgency?.name || doc.urgency?.code || "")
+        : "thuong";
+      return {
+        title: doc.title || "",
+        number: doc.document_code || "",
+        incomingNumber: doc.incoming_number || doc.received_number || "",
+        docDirection: doc.doc_direction || doc.direction || "den",
+        statusKey,
+        statusLabel:
+          (helpers.mapInboundStatusLabel &&
+            helpers.mapInboundStatusLabel(statusKey, doc.status_name || doc.status?.name)) ||
+          doc.status_name ||
+          "Chưa xử lý",
+        urgencyKey,
+        urgencyLabel:
+          (helpers.mapUrgencyLabel &&
+            helpers.mapUrgencyLabel(urgencyKey, doc.urgency?.name || doc.urgency?.code)) ||
+          doc.urgency?.name ||
+          "Thường",
+      };
+    }
+
+    function mapStatusBadgeClass(key) {
+      switch (key) {
+        case "processing":
+          return "bg-amber-100 text-amber-700";
+        case "done":
+          return "bg-emerald-100 text-emerald-700";
+        case "approved":
+          return "bg-slate-900 text-white";
+        default:
+          return "bg-slate-100 text-slate-800";
+      }
+    }
+
+    function mapUrgencyBadgeClass(key) {
+      switch (key) {
+        case "ratkhan":
+        case "khan":
+          return "bg-rose-100 text-rose-700";
+        case "cao":
+          return "bg-amber-100 text-amber-700";
+        default:
+          return "bg-slate-100 text-slate-800";
+      }
+    }
+
+    function updateBadges(normalized) {
+      if (directionBadge) {
+        directionBadge.textContent = normalized.docDirection === "den" ? "Văn bản đến" : "Văn bản";
+      }
+      if (urgencyBadge) {
+        urgencyBadge.textContent = normalized.urgencyLabel || "Thường";
+        urgencyBadge.className = `px-2.5 py-1 rounded-full text-xs font-semibold ${mapUrgencyBadgeClass(
+          normalized.urgencyKey
+        )}`;
+      }
+      if (statusBadge) {
+        statusBadge.textContent = normalized.statusLabel || "Chưa xử lý";
+        statusBadge.className = `px-2.5 py-1 rounded-full text-xs font-semibold ${mapStatusBadgeClass(
+          normalized.statusKey
+        )}`;
+      }
+    }
+
+    function renderDoc(doc) {
+      const normalized = helpers.normalizeInboundDoc ? helpers.normalizeInboundDoc(doc) : fallbackNormalized(doc);
+      updateBadges(normalized);
+      if (titleEl) {
+        titleEl.textContent = normalized.title || doc.title || "Văn bản đến";
+      }
+      if (summaryEl) {
+        summaryEl.textContent = doc.summary || doc.content || normalized.title || "—";
+      }
+      if (metaCode) {
+        metaCode.textContent = doc.document_code || "";
+      }
+      if (metaNumber) {
+        metaNumber.textContent = normalized.incomingNumber || "";
+      }
+      if (metaReceived) {
+        metaReceived.textContent = formatIsoDate(normalized.receivedDate || doc.received_date || doc.created_at);
+      }
+      if (metaIssued) {
+        metaIssued.textContent = formatIsoDate(doc.issued_date);
+      }
+      if (metaSender) {
+        metaSender.textContent = doc.sender || normalized.sender || "";
+      }
+      if (metaReceivedBy) {
+        metaReceivedBy.textContent = formatUserName(doc.received_by) || formatUserName(doc.created_by) || "";
+      }
+      if (metaField) {
+        const fieldText =
+          (doc.field && doc.field.name) ||
+          (doc.document_type && (doc.document_type.name || doc.document_type.code)) ||
+          (doc.department && doc.department.name) ||
+          "";
+        metaField.textContent = fieldText;
+      }
+      if (metaDeadline) {
+        const deadline =
+          doc.due_date || doc.deadline || doc.expected_finish || doc.workflow_deadline_lock_target_date;
+        metaDeadline.textContent = formatIsoDate(deadline);
+      }
+      renderLogs(doc.logs || []);
+      renderAttachments(doc.attachments || []);
+    }
+
+    function loadAssignments() {
+      if (!docApi || !docApi.assignments) {
+        assignmentCache = [];
+        renderAssignments([]);
+        return Promise.resolve([]);
+      }
+      return docApi
+        .assignments(docId, "GET")
+        .then((items) => {
+          const list = Array.isArray(items) ? items : [];
+          assignmentCache = list;
+          renderAssignments(list);
+          return list;
+        })
+        .catch((error) => {
+          console.error("[vanthu] Lỗi tải phân công:", error);
+          assignmentCache = [];
+          renderAssignments([]);
+          return [];
+        });
+    }
+
+    function createPlaceholderRow(message) {
+      const tr = document.createElement("tr");
+      tr.innerHTML = `<td class="px-5 py-3 text-center text-[13px] text-slate-500" colspan="5">${escapeHtml(
+        message
+      )}</td>`;
+      return tr;
+    }
+
+    function assignmentRoleLabel(role) {
+      switch (role) {
+        case "owner":
+          return "Chủ trì";
+        case "assignee":
+          return "Người được giao";
+        case "watcher":
+          return "Theo dõi";
+        default:
+          return role || "Đã giao";
+      }
+    }
+
+    function buildAssignmentRow(item) {
+      const tr = document.createElement("tr");
+      const assignee = formatUserName(item.user) || "Người dùng";
+      const assignor = formatUserName(item.assigned_by) || "—";
+      const due = item.due_at ? formatIsoDate(item.due_at) : "Chưa có hạn";
+      const roleLabel = assignmentRoleLabel(item.role_on_doc);
+      tr.innerHTML = `
+        <td class="px-5 py-3">
+          ${escapeHtml(assignee)}
+          <div class="text-[12px] text-slate-500">${escapeHtml(roleLabel)}</div>
+        </td>
+        <td class="px-5 py-3">
+          <span class="chip chip--blue">${escapeHtml(roleLabel)}</span>
+        </td>
+        <td class="px-5 py-3">
+          ${escapeHtml(assignor)}
+        </td>
+        <td class="px-5 py-3">
+          ${escapeHtml(due)}
+        </td>
+        <td class="px-5 py-3">
+          <span class="chip chip--amber">Đang xử lý</span>
+        </td>
+      `;
+      return tr;
+    }
+
+    function renderAssignments(list) {
+      if (!assignmentsBody) return;
+      assignmentsBody.innerHTML = "";
+      if (!list.length) {
+        assignmentsBody.appendChild(createPlaceholderRow("Chưa có phân công xử lý."));
+        return;
+      }
+      list.forEach((item) => {
+        assignmentsBody.appendChild(buildAssignmentRow(item));
+      });
+    }
+
+    function isCurrentAssignee(list) {
+      if (!currentUserId) return false;
+      const source = Array.isArray(list) ? list : assignmentCache;
+      return source.some((item) => {
+        const userId = item?.user_id || item?.user?.user_id || item?.user?.id;
+        return userId && String(userId) === String(currentUserId);
+      });
+    }
+
+    function renderLogs(list) {
+      if (!logsList) return;
+      if (!list.length) {
+        logsList.innerHTML = '<li class="text-[13px] text-slate-500">Chưa có nhật ký xử lý.</li>';
+        return;
+      }
+      logsList.innerHTML = list
+        .map((log) => {
+          const time = formatDateLabel(log.acted_at || log.created_at || log.updated_at);
+          const action = log.action || log.activity || "Hoạt động";
+          const actor = formatUserName(log.actor) || "Hệ thống";
+          const note = log.comment || (log.meta && log.meta.note) || "";
+          return `<li class="rounded-lg border border-slate-100 p-3">
+            <div class="flex items-center justify-between">
+              <span class="font-semibold text-slate-700">${escapeHtml(
+                `${time} • ${action}`
+              )}</span>
+              <span class="text-[12px] text-slate-500">${escapeHtml(actor)}</span>
+            </div>
+            ${
+              note
+                ? `<p class="mt-1 text-[12.5px] text-slate-600">${escapeHtml(note)}</p>`
+                : ""
+            }
+          </li>`;
+        })
+        .join("");
+    }
+
+    function renderAttachments(list) {
+      if (!attachmentsList) return;
+      if (!list.length) {
+        attachmentsList.innerHTML =
+          '<li class="text-[13px] text-slate-500">Chưa có tệp đính kèm.</li>';
+        return;
+      }
+      attachmentsList.innerHTML = list
+        .map((file) => {
+          const name = file.file_name || file.attachment_id || "Tệp đính kèm";
+          const size = formatBytes(Number(file.size));
+          const uploadedAt = formatDateLabel(file.uploaded_at);
+          const uploader = formatUserName(file.uploaded_by);
+          const extras = [size, uploader, uploadedAt].filter(Boolean).join(" • ");
+          const url =
+            file.file_url && /^https?:\/\//i.test(file.file_url)
+              ? file.file_url
+              : file.file_url
+              ? api.buildUrl(file.file_url)
+              : null;
+          return `<li class="rounded-lg border border-slate-100 p-3 flex items-center justify-between gap-3">
+            <div>
+              <div class="font-medium text-slate-700">${escapeHtml(name)}</div>
+              <div class="text-[12px] text-slate-500">${escapeHtml(extras)}</div>
+            </div>
+            ${
+              url
+                ? `<a class="btn-icon" href="${url}" target="_blank" rel="noreferrer" title="Tải xuống">⬇</a>`
+                : '<span class="btn-icon text-slate-400" title="Không có đường dẫn">⬇</span>'
+            }
+          </li>`;
+        })
+        .join("");
+    }
+
+    function buildWorkflowPrefill(doc, normalized) {
+      return {
+        received_number: doc?.received_number || normalized?.incomingNumber || "",
+        received_date: normalized?.receivedDate || doc?.received_date || "",
+        sender: doc?.sender || normalized?.sender || "",
+      };
+    }
+
+    function updateWorkflowState(doc, normalized, assignments) {
+      if (!workflowContainer || !workflowLib || typeof workflowLib.mount !== "function" || !inboundApi) {
+        return;
+      }
+      const payload = {
+        stateKey: normalized.statusKey,
+        prefill: buildWorkflowPrefill(doc, normalized),
+        isAssignee: isCurrentAssignee(assignments),
+      };
+      if (!workflowInstance) {
+        workflowInstance = workflowLib.mount({
+          container: workflowContainer,
+          docId,
+          role: roleName,
+          api: inboundApi,
+          stateKey: payload.stateKey,
+          prefill: payload.prefill,
+          isAssignee: payload.isAssignee,
+          onStateChange: () => refreshDetail(),
+        });
+      } else {
+        workflowInstance.update(payload);
+      }
+    }
+
+    function refreshDetail() {
+      clearError();
+      if (!docId) {
+        showErrorMessage("Thiếu ID văn bản đến.");
+        return Promise.resolve();
+      }
+      return docApi
+        .retrieve(docId)
+        .then((doc) => {
+          currentDoc = doc;
+          renderDoc(doc);
+          const normalized = helpers.normalizeInboundDoc ? helpers.normalizeInboundDoc(doc) : fallbackNormalized(doc);
+          return loadAssignments().then((assignments) => {
+            updateWorkflowState(doc, normalized, assignments);
+          });
+        })
+        .catch((error) => {
+          console.error("[vanthu] Lỗi tải chi tiết văn bản đến:", error);
+          showErrorMessage(resolveDetailError(error));
+        });
+    }
+
+    refreshDetail();
+  };
+
+  pageHandlers['vanbanden-export'] = function () {
+    const api = window.ApiClient;
+    if (!api) {
+      console.warn("[vanthu] ApiClient không sẵn sàng; bỏ qua trang xuất văn bản.");
+      return;
+    }
+    const inboundApi = resolveInboundApi(api);
+    const helpers = window.DocHelpers || {};
+    if (!inboundApi) {
+      console.warn("[vanthu] ApiClient.inboundDocs chưa được cấu hình.");
+      return;
+    }
+
+    const form = document.getElementById("export-form");
+    const statusSelect = document.getElementById("exportStatus");
+    const levelSelect = document.getElementById("exportLevel");
+    const keywordInput = document.getElementById("exportKeyword");
+    const summaryEl = document.getElementById("export-summary");
+    const alertEl = document.getElementById("export-alert");
+    const tableBody = document.getElementById("export-table-body");
+    const runBtn = document.getElementById("btn-run-export");
+    const downloadBtn = document.getElementById("btn-export-download");
+
+    let currentItems = [];
+    let isLoading = false;
+
+    function loopEscape(value) {
+      if (helpers.escapeHtml) {
+        return helpers.escapeHtml(value);
+      }
+      return (value || "")
+        .toString()
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&#39;");
+    }
+
+    function loopFormatDate(value) {
+      if (helpers.formatDate) {
+        const formatted = helpers.formatDate(value);
+        if (formatted) return formatted;
+      }
+      if (!value) return "";
+      if (typeof value === "string" && /^\d{4}-\d{2}-\d{2}/.test(value)) {
+        return value.slice(0, 10);
+      }
+      const date = new Date(value);
+      if (!Number.isNaN(date.getTime())) {
+        const month = String(date.getMonth() + 1).padStart(2, "0");
+        const day = String(date.getDate()).padStart(2, "0");
+        return `${date.getFullYear()}-${month}-${day}`;
+      }
+      return String(value);
+    }
+
+    function loopResolveError(error) {
+      if (helpers.resolveErrorMessage) {
+        return helpers.resolveErrorMessage(error);
+      }
+      if (!error) return "Không thể kết nối tới máy chủ.";
+      if (error.data) {
+        if (typeof error.data === "string") return error.data;
+        if (error.data.detail) return String(error.data.detail);
+        if (error.data.message) return String(error.data.message);
+      }
+      if (error.message) return String(error.message);
+      return "Không thể kết nối tới máy chủ.";
+    }
+
+    function setAlert(message, type = "info") {
+      if (!alertEl) return;
+      if (!message) {
+        alertEl.textContent = "";
+        alertEl.className = "hidden";
+        return;
+      }
+      const classes = ["text-[13px]", "rounded-md", "border", "px-3", "py-2"];
+      if (type === "error") {
+        classes.push("border-rose-200", "bg-rose-50", "text-rose-700");
+      } else if (type === "success") {
+        classes.push("border-emerald-200", "bg-emerald-50", "text-emerald-700");
+      } else {
+        classes.push("border-slate-200", "bg-slate-50", "text-slate-600");
+      }
+      alertEl.className = classes.join(" ");
+      alertEl.textContent = message;
+    }
+
+    function setSummary(message) {
+      if (summaryEl) {
+        summaryEl.textContent = message || "Chưa có dữ liệu. Chọn bộ lọc và chạy xuất.";
+      }
+    }
+
+    function setTablePlaceholder(message) {
+      if (!tableBody) return;
+      tableBody.innerHTML = `<tr><td colspan="6" class="px-5 py-6 text-center text-slate-500">${message}</td></tr>`;
+    }
+
+    function setLoading(state) {
+      isLoading = state;
+      if (runBtn) {
+        runBtn.disabled = state;
+        runBtn.textContent = state ? "Đang xử lý..." : "Xuất dữ liệu";
+      }
+    }
+
+    function renderTable(items) {
+      if (!tableBody) return;
+      if (!items.length) {
+        setTablePlaceholder("Không tìm thấy văn bản phù hợp.");
+        return;
+      }
+      tableBody.innerHTML = items
+        .map((item) => {
+          const title = item.title || item.raw?.title || "Văn bản";
+          const incomingNumber = item.incoming_number || item.number || item.document_code || "—";
+          const sender = item.sender || item.raw?.sender || "—";
+          const received = item.received_date || item.raw?.received_date || "";
+          const status = item.status_label || item.statusLabel || "Chưa xử lý";
+          const urgency = item.urgency_label || item.urgencyLabel || "Thường";
+          return `<tr>
+              <td class="px-5 py-3 font-medium text-slate-700">${loopEscape(incomingNumber)}</td>
+              <td class="px-5 py-3">
+                <div class="font-semibold text-slate-800">${loopEscape(title)}</div>
+                <div class="text-[12px] text-slate-500">${loopEscape(item.document_code || "")}</div>
+              </td>
+              <td class="px-5 py-3 text-slate-600">${loopEscape(sender)}</td>
+              <td class="px-5 py-3 text-slate-600">${loopEscape(loopFormatDate(received))}</td>
+              <td class="px-5 py-3">${loopEscape(status)}</td>
+              <td class="px-5 py-3">${loopEscape(urgency)}</td>
+            </tr>`;
+        })
+        .join("");
+    }
+
+    function buildCsv(items) {
+      const header = ["So den", "Tieu de", "Co quan gui", "Ngay den", "Trang thai", "Do khan"];
+      const rows = items.map((item) => {
+        const incoming = item.incoming_number || item.number || item.document_code || "";
+        const title = item.title || item.raw?.title || "";
+        const sender = item.sender || item.raw?.sender || "";
+        const received = loopFormatDate(item.received_date || item.raw?.received_date || "");
+        const status = item.status_label || item.statusLabel || "";
+        const urgency = item.urgency_label || item.urgencyLabel || "";
+        return [incoming, title, sender, received, status, urgency]
+          .map((value) => `"${String(value || "").replace(/"/g, '""')}"`)
+          .join(",");
+      });
+      return [header.join(","), ...rows].join("\n");
+    }
+
+    async function runExport(params) {
+      setLoading(true);
+      setAlert("");
+      setTablePlaceholder("Đang tải dữ liệu...");
+      downloadBtn && (downloadBtn.disabled = true);
+      try {
+        const response = await inboundApi.export(params);
+        const items = Array.isArray(response?.items)
+          ? response.items
+          : api.extractItems(response);
+        currentItems = items;
+        renderTable(items);
+        const totalRows = response?.total_rows ?? items.length;
+        setSummary(`Đã tìm thấy ${items.length} / ${totalRows} văn bản phù hợp.`);
+        if (!items.length) {
+          setAlert("Không tìm thấy dữ liệu với bộ lọc hiện tại.", "info");
+        } else {
+          setAlert(
+            `Đã tạo dữ liệu, bạn có thể tải CSV hoặc sao chép bảng.${response?.download_url ? " Mở cùng đường dẫn: " + response.download_url : ""}`,
+            "success"
+          );
+        }
+        if (downloadBtn) {
+          downloadBtn.disabled = !items.length;
+        }
+      } catch (error) {
+        setTablePlaceholder("Không thể tải dữ liệu.");
+        setSummary("Không thể tải dữ liệu do lỗi hệ thống.");
+        setAlert(loopResolveError(error), "error");
+      } finally {
+        setLoading(false);
+      }
+    }
+
+    form?.addEventListener("submit", (event) => {
+      event.preventDefault();
+      if (isLoading) return;
+      const params = { direction: "den", page_size: 200, ordering: "-created_at" };
+      const status = statusSelect?.value || "all";
+      if (status && status !== "all") {
+        params.status = status;
+      }
+      const level = levelSelect?.value || "all";
+      if (level && level !== "all") {
+        params.level = level;
+      }
+      const keyword = keywordInput?.value?.trim();
+      if (keyword) {
+        params.keyword = keyword;
+      }
+      runExport(params);
+    });
+
+    downloadBtn?.addEventListener("click", () => {
+      if (!currentItems.length || isLoading) return;
+      const csv = buildCsv(currentItems);
+      const blob = new Blob([csv], { type: "text/csv;charset=utf-8;" });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = `vanban-den-${new Date().toISOString().slice(0, 10)}.csv`;
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      URL.revokeObjectURL(url);
+    });
+  };
+
   pageHandlers['vanbandi'] = function () {
     const api = window.ApiClient;
     if (!api) {
@@ -2362,9 +3296,13 @@
       });
 
     function loadDocuments() {
+      if (!api.documents) {
+        renderError("Chưa cấu hình Document API.");
+        return Promise.resolve();
+      }
       renderLoading();
-      return api
-        .request("/api/v1/outbound-docs/?ordering=-created_at&page_size=50")
+      return api.documents
+        .list({ doc_direction: "di", ordering: "-created_at", page_size: 50 })
         .then((data) => {
           const docs = api.extractItems(data);
           normalizedDocs = docs.map(normalizeDoc);
@@ -2652,6 +3590,143 @@
       }
       if (error.message) return String(error.message);
       return "Không thể tải dữ liệu từ máy chủ.";
+    }
+  };
+
+  pageHandlers['vanbandi-detail'] = function () {
+    const api = window.ApiClient;
+    const helpers = window.DocHelpers || {};
+    if (!api || !api.documents) {
+      console.warn("[vanthu] ApiClient.documents không sẵn sàng.");
+      return;
+    }
+    const params = new URLSearchParams(window.location.search);
+    const docId = params.get("id");
+    if (!docId) {
+      console.warn("[vanthu] Thiếu tham số id để hiển thị văn bản đi.");
+      return;
+    }
+    const buttons = document.querySelectorAll("[data-doc-action]");
+    if (!buttons.length) {
+      return;
+    }
+
+    let currentDoc = null;
+    api.documents
+      .retrieve(docId)
+      .then((detail) => {
+        currentDoc = detail;
+      })
+      .catch((error) => {
+        console.error("[vanthu] Lỗi tải chi tiết văn bản đi:", error);
+        showActionToast(resolveActionError(error), "error");
+      });
+
+    const actionMap = {
+      publish: {
+        method: api.documents.publish,
+        success: "Đã phát hành văn bản.",
+        payload: collectPublishPayload,
+      },
+      recall: {
+        method: api.documents.recall,
+        success: "Đã thu hồi phát hành.",
+        payload: () => ({
+          comment: "Thu hồi phát hành từ giao diện Văn thư.",
+        }),
+      },
+    };
+
+    buttons.forEach((button) => {
+      const action = button.dataset.docAction;
+      const config = actionMap[action];
+      if (!config) {
+        button.disabled = true;
+        button.title = "Chức năng chưa được cấu hình.";
+        return;
+      }
+      button.addEventListener("click", async () => {
+        if (button.disabled) return;
+        button.disabled = true;
+        try {
+          const payload =
+            typeof config.payload === "function" ? config.payload() : config.payload;
+          if (payload === null) {
+            button.disabled = false;
+            return;
+          }
+          await config.method(docId, payload);
+          showActionToast(config.success, "success");
+        } catch (error) {
+          console.error(`[vanthu] Lỗi thực hiện hành động ${action}:`, error);
+          showActionToast(resolveActionError(error), "error");
+        } finally {
+          button.disabled = false;
+        }
+      });
+    });
+
+    function collectPublishPayload() {
+      const defaultYear =
+        (currentDoc?.issued_date &&
+          Number.parseInt(currentDoc.issued_date.slice(0, 4), 10)) ||
+        new Date().getFullYear();
+      const prefixInput = window.prompt(
+        "Tiền tố số phát hành",
+        currentDoc?.issue_number?.split("/")?.[0] || "UBND"
+      );
+      if (prefixInput === null) {
+        return null;
+      }
+      const postfixInput = window.prompt("Hậu tố số phát hành", "/VP");
+      if (postfixInput === null) {
+        return null;
+      }
+      const yearInput = window.prompt(
+        "Năm phát hành",
+        String(defaultYear)
+      );
+      if (yearInput === null) {
+        return null;
+      }
+      const year = Number.parseInt(yearInput, 10);
+      return {
+        prefix: prefixInput.trim() || "UBND",
+        postfix: postfixInput.trim() || "/VP",
+        year: Number.isFinite(year) ? year : defaultYear,
+      };
+    }
+
+    function resolveActionError(error) {
+      if (helpers.resolveErrorMessage) {
+        return helpers.resolveErrorMessage(error);
+      }
+      if (!error) return "Không thể thực hiện thao tác.";
+      if (error.data) {
+        if (typeof error.data === "string") return error.data;
+        if (error.data.detail) return String(error.data.detail);
+      }
+      if (error.message) return String(error.message);
+      return "Không thể thực hiện thao tác.";
+    }
+
+    function showActionToast(message, tone = "info") {
+      const toast = document.getElementById("toast");
+      if (!toast) {
+        console.log(message);
+        return;
+      }
+      toast.textContent = message;
+      toast.classList.remove(
+        "toast--show",
+        "toast--error",
+        "toast--success",
+        "toast--warn"
+      );
+      if (tone === "error") toast.classList.add("toast--error");
+      else if (tone === "success") toast.classList.add("toast--success");
+      toast.classList.add("toast--show");
+      setTimeout(() => toast.classList.remove("toast--show"), 2200);
     }
   };
 

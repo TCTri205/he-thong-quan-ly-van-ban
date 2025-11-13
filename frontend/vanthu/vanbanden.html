@@ -1,10 +1,10 @@
-<!-- File: vanthu/vanbanden.html -->
+﻿<!-- File: vanthu/vanbanden.html -->
 <!DOCTYPE html>
 <html lang="vi">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>Hệ thống Quản lý Văn bản &amp; Điều hành • Văn bản đến (Văn thư)</title>
+    <title>Há»‡ thá»‘ng Quáº£n lĂ½ VÄƒn báº£n &amp; Äiá»u hĂ nh â€¢ VÄƒn báº£n Ä‘áº¿n (VÄƒn thÆ°)</title>
 
 
     <!-- App theme overrides -->
@@ -27,90 +27,76 @@
         <!-- ====== MAIN ====== -->
         <main class="w-full">
           <div class="max-w-none px-6 lg:px-8 py-6 lg:py-7">
-            <!-- ====== TOP SUMMARY CARDS ====== -->
-            <section
-              class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-4 lg:gap-6"
-            >
-              <!-- Chưa xử lý -->
+            <!-- ====== TOP SUMMARY CARDS ====== -->            <section class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-6 gap-4 lg:gap-6">
               <article class="bg-white border border-slate-200 rounded-xl p-4">
                 <div class="flex items-center gap-3">
-                  <div
-                    class="grid place-items-center w-9 h-9 rounded-lg bg-rose-500/10 text-rose-600"
-                  >
-                    🕒
+                  <div class="grid place-items-center w-9 h-9 rounded-lg bg-slate-900/5 text-slate-900">
+                    📥
                   </div>
                   <div>
-                    <p class="text-[12.5px] text-slate-500">Chưa xử lý</p>
-                    <p id="kpi-chua-xu-ly" class="text-3xl font-bold">8</p>
+                    <p class="text-[12.5px] text-slate-500">Tiếp nhận</p>
+                    <p id="kpi-tiep-nhan" class="text-3xl font-bold">0</p>
                   </div>
                 </div>
               </article>
 
-              <!-- Đang xử lý -->
               <article class="bg-white border border-slate-200 rounded-xl p-4">
                 <div class="flex items-center gap-3">
-                  <div
-                    class="grid place-items-center w-9 h-9 rounded-lg bg-blue-600/10 text-blue-700"
-                  >
+                  <div class="grid place-items-center w-9 h-9 rounded-lg bg-sky-500/10 text-sky-600">
+                    🧾
+                  </div>
+                  <div>
+                    <p class="text-[12.5px] text-slate-500">Đăng ký</p>
+                    <p id="kpi-dang-ky" class="text-3xl font-bold">0</p>
+                  </div>
+                </div>
+              </article>
+
+              <article class="bg-white border border-slate-200 rounded-xl p-4">
+                <div class="flex items-center gap-3">
+                  <div class="grid place-items-center w-9 h-9 rounded-lg bg-violet-500/10 text-violet-600">
+                    👥
+                  </div>
+                  <div>
+                    <p class="text-[12.5px] text-slate-500">Phân công</p>
+                    <p id="kpi-phan-cong" class="text-3xl font-bold">0</p>
+                  </div>
+                </div>
+              </article>
+
+              <article class="bg-white border border-slate-200 rounded-xl p-4">
+                <div class="flex items-center gap-3">
+                  <div class="grid place-items-center w-9 h-9 rounded-lg bg-blue-500/10 text-blue-700">
                     🔄
                   </div>
                   <div>
                     <p class="text-[12.5px] text-slate-500">Đang xử lý</p>
-                    <p id="kpi-dang-xu-ly" class="text-3xl font-bold">6</p>
+                    <p id="kpi-dang-xu-ly" class="text-3xl font-bold">0</p>
                   </div>
                 </div>
               </article>
 
-              <!-- Đã xử lý -->
               <article class="bg-white border border-slate-200 rounded-xl p-4">
                 <div class="flex items-center gap-3">
-                  <div
-                    class="grid place-items-center w-9 h-9 rounded-lg bg-emerald-600/10 text-emerald-700"
-                  >
+                  <div class="grid place-items-center w-9 h-9 rounded-lg bg-emerald-500/10 text-emerald-600">
                     ✅
                   </div>
                   <div>
-                    <p class="text-[12.5px] text-slate-500">Đã xử lý</p>
-                    <p id="kpi-da-xu-ly" class="text-3xl font-bold">4</p>
+                    <p class="text-[12.5px] text-slate-500">Hoàn tất</p>
+                    <p id="kpi-hoan-tat" class="text-3xl font-bold">0</p>
                   </div>
                 </div>
               </article>
 
-              <!-- Đã duyệt -->
               <article class="bg-white border border-slate-200 rounded-xl p-4">
                 <div class="flex items-center gap-3">
-                  <div
-                    class="grid place-items-center w-9 h-9 rounded-lg bg-violet-600/10 text-violet-700"
-                  >
-                    🗂
+                  <div class="grid place-items-center w-9 h-9 rounded-lg bg-slate-500/10 text-slate-700">
+                    🗂️
                   </div>
                   <div>
-                    <p class="text-[12.5px] text-slate-500">Đã duyệt</p>
-                    <p id="kpi-da-duyet" class="text-3xl font-bold">2</p>
+                    <p class="text-[12.5px] text-slate-500">Lưu trữ</p>
+                    <p id="kpi-luu-tru" class="text-3xl font-bold">0</p>
                   </div>
-                </div>
-              </article>
-
-              <!-- Khẩn cấp -->
-              <article class="bg-white border border-slate-200 rounded-xl p-4">
-                <div class="flex items-center justify-between">
-                  <div class="flex items-center gap-3">
-                    <div
-                      class="grid place-items-center w-9 h-9 rounded-lg bg-amber-500/10 text-amber-600"
-                    >
-                      ⚠️
-                    </div>
-                    <div>
-                      <p class="text-[12.5px] text-slate-500">Khẩn cấp</p>
-                      <p id="kpi-khan-cap" class="text-3xl font-bold">6</p>
-                    </div>
-                  </div>
-                  <button
-                    id="btn-filter-khan"
-                    class="px-2 py-1 text-[12px] rounded-md hover:bg-slate-100"
-                  >
-                    Lọc
-                  </button>
                 </div>
               </article>
             </section>
@@ -137,7 +123,7 @@
                   id="search-inbox"
                   class="w-full h-10 pl-10 pr-4 rounded-lg border border-slate-200 focus:outline-none focus:ring-2 focus:ring-blue-600/20 focus:border-blue-500 text-[14px]"
                   type="search"
-                  placeholder="Tìm kiếm theo tiêu đề, số văn bản, cơ quan gửi…"
+                  placeholder="TĂ¬m kiáº¿m theo tiĂªu Ä‘á», sá»‘ vÄƒn báº£n, cÆ¡ quan gá»­iâ€¦"
                   autocomplete="off"
                 />
               </label>
@@ -152,7 +138,7 @@
                     aria-haspopup="menu"
                     aria-expanded="false"
                   >
-                    <span id="status-label">Tất cả trạng thái</span>
+                    <span id="status-label">Táº¥t cáº£ tráº¡ng thĂ¡i</span>
                     <svg
                       xmlns="http://www.w3.org/2000/svg"
                       class="h-4 w-4 text-slate-500"
@@ -170,52 +156,52 @@
                     aria-labelledby="btn-status"
                   >
                     <ul class="py-1 text-[14px]">
+
                       <li>
                         <button
                           data-status="all"
                           class="menu-item w-full text-left px-3 py-2 hover:bg-slate-50"
                           type="button"
                         >
-                          Tất cả trạng thái
+                          T?t c? tr?ng th?i
                         </button>
                       </li>
                       <li>
-                        <button
-                          data-status="new"
-                          class="menu-item w-full text-left px-3 py-2 hover:bg-slate-50"
-                          type="button"
-                        >
-                          Chưa xử lý
+                        <button data-status="tiep-nhan" class="menu-item w-full text-left px-3 py-2 hover:bg-slate-50" type="button">
+                          Ti?p nh?n
                         </button>
                       </li>
                       <li>
-                        <button
-                          data-status="processing"
-                          class="menu-item w-full text-left px-3 py-2 hover:bg-slate-50"
-                          type="button"
-                        >
-                          Đang xử lý
+                        <button data-status="dang-ky" class="menu-item w-full text-left px-3 py-2 hover:bg-slate-50" type="button">
+                          ??ng k?
                         </button>
                       </li>
                       <li>
-                        <button
-                          data-status="done"
-                          class="menu-item w-full text-left px-3 py-2 hover:bg-slate-50"
-                          type="button"
-                        >
-                          Đã xử lý
+                        <button data-status="phan-cong" class="menu-item w-full text-left px-3 py-2 hover:bg-slate-50" type="button">
+                          Ph?n c?ng
                         </button>
                       </li>
                       <li>
-                        <button
-                          data-status="approved"
-                          class="menu-item w-full text-left px-3 py-2 hover:bg-slate-50"
-                          type="button"
-                        >
-                          Đã duyệt
+                        <button data-status="dang-xu-ly" class="menu-item w-full text-left px-3 py-2 hover:bg-slate-50" type="button">
+                          ?ang x? l?
                         </button>
                       </li>
-                    </ul>
+                      <li>
+                        <button data-status="hoan-tat" class="menu-item w-full text-left px-3 py-2 hover:bg-slate-50" type="button">
+                          Ho?n t?t
+                        </button>
+                      </li>
+                      <li>
+                        <button data-status="luu-tru" class="menu-item w-full text-left px-3 py-2 hover:bg-slate-50" type="button">
+                          L?u tr?
+                        </button>
+                      </li>
+                      <li>
+                        <button data-status="thu-hoi" class="menu-item w-full text-left px-3 py-2 hover:bg-slate-50" type="button">
+                          Thu h?i
+                        </button>
+                      </li>
+</ul>
                   </div>
                 </div>
 
@@ -228,7 +214,7 @@
                     aria-haspopup="menu"
                     aria-expanded="false"
                   >
-                    <span id="level-label">Tất cả mức độ</span>
+                    <span id="level-label">Táº¥t cáº£ má»©c Ä‘á»™</span>
                     <svg
                       xmlns="http://www.w3.org/2000/svg"
                       class="h-4 w-4 text-slate-500"
@@ -252,7 +238,7 @@
                           class="menu-item w-full text-left px-3 py-2 hover:bg-slate-50"
                           type="button"
                         >
-                          Tất cả mức độ
+                          Táº¥t cáº£ má»©c Ä‘á»™
                         </button>
                       </li>
                       <li>
@@ -261,7 +247,7 @@
                           class="menu-item w-full text-left px-3 py-2 hover:bg-slate-50"
                           type="button"
                         >
-                          Thường
+                          ThÆ°á»ng
                         </button>
                       </li>
                       <li>
@@ -279,7 +265,7 @@
                           class="menu-item w-full text-left px-3 py-2 hover:bg-slate-50"
                           type="button"
                         >
-                          Khẩn
+                          Kháº©n
                         </button>
                       </li>
                       <li>
@@ -288,39 +274,52 @@
                           class="menu-item w-full text-left px-3 py-2 hover:bg-slate-50"
                           type="button"
                         >
-                          Rất khẩn
+                          Ráº¥t kháº©n
                         </button>
                       </li>
                     </ul>
                   </div>
                 </div>
+
+                <button
+                  id="btn-filter-khan"
+                  class="h-10 px-3 rounded-lg border border-amber-200 text-[13px] font-semibold text-amber-600 bg-white hover:bg-amber-50 flex items-center gap-2"
+                  type="button"
+                >
+                  <span>🔔 Chỉ hiển thị văn bản khẩn</span>
+                  <span
+                    id="kpi-khan-cap"
+                    class="inline-flex items-center justify-center min-w-[36px] h-6 rounded-full bg-amber-500/15 text-[12px]"
+                    >0</span
+                  >
+                </button>
               </div>
 
-              <!-- Action: Tiếp nhận -->
+              <!-- Action: Tiáº¿p nháº­n -->
               <div class="flex items-center gap-2">
-                <button
+                <a
                   id="btn-export-inbound"
-                  type="button"
-                  class="h-10 px-3 rounded-lg border border-slate-200 bg-white text-[14px] font-medium text-slate-700 hover:bg-slate-50"
+                  href="vanbanden-export.html"
+                  class="h-10 px-3 rounded-lg border border-slate-200 bg-white text-[14px] font-medium text-slate-700 hover:bg-slate-50 inline-flex items-center justify-center"
                 >
-                  Xuất văn bản
-                </button>
+                  Xuáº¥t vÄƒn báº£n
+                </a>
 
                 <button
                   id="btn-import-inbound"
                   type="button"
                   class="h-10 px-3 rounded-lg bg-blue-600 text-white text-[14px] font-medium hover:bg-blue-700 flex items-center justify-center"
                 >
-                  Nhập văn bản
+                  Nháº­p vÄƒn báº£n
                 </button>
                               <a
                                 id="btn-tiep-nhan"
                                 class="h-10 px-4 rounded-lg bg-slate-900 text-white text-[14px] hover:bg-slate-800 flex items-center gap-2"
                                 type="button"
-                                title="Tiếp nhận văn bản mới"
+                                title="Tiáº¿p nháº­n vÄƒn báº£n má»›i"
                                 href="vanbanden-tiepnhan.html"
                               >
-                                <span class="text-[16px]">+</span> Tiếp nhận văn bản
+                                <span class="text-[16px]">+</span> Tiáº¿p nháº­n vÄƒn báº£n
                               </a>
               </div>
             </section>
@@ -329,7 +328,7 @@
             <section class="mt-6">
               <header class="mb-3">
                 <h3 class="text-[15px] font-semibold">
-                  Danh sách văn bản đến (<span id="total-count">21</span>)
+                  Danh sĂ¡ch vÄƒn báº£n Ä‘áº¿n (<span id="total-count">21</span>)
                 </h3>
               </header>
 
@@ -339,52 +338,52 @@
                   class="bg-white border border-slate-200 rounded-xl"
                   data-status="approved"
                   data-level="khan"
-                  data-key="Đại hội Đảng bộ phường 001/TB-UBND UBND Quận Thanh Khê Nguyễn Văn An"
+                  data-key="Äáº¡i há»™i Äáº£ng bá»™ phÆ°á»ng 001/TB-UBND UBND Quáº­n Thanh KhĂª Nguyá»…n VÄƒn An"
                 >
                   <div class="p-4">
                     <div class="flex items-start justify-between gap-4">
                       <div class="min-w-0">
                         <h4 class="text-[15px] font-semibold truncate">
-                          Thông báo về việc tổ chức Đại hội Đảng bộ phường
+                          ThĂ´ng bĂ¡o vá» viá»‡c tá»• chá»©c Äáº¡i há»™i Äáº£ng bá»™ phÆ°á»ng
                         </h4>
                         <div
                           class="mt-2 flex flex-wrap items-center gap-2 text-[12.5px] text-slate-600"
                         >
                           <span
                             class="inline-flex items-center gap-1 text-slate-500"
-                            ><span>📄</span> 001/TB-UBND</span
+                            ><span>đŸ“„</span> 001/TB-UBND</span
                           >
                           <span
                             class="inline-flex items-center gap-1 text-slate-500"
-                            ><span>🗓</span> 2024-01-15</span
+                            ><span>đŸ—“</span> 2024-01-15</span
                           >
                           <span
                             class="inline-flex items-center gap-1 text-slate-500"
-                            ><span>🏢</span> UBND Quận Thanh Khê</span
+                            ><span>đŸ¢</span> UBND Quáº­n Thanh KhĂª</span
                           >
                           <span
                             class="inline-flex items-center gap-1 text-slate-500"
-                            ><span>👤</span> Nguyễn Văn An</span
+                            ><span>đŸ‘¤</span> Nguyá»…n VÄƒn An</span
                           >
                         </div>
                         <div class="mt-2 flex flex-wrap items-center gap-2">
-                          <span class="chip chip-danger">Khẩn</span>
-                          <span class="chip chip-warn">Chờ duyệt</span>
+                          <span class="chip chip-danger">Kháº©n</span>
+                          <span class="chip chip-warn">Chá» duyá»‡t</span>
                           <span class="chip chip-deadline"
-                            >Hạn: 2024-01-20</span
+                            >Háº¡n: 2024-01-20</span
                           >
                         </div>
                         <p class="mt-2 text-[13px] text-slate-500 line-clamp-1">
-                          Thông báo về việc tổ chức Đại hội Đảng bộ phường nhiệm
-                          kỳ 2025-2030…
+                          ThĂ´ng bĂ¡o vá» viá»‡c tá»• chá»©c Äáº¡i há»™i Äáº£ng bá»™ phÆ°á»ng nhiá»‡m
+                          ká»³ 2025-2030â€¦
                         </p>
                       </div>
                       <div class="shrink-0">
                         <a
                           href="vanbanden-detail.html"
                           class="btn-outline"
-                          title="Chi tiết"
-                          ><span>👁</span> Chi tiết</a
+                          title="Chi tiáº¿t"
+                          ><span>đŸ‘</span> Chi tiáº¿t</a
                         >
                       </div>
                     </div>
@@ -396,53 +395,53 @@
                   class="bg-white border border-slate-200 rounded-xl"
                   data-status="processing"
                   data-level="thuong"
-                  data-key="xây dựng nông thôn mới 007/TB-UBND UBND Quận Thanh Khê Nguyễn Văn An"
+                  data-key="xĂ¢y dá»±ng nĂ´ng thĂ´n má»›i 007/TB-UBND UBND Quáº­n Thanh KhĂª Nguyá»…n VÄƒn An"
                 >
                   <div class="p-4">
                     <div class="flex items-start justify-between gap-4">
                       <div class="min-w-0">
                         <h4 class="text-[15px] font-semibold truncate">
-                          Thông báo về việc thực hiện chương trình xây dựng nông
-                          thôn mới
+                          ThĂ´ng bĂ¡o vá» viá»‡c thá»±c hiá»‡n chÆ°Æ¡ng trĂ¬nh xĂ¢y dá»±ng nĂ´ng
+                          thĂ´n má»›i
                         </h4>
                         <div
                           class="mt-2 flex flex-wrap items-center gap-2 text-[12.5px] text-slate-600"
                         >
                           <span
                             class="inline-flex items-center gap-1 text-slate-500"
-                            >📄 007/TB-UBND</span
+                            >đŸ“„ 007/TB-UBND</span
                           >
                           <span
                             class="inline-flex items-center gap-1 text-slate-500"
-                            >🗓 2024-01-28</span
+                            >đŸ—“ 2024-01-28</span
                           >
                           <span
                             class="inline-flex items-center gap-1 text-slate-500"
-                            >🏢 UBND Quận Thanh Khê</span
+                            >đŸ¢ UBND Quáº­n Thanh KhĂª</span
                           >
                           <span
                             class="inline-flex items-center gap-1 text-slate-500"
-                            >👤 Nguyễn Văn An</span
+                            >đŸ‘¤ Nguyá»…n VÄƒn An</span
                           >
                         </div>
                         <div class="mt-2 flex flex-wrap items-center gap-2">
-                          <span class="chip chip-info">Thường</span>
-                          <span class="chip chip-primary">Đang xử lý</span>
+                          <span class="chip chip-info">ThÆ°á»ng</span>
+                          <span class="chip chip-primary">Äang xá»­ lĂ½</span>
                           <span class="chip chip-deadline"
-                            >Hạn: 2024-02-10</span
+                            >Háº¡n: 2024-02-10</span
                           >
                         </div>
                         <p class="mt-2 text-[13px] text-slate-500 line-clamp-1">
-                          Thông báo về việc triển khai thực hiện chương trình
-                          xây dựng nông thôn mới trên địa bàn…
+                          ThĂ´ng bĂ¡o vá» viá»‡c triá»ƒn khai thá»±c hiá»‡n chÆ°Æ¡ng trĂ¬nh
+                          xĂ¢y dá»±ng nĂ´ng thĂ´n má»›i trĂªn Ä‘á»‹a bĂ nâ€¦
                         </p>
                       </div>
                       <div class="shrink-0">
                         <a
                           href="vanbanden-detail.html"
                           class="btn-outline"
-                          title="Chi tiết"
-                          ><span>👁</span> Chi tiết</a
+                          title="Chi tiáº¿t"
+                          ><span>đŸ‘</span> Chi tiáº¿t</a
                         >
                       </div>
                     </div>
@@ -454,7 +453,7 @@
                   class="bg-white border border-slate-200 rounded-xl"
                   data-status="new"
                   data-level="khan"
-                  data-key="an toàn thực phẩm 008/TB-UBND Sở Y tế Đà Nẵng Nguyễn Văn An"
+                  data-key="an toĂ n thá»±c pháº©m 008/TB-UBND Sá»Ÿ Y táº¿ ÄĂ  Náºµng Nguyá»…n VÄƒn An"
                 >
                   <div class="p-4">
                     <div class="flex items-start justify-between gap-4">
@@ -462,46 +461,46 @@
                         <h4
                           class="text:[15px] text-[15px] font-semibold truncate"
                         >
-                          Thông báo về việc kiểm tra an toàn thực phẩm
+                          ThĂ´ng bĂ¡o vá» viá»‡c kiá»ƒm tra an toĂ n thá»±c pháº©m
                         </h4>
                         <div
                           class="mt-2 flex flex-wrap items-center gap-2 text-[12.5px] text-slate-600"
                         >
                           <span
                             class="inline-flex items-center gap-1 text-slate-500"
-                            >📄 008/TB-UBND</span
+                            >đŸ“„ 008/TB-UBND</span
                           >
                           <span
                             class="inline-flex items-center gap-1 text-slate-500"
-                            >🗓 2024-01-30</span
+                            >đŸ—“ 2024-01-30</span
                           >
                           <span
                             class="inline-flex items-center gap-1 text-slate-500"
-                            >🏢 Sở Y tế Đà Nẵng</span
+                            >đŸ¢ Sá»Ÿ Y táº¿ ÄĂ  Náºµng</span
                           >
                           <span
                             class="inline-flex items-center gap-1 text-slate-500"
-                            >👤 Nguyễn Văn An</span
+                            >đŸ‘¤ Nguyá»…n VÄƒn An</span
                           >
                         </div>
                         <div class="mt-2 flex flex-wrap items-center gap-2">
-                          <span class="chip chip-danger">Khẩn</span>
-                          <span class="chip">Chưa xử lý</span>
+                          <span class="chip chip-danger">Kháº©n</span>
+                          <span class="chip">ChÆ°a xá»­ lĂ½</span>
                           <span class="chip chip-deadline"
-                            >Hạn: 2024-02-05</span
+                            >Háº¡n: 2024-02-05</span
                           >
                         </div>
                         <p class="mt-2 text-[13px] text-slate-500 line-clamp-1">
-                          Thông báo về việc kiểm tra an toàn thực phẩm tại các
-                          cơ sở kinh doanh…
+                          ThĂ´ng bĂ¡o vá» viá»‡c kiá»ƒm tra an toĂ n thá»±c pháº©m táº¡i cĂ¡c
+                          cÆ¡ sá»Ÿ kinh doanhâ€¦
                         </p>
                       </div>
                       <div class="shrink-0">
                         <a
                           href="vanbanden-detail.html"
                           class="btn-outline"
-                          title="Chi tiết"
-                          ><span>👁</span> Chi tiết</a
+                          title="Chi tiáº¿t"
+                          ><span>đŸ‘</span> Chi tiáº¿t</a
                         >
                       </div>
                     </div>
@@ -513,52 +512,52 @@
                   class="bg-white border border-slate-200 rounded-xl"
                   data-status="new"
                   data-level="ratkhan"
-                  data-key="chuẩn bị bầu cử 031/CT-UBND Ủy ban Bầu cử Quận Thanh Khê Trần Thị Bình"
+                  data-key="chuáº©n bá»‹ báº§u cá»­ 031/CT-UBND á»¦y ban Báº§u cá»­ Quáº­n Thanh KhĂª Tráº§n Thá»‹ BĂ¬nh"
                 >
                   <div class="p-4">
                     <div class="flex items-start justify-between gap-4">
                       <div class="min-w-0">
                         <h4 class="text-[15px] font-semibold truncate">
-                          Chỉ thị về công tác chuẩn bị bầu cử
+                          Chá»‰ thá»‹ vá» cĂ´ng tĂ¡c chuáº©n bá»‹ báº§u cá»­
                         </h4>
                         <div
                           class="mt-2 flex flex-wrap items-center gap-2 text-[12.5px] text-slate-600"
                         >
                           <span
                             class="inline-flex items-center gap-1 text-slate-500"
-                            >📄 031/CT-UBND</span
+                            >đŸ“„ 031/CT-UBND</span
                           >
                           <span
                             class="inline-flex items-center gap-1 text-slate-500"
-                            >🗓 2024-02-07</span
+                            >đŸ—“ 2024-02-07</span
                           >
                           <span
                             class="inline-flex items-center gap-1 text-slate-500"
-                            >🏢 Ủy ban Bầu cử Quận Thanh Khê</span
+                            >đŸ¢ á»¦y ban Báº§u cá»­ Quáº­n Thanh KhĂª</span
                           >
                           <span
                             class="inline-flex items-center gap-1 text-slate-500"
-                            >👤 Trần Thị Bình</span
+                            >đŸ‘¤ Tráº§n Thá»‹ BĂ¬nh</span
                           >
                         </div>
                         <div class="mt-2 flex flex-wrap items-center gap-2">
-                          <span class="chip chip-urgent">Rất khẩn</span>
-                          <span class="chip">Chưa xử lý</span>
+                          <span class="chip chip-urgent">Ráº¥t kháº©n</span>
+                          <span class="chip">ChÆ°a xá»­ lĂ½</span>
                           <span class="chip chip-deadline"
-                            >Hạn: 2024-02-12</span
+                            >Háº¡n: 2024-02-12</span
                           >
                         </div>
                         <p class="mt-2 text-[13px] text-slate-500 line-clamp-1">
-                          Chỉ thị về công tác chuẩn bị bầu cử đại biểu Quốc hội
-                          và HĐND các cấp…
+                          Chá»‰ thá»‹ vá» cĂ´ng tĂ¡c chuáº©n bá»‹ báº§u cá»­ Ä‘áº¡i biá»ƒu Quá»‘c há»™i
+                          vĂ  HÄND cĂ¡c cáº¥pâ€¦
                         </p>
                       </div>
                       <div class="shrink-0">
                         <a
                           href="vanbanden-detail.html"
                           class="btn-outline"
-                          title="Chi tiết"
-                          ><span>👁</span> Chi tiết</a
+                          title="Chi tiáº¿t"
+                          ><span>đŸ‘</span> Chi tiáº¿t</a
                         >
                       </div>
                     </div>
@@ -570,49 +569,49 @@
                   class="bg-white border border-slate-200 rounded-xl"
                   data-status="done"
                   data-level="cao"
-                  data-key="quản lý chất thải rắn 032/NĐ-CP Chính phủ Nguyễn Văn An"
+                  data-key="quáº£n lĂ½ cháº¥t tháº£i ráº¯n 032/NÄ-CP ChĂ­nh phá»§ Nguyá»…n VÄƒn An"
                 >
                   <div class="p-4">
                     <div class="flex items-start justify-between gap-4">
                       <div class="min-w-0">
                         <h4 class="text-[15px] font-semibold truncate">
-                          Nghị định về quản lý chất thải rắn sinh hoạt
+                          Nghá»‹ Ä‘á»‹nh vá» quáº£n lĂ½ cháº¥t tháº£i ráº¯n sinh hoáº¡t
                         </h4>
                         <div
                           class="mt-2 flex flex-wrap items-center gap-2 text-[12.5px] text-slate-600"
                         >
                           <span
                             class="inline-flex items-center gap-1 text-slate-500"
-                            >📄 032/NĐ-CP</span
+                            >đŸ“„ 032/NÄ-CP</span
                           >
                           <span
                             class="inline-flex items-center gap-1 text-slate-500"
-                            >🗓 2024-01-10</span
+                            >đŸ—“ 2024-01-10</span
                           >
                           <span
                             class="inline-flex items-center gap-1 text-slate-500"
-                            >🏢 Chính phủ</span
+                            >đŸ¢ ChĂ­nh phá»§</span
                           >
                           <span
                             class="inline-flex items-center gap-1 text-slate-500"
-                            >👤 Nguyễn Văn An</span
+                            >đŸ‘¤ Nguyá»…n VÄƒn An</span
                           >
                         </div>
                         <div class="mt-2 flex flex-wrap items-center gap-2">
                           <span class="chip chip-level">Cao</span>
-                          <span class="chip chip-success">Đã xử lý</span>
+                          <span class="chip chip-success">ÄĂ£ xá»­ lĂ½</span>
                         </div>
                         <p class="mt-2 text-[13px] text-slate-500 line-clamp-1">
-                          Nghị định quản lý chất thải rắn sinh hoạt tại các khu
-                          dân cư…
+                          Nghá»‹ Ä‘á»‹nh quáº£n lĂ½ cháº¥t tháº£i ráº¯n sinh hoáº¡t táº¡i cĂ¡c khu
+                          dĂ¢n cÆ°â€¦
                         </p>
                       </div>
                       <div class="shrink-0">
                         <a
                           href="vanbanden-detail.html"
                           class="btn-outline"
-                          title="Chi tiết"
-                          ><span>👁</span> Chi tiết</a
+                          title="Chi tiáº¿t"
+                          ><span>đŸ‘</span> Chi tiáº¿t</a
                         >
                       </div>
                     </div>
@@ -623,14 +622,14 @@
               <!-- Pagination (hook) -->
               <div class="mt-6 flex items-center justify-between">
                 <div class="text-[13px] text-slate-500">
-                  Hiển thị <span id="range-from">1</span>–<span id="range-to"
+                  Hiá»ƒn thá»‹ <span id="range-from">1</span>â€“<span id="range-to"
                     >5</span
                   >
-                  / <span id="range-total">21</span> văn bản
+                  / <span id="range-total">21</span> vÄƒn báº£n
                 </div>
                 <div class="flex items-center gap-2">
                   <button id="btn-prev" class="btn-outline" type="button">
-                    Trang trước
+                    Trang trÆ°á»›c
                   </button>
                   <button id="btn-next" class="btn-outline" type="button">
                     Trang sau
@@ -656,7 +655,8 @@
     <script src="../assets/js/layout.js"></script>
     <script src="../assets/js/vanthu.js"></script>
 
-    <!-- Inline bootstraps: đảm bảo logic tối thiểu hoạt động đúng, đồng bộ với vanthu.js -->
+    <!-- Inline bootstraps: Ä‘áº£m báº£o logic tá»‘i thiá»ƒu hoáº¡t Ä‘á»™ng Ä‘Ăºng, Ä‘á»“ng bá»™ vá»›i vanthu.js -->
     
   </body>
 </html>
+

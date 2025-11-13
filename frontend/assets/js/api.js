@@ -799,6 +799,74 @@
     },
   };
 
+  const inboundDocsApi = {
+    list(params) {
+      return request(buildUrl("/api/v1/inbound-docs/", params));
+    },
+    retrieve(id, params) {
+      if (!id) throw new Error("Thi?u document_id");
+      return request(buildUrl(`/api/v1/inbound-docs/${id}/`, params));
+    },
+    receive(id, payload) {
+      if (!id) throw new Error("Thi?u document_id");
+      return request(`/api/v1/inbound-docs/${id}/receive/`, {
+        method: "POST",
+        body: payload,
+      });
+    },
+    register(id, payload) {
+      if (!id) throw new Error("Thi?u document_id");
+      return request(`/api/v1/inbound-docs/${id}/register/`, {
+        method: "POST",
+        body: payload,
+      });
+    },
+    assign(id, payload) {
+      if (!id) throw new Error("Thi?u document_id");
+      return request(`/api/v1/inbound-docs/${id}/assign/`, {
+        method: "POST",
+        body: payload,
+      });
+    },
+    start(id, payload) {
+      if (!id) throw new Error("Thi?u document_id");
+      return request(`/api/v1/inbound-docs/${id}/start/`, {
+        method: "POST",
+        body: payload,
+      });
+    },
+    complete(id, payload) {
+      if (!id) throw new Error("Thi?u document_id");
+      return request(`/api/v1/inbound-docs/${id}/complete/`, {
+        method: "POST",
+        body: payload,
+      });
+    },
+    archive(id, payload) {
+      if (!id) throw new Error("Thi?u document_id");
+      return request(`/api/v1/inbound-docs/${id}/archive/`, {
+        method: "POST",
+        body: payload,
+      });
+    },
+    withdraw(id, payload) {
+      if (!id) throw new Error("Thi?u document_id");
+      return request(`/api/v1/inbound-docs/${id}/withdraw/`, {
+        method: "POST",
+        body: payload,
+      });
+    },
+    import(payload) {
+      return request("/api/v1/inbound-docs/import/", {
+        method: "POST",
+        body: payload,
+      });
+    },
+    export(params) {
+      return request(buildUrl("/api/v1/inbound-docs/export/", params));
+    },
+  };
+
   const caseApi = {
     list(params) {
       return request(buildUrl("/api/v1/cases/", params));
@@ -909,9 +977,10 @@ const api = {
     registerBooks: registerBookApi,
     numberingRules: numberingRuleApi,
     documentTemplates: documentTemplateApi,
-        documents: documentApi,
+    documents: documentApi,
+    inboundDocs: inboundDocsApi,
     cases: caseApi,
-workflowTransitions: workflowTransitionApi,
+    workflowTransitions: workflowTransitionApi,
   };
 
   global.ApiClient = api;

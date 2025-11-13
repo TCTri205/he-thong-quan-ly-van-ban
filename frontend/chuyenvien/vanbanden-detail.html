@@ -232,6 +232,54 @@
                 </div>
               </article>
 
+              <aside class="card p-5 space-y-4" id="doc-workflow-panel">
+                <header>
+                  <h2 class="text-[15px] font-semibold text-slate-800">
+                    Luồng xử lý văn bản đến
+                  </h2>
+
+                  <p class="text-[12.5px] text-slate-500">
+                    Hành động được phép theo vai trò Chuyên viên
+                  </p>
+                </header>
+
+                <ol data-wf="steps" class="space-y-3 text-[13px]"></ol>
+
+                <div class="space-y-2">
+                  <label class="text-[13px] font-medium text-slate-700" for="cv-workflow-action"
+                    >Hành động</label
+                  >
+
+                  <select
+                    id="cv-workflow-action"
+                    data-wf="action-select"
+                    class="w-full h-10 rounded-md border border-slate-200 px-3 text-sm focus:outline-none focus:ring-2 focus:ring-blue-600/20 focus:border-blue-500 disabled:bg-slate-50"
+                  ></select>
+                </div>
+
+                <div data-wf="fields" class="space-y-3 hidden"></div>
+
+                <div class="flex flex-wrap gap-2">
+                  <button
+                    type="button"
+                    data-wf="submit"
+                    class="h-9 rounded-md bg-blue-600 px-3 text-sm font-medium text-white hover:bg-blue-700 shadow-sm disabled:opacity-60 disabled:cursor-not-allowed"
+                  >
+                    Thực hiện
+                  </button>
+
+                  <button
+                    type="button"
+                    data-wf="withdraw"
+                    class="h-9 rounded-md border border-slate-200 px-3 text-sm font-medium text-rose-600 hover:bg-rose-50"
+                  >
+                    Thu hồi
+                  </button>
+                </div>
+
+                <p data-wf="message" class="text-[12.5px] text-slate-500"></p>
+              </aside>
+
               <aside class="card p-5 space-y-4">
                 <header>
                   <h2 class="text-[15px] font-semibold text-slate-800">
@@ -464,5 +512,10 @@
     </div>
 
     <div data-include="footer"></div>
+    <script src="../assets/js/api.js"></script>
+    <script src="../assets/js/doc-helpers.js"></script>
+    <script src="../assets/js/doc-workflow.js"></script>
+    <script src="../assets/js/layout.js"></script>
+    <script src="../assets/js/chuyenvien.js"></script>
   </body>
 </html>

@@ -637,9 +637,9 @@
         const levelLabel = document.getElementById("levelLabel");
 
         const kpiEls = {
-          pending: document.getElementById("kpiPending"),
-          approved: document.getElementById("kpiApproved"),
-          processing: document.getElementById("kpiProcessing"),
+          tiepNhan: document.getElementById("kpiPending"),
+          dangKy: document.getElementById("kpiApproved"),
+          dangXuLy: document.getElementById("kpiProcessing"),
           urgent: document.getElementById("kpiUrgent"),
         };
 
@@ -671,9 +671,18 @@
           .catch(() => renderError("Không thể xác thực người dùng hiện tại."));
 
         function loadDocuments() {
+          const docApi = api.documents;
+          if (!docApi) {
+            renderError('Chua cau hinh Document API.');
+            return Promise.resolve();
+          }
           renderLoading();
-          return api
-            .request("/api/v1/inbound-docs/?ordering=-created_at&page_size=50")
+          return docApi
+            .list({
+              doc_direction: 'den',
+              ordering: '-created_at',
+              page_size: 50,
+            })
             .then((response) => {
               const payload = api.extractItems(response) || [];
               docs = payload.map((item) => helpers.normalizeInboundDoc(item));
@@ -681,10 +690,11 @@
             })
             .catch((error) => {
               const message = helpers.resolveErrorMessage(error);
-              console.error("[lanhdao] Lỗi tải văn bản đến:", error);
+              console.error('[lanhdao] Loi tai van ban den:', error);
               renderError(message);
             });
         }
+
 
         function applyFilters() {
           if (!Array.isArray(docs)) {
@@ -762,17 +772,14 @@
 
         function updateKPIs(list) {
           const baseList = Array.isArray(docs) ? docs : [];
-          const counts = Array.isArray(list)
-            ? helpers.computeInboundKPIs(list)
-            : helpers.computeInboundKPIs(baseList);
-          if (kpiEls.pending)
-            kpiEls.pending.textContent = String(counts.new || 0);
-          if (kpiEls.processing)
-            kpiEls.processing.textContent = String(counts.processing || 0);
-          if (kpiEls.approved)
-            kpiEls.approved.textContent = String(counts.approved || 0);
-          if (kpiEls.urgent)
-            kpiEls.urgent.textContent = String(counts.urgent || 0);
+          const summary = helpers.computeInboundKPIs(Array.isArray(list) ? list : baseList);
+          if (kpiEls.tiepNhan)
+            kpiEls.tiepNhan.textContent = String(summary.states?.["tiep-nhan"] || 0);
+          if (kpiEls.dangKy)
+            kpiEls.dangKy.textContent = String(summary.states?.["dang-ky"] || 0);
+          if (kpiEls.dangXuLy)
+            kpiEls.dangXuLy.textContent = String(summary.states?.["dang-xu-ly"] || 0);
+          if (kpiEls.urgent) kpiEls.urgent.textContent = String(summary.urgent || 0);
         }
 
         function createDocCard(doc) {
@@ -848,11 +855,22 @@
         }
 
         function statusBadgeClass(statusKey) {
-          switch (mapStatusFilter(statusKey)) {
-            case "processing":
-              return "bg-blue-50 text-blue-700 border border-blue-100";
-            case "approved":
-              return "bg-emerald-50 text-emerald-700 border border-emerald-100";
+          const mapped = mapStatusFilter(statusKey);
+          switch (mapped) {
+            case "tiep-nhan":
+              return "bg-slate-100 text-slate-700 border border-slate-200";
+            case "dang-ky":
+              return "bg-sky-100 text-sky-700 border border-sky-200";
+            case "phan-cong":
+              return "bg-violet-100 text-violet-700 border border-violet-200";
+            case "dang-xu-ly":
+              return "bg-amber-100 text-amber-700 border border-amber-200";
+            case "hoan-tat":
+              return "bg-emerald-100 text-emerald-700 border border-emerald-200";
+            case "luu-tru":
+              return "bg-slate-200 text-slate-700 border border-slate-300";
+            case "thu-hoi":
+              return "bg-rose-100 text-rose-700 border border-rose-200";
             default:
               return "bg-slate-100 text-slate-700 border border-slate-200";
           }
@@ -870,11 +888,11 @@
         }
 
         function mapStatusFilter(key) {
-          if (!key) return "pending";
-          if (key === "processing") return "processing";
-          if (key === "done") return "new";
-          if (key === "approved") return "approved";
-          return "pending";
+          if (!key || key === "all") return "all";
+          if (helpers.mapInboundStatusKey) {
+            return helpers.mapInboundStatusKey(key);
+          }
+          return String(key).toLowerCase();
         }
 
         function mapLevelFilter(key) {
@@ -986,11 +1004,20 @@
         runAfterDom(() => loadDocuments());
 
         function loadDocuments() {
+          const docApi = api.documents;
+          if (!docApi) {
+            renderError('Chua cau hinh Document API.');
+            return Promise.resolve();
+          }
           renderLoading();
-          api
-            .request("/api/v1/outbound-docs/?ordering=-created_at&page_size=50")
+          return docApi
+            .list({
+              doc_direction: 'di',
+              ordering: '-updated_at',
+              page_size: 50,
+            })
             .then((data) => {
-              const payload = api.extractItems(data);
+              const payload = api.extractItems(data) || [];
               normalizedDocs = payload.map((item) =>
                 helpers.normalizeOutboundDoc(item)
               );
@@ -998,12 +1025,12 @@
               applyFilters();
             })
             .catch((error) => {
-              console.error("[lanhdao] L?i t?i v�n b?n �i:", error);
+              console.error('[lanhdao] Loi tai van ban di:', error);
               renderError(helpers.resolveErrorMessage(error));
             });
         }
 
-        function renderRows(list) {
+function renderRows(list) {
           tableBody.innerHTML = "";
           if (!list.length) {
             renderEmpty();
@@ -1424,32 +1451,54 @@
     }
 
     const buttons = document.querySelectorAll("[data-doc-action]");
+    const pageId = (document.body?.dataset?.page || "").toLowerCase();
+    if (pageId === "vanbanden-detail") {
+      buttons.forEach((button) => {
+        button.disabled = true;
+        button.classList.add("opacity-60", "cursor-not-allowed");
+        button.title = "Vui lòng thao tác qua bảng Luồng trạng thái.";
+      });
+      initLeaderInboundWorkflow(docId, api);
+      return;
+    }
     if (!buttons.length) return;
 
+    const role = (document.body?.dataset?.role || "").toLowerCase();
     const actionMap = {
-      submit: {
-        method: docApi.submit,
-        success: "Document submitted for approval.",
-        payload: () => ({ comment: "Submitted from leadership view." }),
+      approve: {
+        method: docApi.approve,
+        success: "Đã phê duyệt văn bản.",
+        allowedRoles: ["lanhdao"],
       },
-      approve: { method: docApi.approve, success: "Document approved." },
-      sign: { method: docApi.sign, success: "Document signed." },
-      publish: {
-        method: docApi.publish,
-        success: "Document published.",
-        payload: buildPublishPayload,
+      reject: {
+        method: docApi.reject,
+        success: "Đã từ chối văn bản.",
+        allowedRoles: ["lanhdao"],
+        payload: () => ({
+          comment: "Từ chối từ giao diện lãnh đạo.",
+        }),
       },
-      recall: {
-        method: docApi.recall,
-        success: "Document recalled for revision.",
-        payload: () => ({ comment: "Request to rework document." }),
+      sign: {
+        method: docApi.sign,
+        success: "Đã ký số văn bản.",
+        allowedRoles: ["lanhdao"],
       },
     };
+    const noPermissionMessage = "Bạn không có quyền thực hiện thao tác này.";
 
     buttons.forEach((button) => {
       const action = button.dataset.docAction;
       const config = actionMap[action];
       if (!config) return;
+      if (
+        Array.isArray(config.allowedRoles) &&
+        !config.allowedRoles.includes(role)
+      ) {
+        button.disabled = true;
+        button.title = noPermissionMessage;
+        button.classList.add("cursor-not-allowed", "opacity-70");
+        return;
+      }
       button.addEventListener("click", async () => {
         if (button.disabled) return;
         button.disabled = true;
@@ -1467,6 +1516,116 @@
         }
       });
     });
+  }
+
+  function initLeaderInboundWorkflow(docId, api) {
+    const helpers = window.DocHelpers || {};
+    const workflowLib = window.DocWorkflow || null;
+    if (!docId || !api || !workflowLib || typeof workflowLib.mount !== "function") {
+      return;
+    }
+    const docApi = api.documents;
+    if (!docApi) {
+      return;
+    }
+    const workflowContainer = document.getElementById("doc-workflow-panel");
+    if (!workflowContainer) {
+      return;
+    }
+    const inboundApi =
+      typeof workflowLib.ensureInboundDocsClient === "function"
+        ? workflowLib.ensureInboundDocsClient(api)
+        : api.inboundDocs || null;
+    if (!inboundApi) {
+      console.warn("[lanhdao] Không tìm thấy inboundDocs API để thao tác trạng thái.");
+      return;
+    }
+    const roleName = document.body?.dataset?.role || "lanhdao";
+    const currentUser = typeof api.getCurrentUser === "function" ? api.getCurrentUser() : null;
+    const currentUserId = currentUser?.id || currentUser?.user_id || currentUser?.userId || null;
+    let workflowInstance = null;
+    let assignmentsCache = [];
+
+    function buildPrefill(doc, normalized) {
+      return {
+        received_number: doc?.received_number || normalized?.incomingNumber || "",
+        received_date: normalized?.receivedDate || doc?.received_date || "",
+        sender: doc?.sender || normalized?.sender || "",
+      };
+    }
+
+    function isCurrentAssignee(list) {
+      if (!currentUserId) return false;
+      const source = Array.isArray(list) ? list : assignmentsCache;
+      return source.some((item) => {
+        const userId = item?.user_id || item?.user?.user_id || item?.user?.id;
+        return userId && String(userId) === String(currentUserId);
+      });
+    }
+
+    function loadAssignments() {
+      if (!docApi.assignments) {
+        assignmentsCache = [];
+        return Promise.resolve([]);
+      }
+      return docApi
+        .assignments(docId, "GET")
+        .then((items) => {
+          const list = Array.isArray(items) ? items : [];
+          assignmentsCache = list;
+          return list;
+        })
+        .catch((error) => {
+          console.error("[lanhdao] Lỗi tải phân công văn bản đến:", error);
+          assignmentsCache = [];
+          return [];
+        });
+    }
+
+    function updateWorkflow(doc, normalized, assignments) {
+      const payload = {
+        stateKey: normalized.statusKey,
+        prefill: buildPrefill(doc, normalized),
+        isAssignee: isCurrentAssignee(assignments),
+      };
+      if (!workflowInstance) {
+        workflowInstance = workflowLib.mount({
+          container: workflowContainer,
+          docId,
+          role: roleName,
+          api: inboundApi,
+          stateKey: payload.stateKey,
+          prefill: payload.prefill,
+          isAssignee: payload.isAssignee,
+          onStateChange: () => refreshDetail(),
+        });
+      } else {
+        workflowInstance.update(payload);
+      }
+    }
+
+    function refreshDetail() {
+      return docApi
+        .retrieve(docId)
+        .then((doc) => {
+          const normalized = helpers.normalizeInboundDoc
+            ? helpers.normalizeInboundDoc(doc)
+            : {
+                statusKey: doc?.status?.code || "tiep-nhan",
+                incomingNumber: doc?.incoming_number,
+                receivedDate: doc?.received_date,
+                sender: doc?.sender,
+              };
+          return loadAssignments().then((assignments) => {
+            updateWorkflow(doc, normalized, assignments);
+          });
+        })
+        .catch((error) => {
+          console.error("[lanhdao] Lỗi tải văn bản đến:", error);
+        });
+    }
+
+    refreshDetail();
   }
 
   function getQueryParam(name) {

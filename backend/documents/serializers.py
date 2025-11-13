@@ -1300,6 +1300,8 @@ class DocumentExportQuerySerializer(drf_serializers.Serializer):
     status = drf_serializers.CharField(required=False, allow_blank=True)
     level = drf_serializers.CharField(required=False, allow_blank=True)
     keyword = drf_serializers.CharField(required=False, allow_blank=True)
+    page_size = drf_serializers.IntegerField(required=False, min_value=1, max_value=2000)
+    ordering = drf_serializers.CharField(required=False, allow_blank=True)
 
 
 class DocumentExportResponseSerializer(drf_serializers.Serializer):
