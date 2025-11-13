@@ -627,6 +627,292 @@
               btn?.setAttribute("aria-expanded", "true");
             }
 
+
+  pageHandlers['vanbanden'] = function () {
+    const api = window.ApiClient;
+    const helpers = window.DocHelpers;
+    if (!api || !helpers) {
+      console.warn("[lanhdao] ApiClient hoặc DocHelpers chưa sẵn sàng; bỏ qua văn bản đến.");
+      return;
+    }
+
+    const listContainer = document.getElementById('docList');
+    const totalLabel = document.getElementById('totalDoc');
+    const searchInput = document.getElementById('searchTitle');
+    const statusButton = document.getElementById('btnStatusFilter');
+    const statusMenu = document.getElementById('statusMenu');
+    const statusLabel = document.getElementById('statusLabel');
+    const levelButton = document.getElementById('btnLevelFilter');
+    const levelMenu = document.getElementById('levelMenu');
+    const levelLabel = document.getElementById('levelLabel');
+
+    const kpiEls = {
+      pending: document.getElementById('kpiPending'),
+      approved: document.getElementById('kpiApproved'),
+      processing: document.getElementById('kpiProcessing'),
+      urgent: document.getElementById('kpiUrgent'),
+    };
+
+    if (!listContainer) {
+      return;
+    }
+
+    const state = {
+      keyword: '',
+      status: 'all',
+      level: 'all',
+    };
+
+    let docs = [];
+    const debouncedApply = debounce(() => applyFilters(), 180);
+
+    bindFilterDropdown(statusButton, statusMenu, statusLabel, 'status');
+    bindFilterDropdown(levelButton, levelMenu, levelLabel, 'level');
+    registerSearch(searchInput, 'keyword');
+
+    const layout = window.Layout || {};
+    const ready =
+      layout.authPromise && typeof layout.authPromise.then === 'function'
+        ? layout.authPromise
+        : Promise.resolve();
+
+    ready
+      .then(loadDocuments)
+      .catch(() => renderError('Không thể xác thực người dùng hiện tại.'));
+
+    function loadDocuments() {
+      renderLoading();
+      return api
+        .request('/api/v1/inbound-docs/?ordering=-created_at&page_size=50')
+        .then((response) => {
+          const payload = api.extractItems(response) || [];
+          docs = payload.map((item) => helpers.normalizeInboundDoc(item));
+          applyFilters();
+        })
+        .catch((error) => {
+          const message = helpers.resolveErrorMessage(error);
+          console.error('[lanhdao] Lỗi tải văn bản đến:', error);
+          renderError(message);
+        });
+    }
+
+    function applyFilters() {
+      if (!Array.isArray(docs)) {
+        renderEmpty();
+        return;
+      }
+      const keyword = helpers.normalizeText(state.keyword || '');
+      const filtered = docs.filter((doc) => {
+        if (!doc) {
+          return false;
+        }
+        if (state.status !== 'all' && mapStatusFilter(doc.statusKey) !== state.status) {
+          return false;
+        }
+        if (state.level !== 'all' && mapLevelFilter(doc.urgencyKey) !== state.level) {
+          return false;
+        }
+        if (keyword && !(doc.searchText || '').includes(keyword)) {
+          return false;
+        }
+        return true;
+      });
+      renderList(filtered);
+      updateKPIs(filtered);
+    }
+
+    function renderList(list) {
+      if (!listContainer) {
+        return;
+      }
+      if (!list.length) {
+        renderEmpty();
+        updateSummary(0);
+        return;
+      }
+      listContainer.innerHTML = '';
+      const fragment = document.createDocumentFragment();
+      list.forEach((doc) => {
+        fragment.appendChild(createDocCard(doc));
+      });
+      listContainer.appendChild(fragment);
+      updateSummary(list.length);
+    }
+
+    function renderLoading() {
+      if (!listContainer) return;
+      listContainer.innerHTML =
+        "<div class='px-4 py-8 text-center text-sm text-slate-500'>Đang tải văn bản...</div>";
+    }
+
+    function renderEmpty() {
+      if (!listContainer) return;
+      listContainer.innerHTML =
+        "<div class='px-4 py-8 text-center text-sm text-slate-500'>Không có văn bản đến nào phù hợp.</div>";
+    }
+
+    function renderError(message) {
+      if (!listContainer) return;
+      listContainer.innerHTML = `<div class='px-4 py-8 text-center text-sm text-rose-600'>${helpers.escapeHtml(message)}</div>`;
+      updateSummary(0);
+    }
+
+    function updateSummary(count) {
+      if (!totalLabel) return;
+      totalLabel.textContent = `(${count})`;
+    }
+
+    function updateKPIs(list) {
+      const baseList = Array.isArray(docs) ? docs : [];
+      const counts = Array.isArray(list)
+        ? helpers.computeInboundKPIs(list)
+        : helpers.computeInboundKPIs(baseList);
+      if (kpiEls.pending) kpiEls.pending.textContent = String(counts.new || 0);
+      if (kpiEls.processing) kpiEls.processing.textContent = String(counts.processing || 0);
+      if (kpiEls.approved) kpiEls.approved.textContent = String(counts.approved || 0);
+      if (kpiEls.urgent) kpiEls.urgent.textContent = String(counts.urgent || 0);
+    }
+
+    function createDocCard(doc) {
+      const article = document.createElement('article');
+      article.className = 'bg-white border border-slate-200 rounded-xl';
+      article.dataset.docItem = '1';
+      article.dataset.status = mapStatusFilter(doc.statusKey);
+      article.dataset.level = mapLevelFilter(doc.urgencyKey);
+
+      const statusBadge = `<span class='inline-flex items-center gap-1 rounded-full px-2 py-0.5 text-[12px] font-semibold ${statusBadgeClass(
+        doc.statusKey
+      )}'>${helpers.escapeHtml(doc.statusLabel || 'Chưa xử lý')}</span>`;
+      const levelBadge = `<span class='inline-flex items-center gap-1 rounded-full px-2 py-0.5 text-[12px] font-semibold ${levelBadgeClass(
+        doc.urgencyKey
+      )}'>${helpers.escapeHtml(
+        doc.urgencyLabel || helpers.mapUrgencyLabel(doc.urgencyKey, '')
+      )}</span>`;
+      const assigneeBadge = `<span class='inline-flex items-center gap-1 rounded-full border border-slate-200 bg-white px-2 py-0.5 text-[12px] font-semibold text-slate-600'><span class='opacity-70'>Đã giao:</span> ${helpers.escapeHtml(
+        doc.creatorName || '—'
+      )}</span>`;
+      const number = helpers.escapeHtml(doc.number || '—');
+      const received = helpers.escapeHtml(doc.receivedDate || doc.issuedDate || '');
+      const sender = helpers.escapeHtml(doc.sender || doc.department || '—');
+      const due = helpers.escapeHtml(doc.dueDate || '');
+      const description = helpers.escapeHtml(
+        doc.raw?.summary || doc.raw?.instruction || doc.raw?.goal || ''
+      );
+      const detailHref = `vanbanden-detail.html?id=${encodeURIComponent(doc.id || '')}`;
+
+      const actions = [
+        `  <a href='${detailHref}' class='inline-flex items-center gap-2 h-9 px-3 rounded-md border border-slate-200 text-sm font-medium text-slate-700 transition-colors hover:bg-slate-50 focus:outline-none focus:ring-2 focus:ring-blue-500/20'>Chi tiết</a>`,
+      ];
+      if (mapStatusFilter(doc.statusKey) === 'pending') {
+        actions.push(
+          "  <button type='button' class='inline-flex items-center gap-2 h-9 px-3 rounded-md bg-emerald-600 text-white text-sm font-medium transition-colors hover:bg-emerald-700 focus:outline-none focus:ring-2 focus:ring-emerald-500/20' title='Duyệt văn bản'><span class='text-base leading-none'>✔</span> Duyệt</button>",
+          "  <button type='button' class='inline-flex items-center gap-2 h-9 px-3 rounded-md bg-slate-100 text-sm font-medium text-slate-700 transition-colors hover:bg-slate-200 focus:outline-none focus:ring-2 focus:ring-blue-500/20'>Giao việc</button>"
+        );
+      }
+
+      const html = [
+        '<div class="px-4 py-3">',
+        `  <h3 class="font-semibold doc-title">${helpers.escapeHtml(doc.title || 'Văn bản đến')}</h3>`,
+        '  <div class="mt-1 flex flex-wrap items-center gap-2 text-[12.5px]">',
+        `    ${levelBadge}`,
+        `    ${statusBadge}`,
+        `    ${assigneeBadge}`,
+        `    <span class="text-slate-500">Số văn bản: <b class="doc-number">${number}</b></span>`,
+        `    <span class="text-slate-500">Ngày đến: <b>${received}</b></span>`,
+        `    <span class="text-slate-500">Cơ quan gửi: <b>${sender}</b></span>`,
+        `    <span class="text-slate-500">Hạn xử lý: <b>${due}</b></span>`,
+        '  </div>',
+        description
+          ? `  <p class="text-[12.5px] text-slate-500 mt-2 line-clamp-2">${description}</p>`
+          : '',
+        '</div>',
+        '<div class="px-4 pb-3 flex items-center justify-end gap-2">',
+        ...actions,
+        '</div>',
+      ]
+        .filter(Boolean)
+        .join('
+');
+
+      article.innerHTML = html;
+      return article;
+    }
+
+    function statusBadgeClass(statusKey) {
+      switch (mapStatusFilter(statusKey)) {
+        case 'processing':
+          return 'bg-blue-50 text-blue-700 border border-blue-100';
+        case 'approved':
+          return 'bg-emerald-50 text-emerald-700 border border-emerald-100';
+        default:
+          return 'bg-slate-100 text-slate-700 border border-slate-200';
+      }
+    }
+
+    function levelBadgeClass(urgencyKey) {
+      switch (mapLevelFilter(urgencyKey)) {
+        case 'urgent':
+          return 'bg-rose-50 text-rose-600';
+        case 'high':
+          return 'bg-amber-50 text-amber-700';
+        default:
+          return 'bg-slate-100 text-slate-600';
+      }
+    }
+
+    function mapStatusFilter(key) {
+      if (!key) return 'pending';
+      if (key === 'processing') return 'processing';
+      if (key === 'done') return 'new';
+      if (key === 'approved') return 'approved';
+      return 'pending';
+    }
+
+    function mapLevelFilter(key) {
+      if (!key) return 'normal';
+      if (key === 'ratkhan' || key === 'khan') return 'urgent';
+      if (key === 'cao') return 'high';
+      return 'normal';
+    }
+
+    function bindFilterDropdown(button, menu, label, key) {
+      if (!button || !menu || !label) return;
+      button.dataset[key] = 'all';
+      button.addEventListener('click', (event) => {
+        event.stopPropagation();
+        const isOpen = !menu.classList.contains('hidden');
+        menu.classList.toggle('hidden', isOpen);
+        button.setAttribute('aria-expanded', isOpen ? 'false' : 'true');
+      });
+      menu.addEventListener('click', (event) => {
+        const item = event.target.closest('.filter-item');
+        if (!item) return;
+        const value = item.getAttribute('data-' + key) || 'all';
+        label.textContent = item.textContent.trim();
+        button.dataset[key] = value;
+        menu.classList.add('hidden');
+        button.setAttribute('aria-expanded', 'false');
+        state[key] = value;
+        applyFilters();
+      });
+      document.addEventListener('click', (event) => {
+        if (!menu.classList.contains('hidden') && !menu.contains(event.target) && event.target !== button) {
+          menu.classList.add('hidden');
+          button.setAttribute('aria-expanded', 'false');
+        }
+      });
+    }
+
+    function registerSearch(input, key) {
+      if (!input) return;
+      input.addEventListener('input', () => {
+        state[key] = input.value || '';
+        debouncedApply();
+      });
+    }
+  };
+
+
   pageHandlers['vanbandi'] = function () {
     const api = window.ApiClient;
     const helpers = window.DocHelpers;
@@ -1082,6 +1368,112 @@
 
           runAfterDom(applyFilters);
   };
+
+
+  pageHandlers['vanbandi-detail'] = () => initDocumentDetailPage();
+  pageHandlers['vanbanden-detail'] = () => initDocumentDetailPage();
+
+  function initDocumentDetailPage() {
+    const docId = getQueryParam('id');
+    if (!docId) return;
+
+    const api = window.ApiClient;
+    const docApi = api?.documents;
+    if (!docApi) {
+      console.warn('[lanhdao] ApiClient.documents is not ready.');
+      return;
+    }
+
+    const buttons = document.querySelectorAll('[data-doc-action]');
+    if (!buttons.length) return;
+
+    const actionMap = {
+      submit: {
+        method: docApi.submit,
+        success: 'Document submitted for approval.',
+        payload: () => ({ comment: 'Submitted from leadership view.' }),
+      },
+      approve: { method: docApi.approve, success: 'Document approved.' },
+      sign: { method: docApi.sign, success: 'Document signed.' },
+      publish: {
+        method: docApi.publish,
+        success: 'Document published.',
+        payload: buildPublishPayload,
+      },
+      recall: {
+        method: docApi.recall,
+        success: 'Document recalled for revision.',
+        payload: () => ({ comment: 'Request to rework document.' }),
+      },
+    };
+
+    buttons.forEach((button) => {
+      const action = button.dataset.docAction;
+      const config = actionMap[action];
+      if (!config) return;
+      button.addEventListener('click', async () => {
+        if (button.disabled) return;
+        button.disabled = true;
+        try {
+          const payload = typeof config.payload === 'function' ? config.payload() : config.payload;
+          await config.method(docId, payload);
+          showDetailToast(config.success, 'success');
+        } catch (error) {
+          showDetailToast(resolveDetailError(error), 'error');
+        } finally {
+          button.disabled = false;
+        }
+      });
+    });
+  }
+
+  function getQueryParam(name) {
+    try {
+      const params = new URLSearchParams(window.location.search);
+      return params.get(name);
+    } catch (error) {
+      return null;
+    }
+  }
+
+  function buildPublishPayload() {
+    return {
+      prefix: 'UBND',
+      postfix: '/VP',
+      year: new Date().getFullYear(),
+    };
+  }
+
+  function resolveDetailError(error) {
+    const helpers = window.DocHelpers;
+    if (helpers?.resolveErrorMessage) {
+      return helpers.resolveErrorMessage(error);
+    }
+    if (!error) {
+      return 'Unable to perform the operation.';
+    }
+    if (error.data) {
+      if (typeof error.data === 'string') return error.data;
+      if (error.data.detail) return String(error.data.detail);
+    }
+    if (error.message) return String(error.message);
+    return 'Unable to perform the operation.';
+  }
+
+  function showDetailToast(message, type = 'info') {
+    const toastEl = document.getElementById('toast');
+    if (!toastEl) {
+      console.log(message);
+      return;
+    }
+    toastEl.textContent = message;
+    toastEl.classList.remove('toast--show', 'toast--error', 'toast--success', 'toast--warn');
+    if (type === 'error') toastEl.classList.add('toast--error');
+    else if (type === 'success') toastEl.classList.add('toast--success');
+    else if (type === 'warn') toastEl.classList.add('toast--warn');
+    toastEl.classList.add('toast--show');
+    setTimeout(() => toastEl.classList.remove('toast--show'), 2200);
+  }
 
 })();
 

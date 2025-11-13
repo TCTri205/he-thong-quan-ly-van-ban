@@ -516,92 +516,297 @@
   };
 
   pageHandlers['hosocongviec'] = function () {
-    const qs = (s, r = document) => r.querySelector(s);
-            const qsa = (s, r = document) => Array.from(r.querySelectorAll(s));
+    const api = window.ApiClient;
+    if (!api) {
+      console.warn("[vanthu] ApiClient không sẵn sàng; bỏ qua hồ sơ công việc.");
+      return;
+    }
 
-            // Sidebar (mobile)
-            qs("#btn-sidebar")?.addEventListener("click", () => {
-              qs("#sidebar")?.classList.toggle("hidden");
-            });
+    const listContainer = document.getElementById("caseList");
+    const txtSearch = document.getElementById("txtSearch");
+    const selStatus = document.getElementById("selStatus");
+    const selCategory = document.getElementById("selCategory");
+    const kpiTotal = document.getElementById("kpi-total");
+    const kpiCollect = document.getElementById("kpi-collect");
+    const kpiDone = document.getElementById("kpi-done");
+    const kpiDocs = document.getElementById("kpi-docs");
+    const exportBtn = document.getElementById("btnExport");
+    const createBtn = document.getElementById("btnCreate");
+    const toast = document.getElementById("toast");
 
-            // Toast helper
-            function showToast(msg) {
-              const t = qs("#toast");
-              if (!t) return;
-              t.textContent = msg;
-              t.classList.add("show");
-              setTimeout(() => t.classList.remove("show"), 1800);
-            }
+    if (!listContainer) {
+      return;
+    }
 
-            // Normalize for search
-            const normalize = (s) =>
-              (s || "")
-                .toLowerCase()
-                .normalize("NFD")
-                .replace(/[\u0300-\u036f]/g, "");
+    const state = { keyword: "", status: "", category: "" };
+    let cases = [];
 
-            // KPIs compute
-            function computeKPIs() {
-              const items = qsa("#caseList > li");
-              let total = 0,
-                collect = 0,
-                done = 0,
-                docs = 0;
-              items.forEach((li) => {
-                if (li.style.display === "none") return; // tính theo danh sách sau lọc
-                total++;
-                const st = li.getAttribute("data-status");
-                const d = Number(li.getAttribute("data-docs") || 0);
-                docs += isNaN(d) ? 0 : d;
-                if (st === "collecting") collect++;
-                if (st === "done") done++;
-              });
-              qs("#kpi-total").textContent = String(total);
-              qs("#kpi-collect").textContent = String(collect);
-              qs("#kpi-done").textContent = String(done);
-              qs("#kpi-docs").textContent = String(docs);
-            }
+    const layout = window.Layout || {};
+    const ready =
+      layout.authPromise && typeof layout.authPromise.then === "function"
+        ? layout.authPromise
+        : Promise.resolve();
 
-            // Filters
-            const txtSearch = qs("#txtSearch");
-            const globalSearch = qs("#global-search");
-            const selStatus = qs("#selStatus");
-            const selCategory = qs("#selCategory");
+    ready
+      .then(loadCases)
+      .catch(() => renderMessage("Không thể xác thực người dùng hiện tại."));
 
-            function applyFilters() {
-              const kw = normalize(
-                (txtSearch?.value || globalSearch?.value || "").trim()
-              );
-              const st = selStatus?.value || "";
-              const cat = selCategory?.value || "";
-              const items = qsa("#caseList > li");
-              items.forEach((li) => {
-                const stOK = !st || li.getAttribute("data-status") === st;
-                const catOK = !cat || li.getAttribute("data-category") === cat;
-                const key = normalize(
-                  li.getAttribute("data-key") || li.textContent
-                );
-                const kwOK = !kw || key.includes(kw);
-                li.style.display = stOK && catOK && kwOK ? "" : "none";
-              });
-              computeKPIs();
-            }
+    function loadCases() {
+      renderMessage("Đang tải hồ sơ công việc...");
+      return api
+        .cases.list({ ordering: "-created_at", page_size: 50 })
+        .then((response) => {
+          const items = Array.isArray(response)
+            ? response
+            : api.extractItems
+            ? api.extractItems(response) || []
+            : [];
+          cases = Array.isArray(items) ? items : [];
+          applyFilters();
+        })
+        .catch((error) => {
+          console.error("[vanthu] lỗi tải hồ sơ công việc:", error);
+          renderMessage("Không thể tải dữ liệu hồ sơ công việc.");
+        });
+    }
 
-            txtSearch?.addEventListener("input", applyFilters);
-            globalSearch?.addEventListener("input", applyFilters);
-            selStatus?.addEventListener("change", applyFilters);
-            selCategory?.addEventListener("change", applyFilters);
+    function applyFilters() {
+      const keyword = normalizeText(state.keyword);
+      const filtered = cases.filter((item) => {
+        if (!item) return false;
+        const statusKey = mapStatus(item.status?.case_status_name);
+        const categoryKey = mapCategory(item.case_type?.case_type_name);
+        const matchesStatus = !state.status || state.status === statusKey;
+        const matchesCategory = !state.category || state.category === categoryKey;
+        const haystack = normalizeText(
+          [
+            item.case_code,
+            item.title,
+            item.status?.case_status_name,
+            item.department?.name,
+            item.leader?.full_name,
+          ]
+            .filter(Boolean)
+            .join(" ")
+        );
+        const matchesKeyword = !keyword || haystack.includes(keyword);
+        return matchesStatus && matchesCategory && matchesKeyword;
+      });
+      renderList(filtered);
+      updateKPIs(filtered);
+    }
 
-            // Export / Create
-            qs("#btnExport")?.addEventListener("click", () => {
-              showToast("Đã xuất danh sách (demo). Kết nối API để tải file.");
-            });
-            qs("#btnCreate")?.addEventListener("click", () => {
-              showToast("Tạo hồ sơ mới (demo). Kết nối biểu mẫu tạo hồ sơ.");
-            });
+    function renderList(list) {
+      if (!listContainer) return;
+      if (!list.length) {
+        renderEmpty();
+        return;
+      }
+      listContainer.innerHTML = "";
+      const fragment = document.createDocumentFragment();
+      list.forEach((item) => fragment.appendChild(createCaseItem(item)));
+      listContainer.appendChild(fragment);
+      updateSummary(list.length);
+    }
 
-            // Init
-            applyFilters();
+    function renderEmpty() {
+      listContainer.innerHTML =
+        '<li class="px-4 py-8 text-center text-sm text-slate-500">Không có hồ sơ nào phù hợp.</li>';
+      updateSummary(0);
+    }
+
+    function renderMessage(message) {
+      if (!listContainer) return;
+      listContainer.innerHTML = `<li class="px-4 py-8 text-center text-sm text-slate-500">${escapeHtml(
+        message
+      )}</li>`;
+      updateSummary(0);
+    }
+
+    function updateSummary(count) {
+      if (kpiTotal) {
+        kpiTotal.textContent = String(count || 0);
+      }
+    }
+
+    function updateKPIs(list) {
+      const filtered = Array.isArray(list) ? list : cases;
+      const counts = filtered.reduce(
+        (acc, item) => {
+          const statusKey = mapStatus(item.status?.case_status_name);
+          if (statusKey === "collecting") acc.collecting += 1;
+          if (statusKey === "done") acc.done += 1;
+          acc.docs += item.case_documents?.length || 0;
+          return acc;
+        },
+        { collecting: 0, done: 0, docs: 0 }
+      );
+      if (kpiCollect) kpiCollect.textContent = String(counts.collecting);
+      if (kpiDone) kpiDone.textContent = String(counts.done);
+      if (kpiDocs) kpiDocs.textContent = String(counts.docs);
+    }
+
+    function createCaseItem(item) {
+      const li = document.createElement("li");
+      li.className =
+        "bg-white border border-slate-200 rounded-xl p-4 space-y-3 shadow-sm";
+      const statusLabel = item.status?.case_status_name || "Đang xử lý";
+      const statusKey = mapStatus(statusLabel);
+      const categoryKey = mapCategory(item.case_type?.case_type_name);
+      li.dataset.status = statusKey;
+      li.dataset.category = categoryKey;
+      li.dataset.key = normalizeText(
+        [
+          item.case_code,
+          item.title,
+          statusLabel,
+          item.department?.name,
+        ]
+          .filter(Boolean)
+          .join(" ")
+      );
+      const priorityLabel = item.priority || "Trung bình";
+      const dueDate = formatDate(item.due_date);
+      const leader = item.leader?.full_name || item.leader?.username || "Chưa rõ";
+      const department = item.department?.name || "Chưa có";
+      const code = item.case_code || `HS-${item.case_id}`;
+      const summary = item.description || item.goal || "";
+      const statusBadge =
+        statusKey === "done"
+          ? '<span class="chip chip--green">Hoàn tất</span>'
+          : `<span class="chip chip--blue">${escapeHtml(statusLabel)}</span>`;
+      const priorityBadge = `<span class="text-[12px] text-slate-600 font-semibold">${escapeHtml(
+        priorityLabel
+      )}</span>`;
+      li.innerHTML = [
+        '<div class="flex items-center justify-between gap-2">',
+        '  <div class="min-w-0">',
+        `    <h4 class="text-[15px] font-semibold text-slate-800 truncate">${escapeHtml(
+          item.title || "Hồ sơ công việc"
+        )}</h4>`,
+        "  </div>",
+        '  <div class="flex items-center gap-2">',
+        `    ${statusBadge}`,
+        `    ${priorityBadge}`,
+        "  </div>",
+        "</div>",
+        '<div class="text-[12px] text-slate-500 flex flex-wrap gap-3">',
+        `  <span>HS: ${escapeHtml(code)}</span>`,
+        `  <span>Phòng: ${escapeHtml(department)}</span>`,
+        `  <span>Chủ trì: ${escapeHtml(leader)}</span>`,
+        dueDate ? `  <span>Hạn: ${escapeHtml(dueDate)}</span>` : "",
+        "</div>",
+        `<p class="text-[13px] text-slate-600 line-clamp-2">${escapeHtml(
+          summary
+        )}</p>`,
+        '<div class="flex items-center justify-end gap-2">',
+        `  <a href="hosocongviec-detail.html?id=${encodeURIComponent(
+          item.case_id
+        )}" class="text-blue-600 text-sm font-medium hover:underline">Chi tiết</a>`,
+        "</div>",
+      ]
+        .filter(Boolean)
+        .join("");
+      return li;
+    }
+
+    function registerFilters() {
+      const debounced = debounce(applyFilters, 150);
+      if (txtSearch) {
+        txtSearch.addEventListener("input", (event) => {
+          state.keyword = event.target.value || "";
+          debounced();
+        });
+      }
+      if (selStatus) {
+        selStatus.addEventListener("change", (event) => {
+          state.status = event.target.value;
+          applyFilters();
+        });
+      }
+      if (selCategory) {
+        selCategory.addEventListener("change", (event) => {
+          state.category = normalizeText(event.target.value);
+          applyFilters();
+        });
+      }
+    }
+
+    if (exportBtn) {
+      exportBtn.addEventListener("click", () =>
+        showToast("Chức năng xuất đang trong quá trình triển khai.")
+      );
+    }
+    if (createBtn) {
+      createBtn.addEventListener("click", () =>
+        showToast("Chức năng tạo hồ sơ mới sẽ mở form thực tế.")
+      );
+    }
+
+    function showToast(message) {
+      if (!toast) {
+        console.log(message);
+        return;
+      }
+      toast.textContent = message;
+      toast.classList.add("show");
+      setTimeout(() => toast.classList.remove("show"), 1800);
+    }
+
+    function normalizeText(value) {
+      return (value || "")
+        .toString()
+        .toLowerCase()
+        .normalize("NFD")
+        .replace(/[̀-ͯ]/g, "")
+        .trim();
+    }
+
+    function escapeHtml(value) {
+      return (value || "")
+        .toString()
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&#39;");
+    }
+
+    function formatDate(value) {
+      if (!value) return "";
+      const date = new Date(value);
+      if (Number.isNaN(date.getTime())) {
+        return value.slice(0, 10);
+      }
+      return date.toISOString().slice(0, 10);
+    }
+
+    function mapStatus(raw) {
+      const norm = normalizeText(raw);
+      if (/hoan|done|completed/.test(norm)) return "done";
+      if (/cho|waiting|pending/.test(norm)) return "collecting";
+      return "collecting";
+    }
+
+    function mapCategory(raw) {
+      const norm = normalizeText(raw);
+      if (!norm) return "";
+      if (norm.includes("kehoach")) return "kehoach";
+      if (norm.includes("quanly")) return "quanly";
+      if (norm.includes("hanhchinh")) return "hanhchinh";
+      if (norm.includes("taichinh")) return "taichinh";
+      return norm;
+    }
+
+    function debounce(fn, delay) {
+      let timer;
+      return (...args) => {
+        clearTimeout(timer);
+        timer = setTimeout(() => fn(...args), delay);
+      };
+    }
+
+    registerFilters();
   };
 
   pageHandlers['hosocongviec-detail'] = function () {
@@ -612,11 +817,31 @@
     }
 
     const body = document.body;
-    const caseId = body?.dataset?.caseId;
+    const queryId = new URLSearchParams(window.location.search).get("id");
+    const caseId = body?.dataset?.caseId || queryId;
     if (!caseId) {
       console.warn("[vanthu] Thiếu case_id trong trang chi tiết hồ sơ.");
       return;
     }
+    if (!body?.dataset?.caseId) {
+      body.dataset.caseId = caseId;
+    }
+
+    const caseTitleEl = document.getElementById("case-title");
+    const caseDescriptionEl = document.getElementById("case-description");
+    const caseCodeEl = document.getElementById("case-code");
+    const caseStatusEl = document.getElementById("case-status");
+    const caseCreatedEl = document.getElementById("case-created");
+    const caseOwnerEl = document.getElementById("case-owner");
+    const caseDepartmentEl = document.getElementById("case-department");
+    const caseDueEl = document.getElementById("case-due");
+    const casePriorityEl = document.getElementById("case-priority");
+    const caseTasksList = document.getElementById("case-tasks-list");
+    const caseActivityList = document.getElementById("case-activity-list");
+    const caseProgressCompleted = document.getElementById("case-progress-completed");
+    const caseProgressOverdue = document.getElementById("case-progress-overdue");
+    const caseProgressDocs = document.getElementById("case-progress-docs");
+    const caseProgressPending = document.getElementById("case-progress-pending");
 
     const watchBtn = document.getElementById("btn-case-watch");
     const watchersList = document.getElementById("case-watchers-list");
@@ -737,11 +962,177 @@
       return "Không thể thực hiện thao tác.";
     }
 
+    async function loadCaseDetail() {
+      try {
+        const detail = await api.cases.retrieve(caseId);
+        renderCaseDetails(detail);
+        const [tasks, logs] = await Promise.all([
+          api.cases.tasks(caseId).catch(() => []),
+          api.cases.activityLogs(caseId).catch(() => []),
+        ]);
+        const taskList = Array.isArray(tasks) ? tasks : [];
+        renderCaseTasks(taskList);
+        updateProgressStats(taskList, detail);
+        renderCaseActivity(Array.isArray(logs) ? logs : []);
+      } catch (error) {
+        console.error("[vanthu] lỗi tải thông tin hồ sơ:", error);
+      }
+    }
+
+    function renderCaseDetails(detail) {
+      if (!detail) return;
+      if (caseTitleEl) caseTitleEl.textContent = detail.title || "Hồ sơ công việc";
+      if (caseDescriptionEl)
+        caseDescriptionEl.textContent =
+          detail.description || detail.goal || detail.instruction || "";
+      if (caseCodeEl)
+        caseCodeEl.textContent = detail.case_code || `HS-${detail.case_id}`;
+      if (caseStatusEl)
+        caseStatusEl.textContent =
+          detail.status?.case_status_name || "Chưa xác định";
+      if (caseCreatedEl) caseCreatedEl.textContent = formatDate(detail.created_at);
+      if (caseOwnerEl)
+        caseOwnerEl.textContent =
+          detail.owner?.full_name || detail.owner?.username || "Chưa rõ";
+      if (caseDepartmentEl)
+        caseDepartmentEl.textContent =
+          detail.department?.name || detail.department?.department_code || "";
+      if (caseDueEl) caseDueEl.textContent = formatDate(detail.due_date);
+      if (casePriorityEl) casePriorityEl.textContent = detail.priority || "Trung bình";
+      if (caseProgressDocs)
+        caseProgressDocs.textContent = String(getDocumentCount(detail));
+    }
+
+    function formatDate(value) {
+      if (!value) return "";
+      const date = new Date(value);
+      if (Number.isNaN(date.getTime())) {
+        return value.slice(0, 10);
+      }
+      return date.toISOString().slice(0, 10);
+    }
+
+    function renderCaseTasks(tasks) {
+      if (!caseTasksList) return;
+      if (!tasks.length) {
+        caseTasksList.innerHTML =
+          '<li class="text-[13px] text-slate-500">Chưa có nhiệm vụ liên quan.</li>';
+        return;
+      }
+      caseTasksList.innerHTML = tasks
+        .map((task) => {
+          const title = escapeHtml(task.title || "Nhiệm vụ");
+          const status = (task.status || task.status_name || "").toString();
+          const due = formatDate(task.due_at || task.due_date);
+          const assignee =
+            task.assignee?.full_name || task.assignee?.username || "Chưa rõ";
+          const badgeClass = status.toLowerCase().includes("done")
+            ? "chip chip--green"
+            : "chip chip--default";
+          return `<li class="rounded-lg border border-slate-100 p-3">
+            <div class="flex items-center justify-between gap-2">
+              <div>
+                <div class="font-medium text-slate-700">${title}</div>
+                <div class="text-[12px] text-slate-500">Phụ trách: ${escapeHtml(
+                  assignee
+                )} · Hạn: ${escapeHtml(due || "Chưa có")}</div>
+              </div>
+              <span class="${badgeClass}">${escapeHtml(status || "Chờ xử lý")}</span>
+            </div>
+          </li>`;
+        })
+        .join("");
+    }
+
+    function renderCaseActivity(logs) {
+      if (!caseActivityList) return;
+      if (!logs.length) {
+        caseActivityList.innerHTML =
+          '<li class="text-[13px] text-slate-500">Chưa có hoạt động nào.</li>';
+        return;
+      }
+      caseActivityList.innerHTML = logs
+        .map((log) => {
+          const actor =
+            log.actor?.full_name || log.actor?.username || "Hệ thống";
+          const time = formatDate(log.at || log.created_at);
+          const action = log.action || log.activity || "Hoạt động";
+          const note = log.note || log.meta || log.comment || "";
+          return `<li class="rounded-lg border border-slate-100 p-3">
+            <div class="flex items-center justify-between">
+              <span class="font-semibold text-slate-700">${time}</span>
+              <span class="text-[12px] text-slate-500">${escapeHtml(actor)}</span>
+            </div>
+            <div class="text-[13px] text-slate-600 mt-1">${escapeHtml(
+              action
+            )}</div>
+            ${
+              note
+                ? `<p class="mt-2 text-[12px] text-slate-500">${escapeHtml(
+                    note
+                  )}</p>`
+                : ""
+            }
+          </li>`;
+        })
+        .join("");
+    }
+
+    function updateProgressStats(tasks, detail) {
+      const list = Array.isArray(tasks) ? tasks : [];
+      const total = list.length;
+      const completed = list.filter((task) =>
+        (task.status || task.status_name || "")
+          .toString()
+          .toLowerCase()
+          .includes("done")
+      ).length;
+      const pending = list.filter((task) => {
+        const status = (task.status || task.status_name || "")
+          .toString()
+          .toLowerCase();
+        return (
+          status.includes("pending") ||
+          status.includes("open") ||
+          (status && !status.includes("done"))
+        );
+      }).length;
+      const overdue = list.filter((task) => {
+        const due = new Date(task.due_at || task.due_date || task.deadline);
+        return (
+          due instanceof Date &&
+          !Number.isNaN(due.getTime()) &&
+          Date.now() > due.getTime() &&
+          !(
+            (task.status || task.status_name || "")
+              .toString()
+              .toLowerCase()
+              .includes("done")
+          )
+        );
+      }).length;
+      if (caseProgressCompleted)
+        caseProgressCompleted.textContent = `${completed} / ${total}`;
+      if (caseProgressPending) caseProgressPending.textContent = String(pending);
+      if (caseProgressOverdue) caseProgressOverdue.textContent = String(overdue);
+      if (caseProgressDocs) caseProgressDocs.textContent = String(getDocumentCount(detail));
+    }
+
+    function getDocumentCount(detail) {
+      if (!detail) return 0;
+      if (Array.isArray(detail.documents)) return detail.documents.length;
+      if (Array.isArray(detail.case_documents)) return detail.case_documents.length;
+      if (typeof detail.case_documents_count === "number")
+        return detail.case_documents_count;
+      return 0;
+    }
+
     if (watchBtn) {
       watchBtn.addEventListener("click", toggleWatch);
     }
 
     refreshWatchers();
+    loadCaseDetail();
   };
 
   pageHandlers['taikhoan'] = function () {

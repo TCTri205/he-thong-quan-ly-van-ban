@@ -380,6 +380,8 @@
 
     searchInput?.addEventListener("input", AdminRuntime.debounce(applySearch, 160));
     showTab(activeTab);
+    loadRegisterBooks();
+    loadNumberingSummary();
   }
 
   /* --------------------------- Cấu hình nâng cao --------------------------- */
@@ -413,6 +415,103 @@
     $$('[data-sync-config]').forEach((btn) =>
       btn.addEventListener("click", () => AdminRuntime.toast("Đã lưu cấu hình, sẽ sync với server sau."))
     );
+  }
+
+  const REGISTER_RESET_LABELS = {
+    yearly: 'Hằng năm',
+    quarterly: 'Theo quý',
+    monthly: 'Hằng tháng',
+    never: 'Không reset',
+  };
+
+  async function loadRegisterBooks() {
+    const body = document.getElementById('qt-register-body');
+    const totalEl = document.getElementById('qt-register-total');
+    if (!body) return;
+    const api = window.ApiClient;
+    if (!api?.registerBooks) {
+      body.innerHTML =
+        '<tr><td colspan="7" class="px-4 py-6 text-center text-slate-400 text-sm">Register book API not available.</td></tr>';
+      if (totalEl) totalEl.textContent = '0';
+      return;
+    }
+    body.innerHTML =
+      '<tr><td colspan="7" class="px-4 py-6 text-center text-slate-400 text-sm">Đang tải dữ liệu sổ đăng ký...</td></tr>';
+    try {
+      const response = await api.registerBooks.list({ page_size: 32 });
+      const books = api.extractItems(response);
+      if (!books.length) {
+        body.innerHTML =
+          '<tr><td colspan="7" class="px-4 py-6 text-center text-slate-400 text-sm">Chưa có sổ đăng ký nào.</td></tr>';
+        if (totalEl) totalEl.textContent = '0';
+        return;
+      }
+      body.innerHTML = books
+        .map((book) => {
+          const direction =
+            book.direction === 'di' ? 'Văn bản đi' : book.direction === 'den' ? 'Văn bản đến' : 'Khác';
+          const reset = REGISTER_RESET_LABELS[book.reset_policy] || book.reset_policy || '—';
+          const status = book.is_active ? 'Hoạt động' : 'Đã khóa';
+          return `<tr class="hover:bg-slate-50/60">
+            <td class="px-4 py-3 font-mono text-[12px] text-slate-600">${book.prefix || '—'}</td>
+            <td class="px-4 py-3">${book.name || '—'}</td>
+            <td class="px-4 py-3">${direction}</td>
+            <td class="px-4 py-3">${book.year || '—'}</td>
+            <td class="px-4 py-3">${book.next_sequence ?? '—'}</td>
+            <td class="px-4 py-3">${reset}</td>
+            <td class="px-4 py-3">
+              <span class="inline-flex items-center rounded-full border px-2 py-0.5 text-[12px] ${
+                book.is_active ? 'border-slate-300 text-slate-700' : 'border-rose-200 text-rose-600'
+              }">${status}</span>
+            </td>
+          </tr>`;
+        })
+        .join('');
+      if (totalEl) totalEl.textContent = String(books.length);
+    } catch (error) {
+      body.innerHTML = `<tr><td colspan="7" class="px-4 py-6 text-center text-rose-500 text-sm">${resolveApiError(
+        error
+      )}</td></tr>`;
+      if (totalEl) totalEl.textContent = '0';
+    }
+  }
+
+  async function loadNumberingSummary() {
+    const countEl = document.getElementById('qt-numbering-count');
+    const activeEl = document.getElementById('qt-numbering-active');
+    const api = window.ApiClient;
+    if (!api?.numberingRules) {
+      if (countEl) countEl.textContent = '—';
+      if (activeEl) activeEl.textContent = '—';
+      return;
+    }
+    try {
+      const response = await api.numberingRules.list({ page_size: 64 });
+      const rules = api.extractItems(response);
+      if (countEl) countEl.textContent = String(rules.length);
+      if (activeEl) {
+        const activeCount = rules.filter((rule) => rule.is_active).length;
+        activeEl.textContent = String(activeCount);
+      }
+    } catch (error) {
+      if (countEl) countEl.textContent = '—';
+      if (activeEl) activeEl.textContent = '—';
+      console.error('[quantri] loadNumberingSummary', error);
+    }
+  }
+
+  function resolveApiError(error) {
+    const helpers = window.DocHelpers;
+    if (helpers?.resolveErrorMessage) {
+      return helpers.resolveErrorMessage(error);
+    }
+    if (!error) return 'Không thể tải dữ liệu.';
+    if (error.data) {
+      if (typeof error.data === 'string') return error.data;
+      if (error.data.detail) return String(error.data.detail);
+    }
+    if (error.message) return String(error.message);
+    return 'Không thể tải dữ liệu.';
   }
 
   function createConfigPanel(options) {
@@ -478,65 +577,210 @@
   }
 
   /* --------------------------- Báo cáo - thống kê --------------------------- */
-  function initThongKe() {
+    async function initThongKe() {
     animateDashboardMetrics();
     const filterBtn = $("#btnFilter");
-    filterBtn?.addEventListener("click", () => AdminRuntime.toast("Đã áp dụng bộ lọc, biểu đồ sẽ cập nhật."));
+    filterBtn?.addEventListener("click", () => AdminRuntime.toast("Applying filters, charts will refresh."));
     ["#btnExcel", "#btnPdf"].forEach((selector) => {
-      $(selector)?.addEventListener("click", () => AdminRuntime.toast("Đang chuẩn bị dữ liệu tải xuống."));
+      $(selector)?.addEventListener("click", () => AdminRuntime.toast("Export is being prepared."));
     });
-    drawPlaceholderCharts();
+    await updateReportCharts();
+  }
+  function renderReportCharts(data = {}) {
+    const lineData = data.accessLine || data.line || [];
+    const weekBars = data.weekBars || data.bar || [];
+    const priorityBars = data.priorityBars || [];
+    const dayLine = data.dayLine || [];
+    const perfBars = data.perfBars || [];
+    const otherLine = data.accessLine2 || lineData;
+    const weekBars2 = data.weekBars2 || weekBars;
+
+    renderLineCanvas('chAccessDay', lineData);
+    renderBarCanvas('chWeekBars', weekBars);
+    renderBarCanvas('chPriority', priorityBars, ['#2563eb', '#0f172a', '#38bdf8']);
+    renderLineCanvas('chDayLine', dayLine, '#0f172a');
+    renderBarCanvas('chPerfDept', perfBars, ['#10b981', '#f97316']);
+    renderLineCanvas('chAccessDay2', otherLine, '#a855f7');
+    renderBarCanvas('chWeekBars2', weekBars2, ['#6d28d9', '#0ea5e9']);
   }
 
-  function drawPlaceholderCharts() {
-    const paintLine = (canvas) => {
-      if (!canvas?.getContext) return;
-      const ctx = canvas.getContext("2d");
-      const width = canvas.width || canvas.clientWidth || 320;
-      const height = canvas.height || canvas.clientHeight || 120;
-      canvas.width = width;
-      canvas.height = height;
-      ctx.clearRect(0, 0, width, height);
-      ctx.strokeStyle = "#2563eb";
-      ctx.lineWidth = 2;
-      ctx.beginPath();
-      const points = Array.from({ length: 10 }, (_, i) => [
-        (i / 9) * width,
-        height - Math.random() * height * 0.8 - height * 0.1,
-      ]);
-      points.forEach(([x, y], index) => {
-        if (index === 0) ctx.moveTo(x, y);
-        else ctx.lineTo(x, y);
+  function updateReportCharts() {
+    const api = window.ApiClient;
+    if (!api) {
+      renderReportCharts();
+      return Promise.resolve();
+    }
+    return Promise.all([
+      api.documents.list({ ordering: '-created_at', page_size: 52 }),
+      api.cases.list({ ordering: '-created_at', page_size: 32 }),
+    ])
+      .then(([docResp, caseResp]) => {
+        const docs = api.extractItems(docResp);
+        const cases = api.extractItems(caseResp);
+        const docMeta = api.extractPageMeta(docResp);
+        const caseMeta = api.extractPageMeta(caseResp);
+        updateTopCards(docMeta, docs, caseMeta, cases);
+        renderReportCharts({
+          accessLine: buildDayCounts(docs, 8),
+          weekBars: buildDayCounts(docs, 6),
+          priorityBars: buildPriorityCounts(docs),
+          dayLine: buildDayCounts(docs, 7),
+          perfBars: buildCaseStatusCounts(cases),
+          accessLine2: buildDayCounts(docs, 5),
+          weekBars2: buildDayCounts(docs, 4),
+        });
+      })
+      .catch((error) => {
+        console.error('[quantri] updateReportCharts failed', error);
+        renderReportCharts();
       });
-      ctx.stroke();
-    };
+  }
 
-    const paintBars = (canvas) => {
-      if (!canvas?.getContext) return;
-      const ctx = canvas.getContext("2d");
-      const width = canvas.width || canvas.clientWidth || 320;
-      const height = canvas.height || canvas.clientHeight || 120;
-      canvas.width = width;
-      canvas.height = height;
-      ctx.clearRect(0, 0, width, height);
-      const bars = 8;
-      const gap = 8;
-      const barWidth = (width - (bars + 1) * gap) / bars;
-      for (let i = 0; i < bars; i++) {
-        const barHeight = Math.random() * height * 0.8;
-        ctx.fillStyle = i % 2 ? "#0f172a" : "#38bdf8";
-        ctx.fillRect(gap + i * (barWidth + gap), height - barHeight, barWidth, barHeight);
-      }
-    };
-
-    $$('canvas[id^="ch"]').forEach((canvas, index) => {
-      if (index % 2 === 0) paintLine(canvas);
-      else paintBars(canvas);
+  function updateTopCards(docMeta, docs, caseMeta, cases) {
+    const container = document.querySelector('section.grid.grid-cols-1.md\:grid-cols-4');
+    if (!container) return;
+    const cards = Array.from(container.querySelectorAll('article'));
+    const stats = buildTopStats(docMeta, docs, caseMeta, cases);
+    cards.forEach((card, index) => {
+      const valueEl = card.querySelector('.text-2xl.font-bold');
+      const textEl = card.querySelector('p');
+      if (valueEl && stats[index]) valueEl.textContent = stats[index].value;
+      if (textEl && stats[index]) textEl.textContent = stats[index].text;
     });
   }
 
-  /* --------------------------- Tài khoản --------------------------- */
-  function initTaiKhoan() {
+  function buildTopStats(docMeta, docs, caseMeta, cases) {
+    const totalDocs = docMeta?.totalItems ?? docs.length;
+    const totalCases = caseMeta?.totalItems ?? cases.length;
+    const finishedDocs = docs.filter(isDocFinished).length;
+    const inProgressCount = Math.max(0, docs.length - finishedDocs);
+    const processingRate = docs.length ? Math.round((inProgressCount / docs.length) * 100) : 0;
+    const overdueCount = computeOverdueCases(cases);
+    const overduePercent = cases.length ? Math.round((overdueCount / cases.length) * 100) : 0;
+    return [
+      { value: totalDocs.toLocaleString('vi-VN'), text: 'Live API data' },
+      { value: `${totalCases.toLocaleString('vi-VN')}`, text: `${cases.length} recent cases` },
+      { value: `${processingRate}%`, text: `${inProgressCount}/${docs.length || 1} processing` },
+      { value: `${overduePercent}%`, text: `${overdueCount}/${cases.length || 1} overdue` },
+    ];
+  }
+
+  function isDocFinished(doc) {
+    const status = (doc.status?.code || doc.status?.name || doc.status || '').toString().toLowerCase();
+    return ['done', 'completed', 'published', 'archived', 'closed'].some((value) => status.includes(value));
+  }
+
+  function computeOverdueCases(cases) {
+    const now = Date.now();
+    return cases.reduce((count, item) => {
+      const raw = item.due_date || item.dueDate || item.due || item.deadline || item.deadline_at;
+      if (!raw) return count;
+      const date = new Date(raw);
+      if (Number.isNaN(date.getTime())) return count;
+      const status = (item.status?.code || item.status?.name || '').toString().toLowerCase();
+      if (['done', 'completed', 'closed'].some((value) => status.includes(value))) return count;
+      if (date.getTime() < now) return count + 1;
+      return count;
+    }, 0);
+  }
+
+  function buildDayCounts(items, days = 7) {
+    const now = new Date();
+    const buckets = [];
+    const indexByKey = {};
+    for (let i = days - 1; i >= 0; i -= 1) {
+      const date = new Date(now);
+      date.setDate(now.getDate() - i);
+      const key = date.toISOString().slice(0, 10);
+      indexByKey[key] = buckets.length;
+      buckets.push(0);
+    }
+    items.forEach((item) => {
+      const raw = item.created_at || item.createdAt || item.published_date || item.updated_at;
+      if (!raw) return;
+      const date = new Date(raw);
+      if (Number.isNaN(date.getTime())) return;
+      const key = date.toISOString().slice(0, 10);
+      if (key in indexByKey) buckets[indexByKey[key]] += 1;
+    });
+    return buckets;
+  }
+
+  function buildPriorityCounts(docs) {
+    const buckets = { urgent: 0, high: 0, normal: 0, other: 0 };
+    docs.forEach((doc) => {
+      const key = (doc.urgencyKey || doc.urgency?.name || '').toString().toLowerCase();
+      if (key.includes('ratkhan') || key.includes('urgent')) buckets.urgent += 1;
+      else if (key.includes('khan') || key.includes('high')) buckets.high += 1;
+      else if (key.includes('cao')) buckets.normal += 1;
+      else buckets.other += 1;
+    });
+    return [buckets.urgent, buckets.high, buckets.normal, buckets.other];
+  }
+
+  function buildCaseStatusCounts(cases) {
+    const buckets = { open: 0, processing: 0, pending: 0, done: 0 };
+    cases.forEach((item) => {
+      const status = (item.status?.code || item.status?.name || '').toString().toLowerCase();
+      if (status.includes('processing') || status.includes('handling')) buckets.processing += 1;
+      else if (status.includes('pending')) buckets.pending += 1;
+      else if (status.includes('done') || status.includes('completed')) buckets.done += 1;
+      else buckets.open += 1;
+    });
+    return [buckets.open, buckets.processing, buckets.pending, buckets.done];
+  }
+
+  function renderLineCanvas(id, values, color = '#2563eb') {
+    const canvas = document.getElementById(id);
+    if (!canvas?.getContext) return;
+    const ctx = canvas.getContext('2d');
+    const width = canvas.width || canvas.clientWidth || 320;
+    const height = canvas.height || canvas.clientHeight || 120;
+    canvas.width = width;
+    canvas.height = height;
+    ctx.clearRect(0, 0, width, height);
+    if (!values.length) {
+      ctx.fillStyle = '#e5e7eb';
+      ctx.fillRect(0, 0, width, height);
+      return;
+    }
+    const max = Math.max(...values, 1);
+    ctx.strokeStyle = color;
+    ctx.lineWidth = 2;
+    ctx.beginPath();
+    values.forEach((value, index) => {
+      const x = (index / (values.length - 1 || 1)) * width;
+      const y = height - (value / max) * height;
+      if (index === 0) ctx.moveTo(x, y);
+      else ctx.lineTo(x, y);
+    });
+    ctx.stroke();
+  }
+
+  function renderBarCanvas(id, values, palette = ['#2563eb', '#0f172a']) {
+    const canvas = document.getElementById(id);
+    if (!canvas?.getContext) return;
+    const ctx = canvas.getContext('2d');
+    const width = canvas.width || canvas.clientWidth || 320;
+    const height = canvas.height || canvas.clientHeight || 120;
+    canvas.width = width;
+    canvas.height = height;
+    ctx.clearRect(0, 0, width, height);
+    if (!values.length) {
+      ctx.fillStyle = '#e5e7eb';
+      ctx.fillRect(0, 0, width, height);
+      return;
+    }
+    const max = Math.max(...values, 1);
+    const gap = 8;
+    const barWidth = (width - (values.length + 1) * gap) / values.length;
+    values.forEach((value, index) => {
+      const barHeight = (value / max) * height;
+      ctx.fillStyle = palette[index % palette.length] || palette[0];
+      ctx.fillRect(gap + index * (barWidth + gap), height - barHeight, barWidth, barHeight || 2);
+    });
+  }
+function initTaiKhoan() {
     const modalChange = initModal("#modalChangePass");
     const modalLogout = initModal("#modalLogout");
     $("#btnChangePass")?.addEventListener("click", () => modalChange.open());

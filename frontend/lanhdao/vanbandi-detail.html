@@ -42,16 +42,19 @@
               </div>
               <div class="flex items-center gap-2">
                 <button
+                  data-doc-action="submit"
                   class="h-9 rounded-md bg-blue-600 px-3 text-sm font-medium text-white hover:bg-blue-700 shadow-sm"
                 >
                   Trình ký
                 </button>
                 <button
+                  data-doc-action="sign"
                   class="h-9 rounded-md border border-slate-200 px-3 text-sm font-medium text-slate-700 hover:bg-slate-50"
                 >
                   Ký số
                 </button>
                 <button
+                  data-doc-action="publish"
                   class="h-9 rounded-md border border-slate-200 px-3 text-sm font-medium text-slate-700 hover:bg-slate-50"
                 >
                   Phát hành
@@ -574,5 +577,10 @@
 
     <!-- ================= FOOTER ================= -->
     <div data-include="footer"></div>
+
+    <script src="../assets/js/api.js"></script>
+    <script src="../assets/js/doc-helpers.js"></script>
+    <script src="../assets/js/layout.js"></script>
+    <script src="../assets/js/lanhdao.js"></script>
   </body>
 </html>

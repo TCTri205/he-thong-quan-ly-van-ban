@@ -424,6 +424,60 @@
               </div>
             </section>
 
+            <!-- Register & numbering summary -->
+            <section class="mt-4 grid grid-cols-1 lg:grid-cols-[2fr,1fr] gap-4">
+              <article class="bg-white border border-slate-200 rounded-xl p-5">
+                <h3 class="text-[15px] font-semibold text-slate-900">Quy tắc đánh số</h3>
+                <p class="text-xs text-slate-500">Văn thư và quản trị đồng bộ quy tắc từ API.</p>
+                <div class="mt-4 flex items-end justify-between">
+                  <div>
+                    <div class="text-3xl font-bold" id="qt-numbering-count">-</div>
+                    <div class="text-[13px] text-slate-600">Quy tắc hiện có</div>
+                  </div>
+                  <div class="text-right text-sm text-slate-500">
+                    Hoạt động: <span id="qt-numbering-active">-</span>
+                  </div>
+                </div>
+              </article>
+              <article class="bg-white border border-slate-200 rounded-xl p-5">
+                <h3 class="text-[15px] font-semibold text-slate-900">Sổ đăng ký</h3>
+                <p class="text-xs text-slate-500">Số lượng sổ quản lý</p>
+                <div class="mt-4">
+                  <div class="text-3xl font-bold" id="qt-register-total">-</div>
+                  <div class="text-[13px] text-slate-600">Cập nhật theo API</div>
+                </div>
+              </article>
+            </section>
+
+            <section class="mt-4 bg-white border border-slate-200 rounded-xl p-5">
+              <div class="flex items-center justify-between mb-3">
+                <h3 class="text-[15px] font-semibold text-slate-800">Danh sách sổ đăng ký</h3>
+                <span class="text-[12px] text-slate-500">Dữ liệu mới nhất</span>
+              </div>
+              <div class="overflow-x-auto">
+                <table class="min-w-full text-[13px]">
+                  <thead class="bg-slate-50 text-slate-600 text-xs uppercase tracking-wide">
+                    <tr>
+                      <th class="px-4 py-3 text-left font-semibold">Mã</th>
+                      <th class="px-4 py-3 text-left font-semibold">Tên</th>
+                      <th class="px-4 py-3 text-left font-semibold">Hướng</th>
+                      <th class="px-4 py-3 text-left font-semibold">Năm</th>
+                      <th class="px-4 py-3 text-left font-semibold">Số tiếp</th>
+                      <th class="px-4 py-3 text-left font-semibold">Reset</th>
+                      <th class="px-4 py-3 text-left font-semibold">Trạng thái</th>
+                    </tr>
+                  </thead>
+                  <tbody id="qt-register-body" class="divide-y divide-slate-100">
+                    <tr>
+                      <td colspan="7" class="px-4 py-6 text-center text-slate-400 text-sm">
+                        Đang tải dữ liệu sổ đăng ký...
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </section>
+
             <!-- ========== TAB: LOẠI VĂN BẢN ========== -->
             <section
               id="tab-types"
@@ -2158,6 +2212,9 @@
     <div data-include="footer"></div>
 
     <!-- App script -->
+    <script src="../assets/js/api.js"></script>
+    <script src="../assets/js/doc-helpers.js"></script>
+    <script src="../assets/js/layout.js"></script>
     <script src="../assets/js/quantri.js" defer></script>
     
   </body>
