@@ -199,7 +199,7 @@
     const helpers = window.DocHelpers;
     if (!api || !helpers) {
       console.warn(
-        "[chuyenvien] ApiClient ho?c DocHelpers ch�a s?n s�ng; b? qua t?i v�n b?n �?n."
+        "[chuyenvien] ApiClient hoặc DocHelpers chưa sẵn sàng; bỏ qua tới văn bản đến."
       );
       return;
     }
@@ -263,7 +263,7 @@
     });
 
     advBtn?.addEventListener("click", () =>
-      showToast("B? l?c n�ng cao s? ��?c k�ch ho?t khi tri?n khai �?y �? API.")
+      showToast("Bộ lọc nâng cao sẽ được kích hoạt khi triển khai đầy đủ API.")
     );
 
     tableBody.addEventListener("click", (event) => {
@@ -289,11 +289,11 @@
 
     attachIconActions(tableBody, {
       getLabel(row) {
-        return row?.dataset?.docTitle || row?.dataset?.docId || "v�n b?n";
+        return row?.dataset?.docTitle || row?.dataset?.docId || "văn bản";
       },
       actionTexts: {
-        log: "Nh?t k? v�n b?n",
-        download: "T?i t?p",
+        log: "Nhật ký văn bản",
+        download: "Tải tệp",
       },
     });
 
@@ -305,7 +305,7 @@
 
     authReady
       .then(loadDocuments)
-      .catch(() => renderErrorRow("Kh�ng th? x�c th?c ng�?i d�ng hi?n t?i."));
+      .catch(() => renderErrorRow("Không thể xác thực người dùng hiện tại."));
 
     function registerSearch(input, key) {
       if (!input) return;
@@ -418,15 +418,15 @@
       const detailHref = `vanbanden-detail.html?id=${encodeURIComponent(
         tr.dataset.docId || ""
       )}`;
-      const attachmentText = doc.hasAttachments ? "C�" : "Kh�ng";
+      const attachmentText = doc.hasAttachments ? "Có" : "Không";
 
       tr.innerHTML = [
         '<td class="py-3 pl-6 pr-3">',
         `  <div class="font-medium text-slate-800 truncate">${helpers.escapeHtml(
-          doc.title || "V�n b?n"
+          doc.title || "Văn bản"
         )}</div>`,
         doc.department
-          ? `  <div class="text-[12.5px] text-slate-500">��n v? x? l?: ${helpers.escapeHtml(
+          ? `  <div class="text-[12.5px] text-slate-500">Đơn vị xử lý: ${helpers.escapeHtml(
               doc.department
             )}</div>`
           : "",
@@ -436,29 +436,29 @@
           ? `  <div class="doc-number">${helpers.escapeHtml(doc.number)}</div>`
           : "",
         doc.incomingNumber && doc.incomingNumber !== doc.number
-          ? `  <div class="text-[12px] text-slate-500">S? �?n: ${helpers.escapeHtml(
+          ? `  <div class="text-[12px] text-slate-500">Số đến: ${helpers.escapeHtml(
               doc.incomingNumber
             )}</div>`
           : "",
         "</td>",
         '<td class="px-3 py-3 text-[13px]">',
         doc.issuedDate
-          ? `  <div>Ban h�nh: ${helpers.escapeHtml(
+          ? `  <div>Ban hành: ${helpers.escapeHtml(
               helpers.formatDate(doc.issuedDate)
             )}</div>`
           : "",
         doc.receivedDate
-          ? `  <div class="text-[12px] text-slate-500">�?n: ${helpers.escapeHtml(
+          ? `  <div class="text-[12px] text-slate-500">Đến: ${helpers.escapeHtml(
               helpers.formatDate(doc.receivedDate)
             )}</div>`
           : "",
         "</td>",
         '<td class="px-3 py-3 text-[13px]">',
         doc.docType
-          ? `  <div>Lo?i: ${helpers.escapeHtml(doc.docType)}</div>`
+          ? `  <div>Loại: ${helpers.escapeHtml(doc.docType)}</div>`
           : "",
         doc.assigneeCount
-          ? `  <div class="text-[12px] text-slate-500">Ph�n c�ng: ${helpers.escapeHtml(
+          ? `  <div class="text-[12px] text-slate-500">Phân công: ${helpers.escapeHtml(
               String(doc.assigneeCount)
             )}</div>`
           : "",
@@ -478,17 +478,17 @@
         '<td class="px-3 py-3 text-[13px]">',
         doc.sender ? `  <div>${helpers.escapeHtml(doc.sender)}</div>` : "",
         doc.creatorName
-          ? `  <div class="text-[12px] text-slate-500">Ti?p nh?n: ${helpers.escapeHtml(
+          ? `  <div class="text-[12px] text-slate-500">Tiếp nhận: ${helpers.escapeHtml(
               doc.creatorName
             )}</div>`
           : "",
         "</td>",
         '<td class="px-3 py-3 text-[13px]">',
         doc.department
-          ? `  <div>Ch? tr?: ${helpers.escapeHtml(doc.department)}</div>`
+          ? `  <div>Chủ trì: ${helpers.escapeHtml(doc.department)}</div>`
           : "",
         doc.dueDate
-          ? `  <div class="text-[12px] text-slate-500">H?n x? l?: ${helpers.escapeHtml(
+          ? `  <div class="text-[12px] text-slate-500">Hạn xử lý: ${helpers.escapeHtml(
               helpers.formatDate(doc.dueDate)
             )}</div>`
           : "",
@@ -501,26 +501,26 @@
         )}</span></td>`,
         '<td class="px-3 py-3">',
         '  <div class="flex items-center justify-end gap-2 pr-3">',
-        `    <a href="${detailHref}" class="w-8 h-8 grid place-items-center rounded-full border border-slate-200 hover:bg-slate-100" title="Xem chi ti?t" data-open-detail="1">`,
+        `    <a href="${detailHref}" class="w-8 h-8 grid place-items-center rounded-full border border-slate-200 hover:bg-slate-100" title="Xem chi tiết" data-open-detail="1">`,
         '      <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-slate-500" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">',
         '        <circle cx="11" cy="11" r="7"></circle>',
         '        <line x1="16.65" y1="16.65" x2="21" y2="21"></line>',
         "      </svg>",
         "    </a>",
-        '    <button type="button" class="btn-icon" data-action="log" title="Nh?t k? x? l?">',
+        '    <button type="button" class="btn-icon" data-action="log" title="Nhật ký xử lý">',
         '      <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-slate-500" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">',
         '        <path d="M4 4h16v16H4z"></path>',
         '        <path d="M8 4v4h8V4"></path>',
         "      </svg>",
         "    </button>",
-        '    <button type="button" class="btn-icon" data-action="dl" title="T?i xu?ng">',
+        '    <button type="button" class="btn-icon" data-action="dl" title="Tải xuống">',
         '      <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-slate-500" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">',
         '        <path d="M12 5v14"></path>',
         '        <path d="m19 12-7 7-7-7"></path>',
         "      </svg>",
         "    </button>",
         '    <button type="button" class="px-3 py-1.5 rounded-lg border border-blue-200 text-[12.5px] font-semibold text-blue-600 hover:bg-blue-50 transition" data-action="accept">',
-        "      Ti?p nh?n",
+        "      Tiếp nhận",
         "    </button>",
         "  </div>",
         "</td>",
@@ -532,12 +532,12 @@
 
     function renderLoading() {
       tableBody.innerHTML =
-        '<tr><td colspan="10" class="py-6 text-center text-[13px] text-slate-500">�ang t?i d? li?u...</td></tr>';
+        '<tr><td colspan="10" class="py-6 text-center text-[13px] text-slate-500">Đang tải dữ liệu...</td></tr>';
     }
 
     function renderEmptyRow() {
       tableBody.innerHTML =
-        '<tr><td colspan="10" class="py-6 text-center text-[13px] text-slate-500">Kh�ng c� v�n b?n ph� h?p v?i b? l?c.</td></tr>';
+        '<tr><td colspan="10" class="py-6 text-center text-[13px] text-slate-500">Không có văn bản phù hợp với bộ lọc.</td></tr>';
     }
 
     function renderErrorRow(message) {
@@ -606,25 +606,25 @@
       const statusCell = row.children?.[8];
       if (statusCell) {
         statusCell.innerHTML =
-          '<span class="px-2.5 py-1 rounded-full text-xs font-semibold bg-amber-100 text-amber-700">?ang x? l?</span>';
+          '<span class="px-2.5 py-1 rounded-full text-xs font-semibold bg-amber-100 text-amber-700">Đang xử lý</span>';
       }
       const button = row.querySelector("[data-action='accept']");
       if (button) {
-        button.textContent = "?? ti?p nh?n";
+        button.textContent = "Đã tiếp nhận";
         button.classList.add("opacity-60", "cursor-not-allowed");
         button.setAttribute("disabled", "true");
       }
       row.dataset.accepted = "true";
-      row.dataset.docStatus = "?ang x? l?";
+      row.dataset.docStatus = "Đang xử lý";
       if (doc) {
         doc.statusKey = "processing";
-        doc.statusLabel = "?ang x? l?";
+        doc.statusLabel = "Đang xử lý";
       }
       if (!silent) {
         showToast(
-          doc?.number
-            ? `?? ti?p nh?n v?n b?n ${doc.number}`
-            : "?? ti?p nh?n v?n b?n."
+        doc?.number
+          ? `Đã tiếp nhận văn bản ${doc.number}`
+          : "Đã tiếp nhận văn bản."
         );
       }
     }
@@ -776,7 +776,7 @@
     const helpers = window.DocHelpers;
     if (!api || !helpers) {
       console.warn(
-        "[chuyenvien] ApiClient ho?c DocHelpers ch�a s?n s�ng; b? qua t?i v�n b?n �i."
+        "[chuyenvien] ApiClient hoặc DocHelpers chưa sẵn sàng; bỏ qua tới văn bản đi."
       );
       return;
     }
@@ -821,7 +821,7 @@
     });
 
     advBtn?.addEventListener("click", () =>
-      showToast("B? l?c n�ng cao s? ��?c b? sung khi k?t n?i �?y �? API.")
+      showToast("Bộ lọc nâng cao sẽ được bổ sung khi kết nối đầy đủ API.")
     );
 
     tableBody.addEventListener("click", (event) => {
@@ -838,11 +838,11 @@
 
     attachIconActions(tableBody, {
       getLabel(row) {
-        return row?.dataset?.docTitle || row?.dataset?.docId || "v�n b?n";
+        return row?.dataset?.docTitle || row?.dataset?.docId || "văn bản";
       },
       actionTexts: {
-        log: "Nh?t k? ph�t h�nh",
-        download: "T?i t?p",
+        log: "Nhật ký phát hành",
+        download: "Tải tệp",
       },
     });
 
@@ -854,7 +854,7 @@
 
     authReady
       .then(loadDocuments)
-      .catch(() => renderErrorRow("Kh�ng th? x�c th?c ng�?i d�ng hi?n t?i."));
+      .catch(() => renderErrorRow("Không thể xác thực người dùng hiện tại."));
 
     function registerSearch(input, key) {
       if (!input) return;
@@ -971,24 +971,24 @@
         '<td class="py-2 pr-3">',
         `  <a href="${detailHref}" class="text-blue-700 hover:underline inline-flex items-center gap-2" data-open-detail="1">`,
         '    <span class="badge-dot bg-blue-600"></span>',
-        `    ${helpers.escapeHtml(doc.title || "V�n b?n")}`,
+            `    ${helpers.escapeHtml(doc.title || "Văn bản")}`,
         "  </a>",
         "</td>",
-        `<td class="py-2 px-3">${helpers.escapeHtml(doc.number || "�")}</td>`,
+            `<td class="py-2 px-3">${helpers.escapeHtml(doc.number || "—")}</td>`,
         '<td class="py-2 px-3">',
-        doc.issuedDate
-          ? `  <div>Ng�y k?: ${helpers.escapeHtml(
-              helpers.formatDate(doc.issuedDate)
-            )}</div>`
-          : "",
-        doc.publishedDate
-          ? `  <div class="text-[12px] text-slate-500">Ph�t h�nh: ${helpers.escapeHtml(
-              helpers.formatDate(doc.publishedDate)
-            )}</div>`
-          : "",
+            doc.issuedDate
+              ? `  <div>Ngày ký: ${helpers.escapeHtml(
+                  helpers.formatDate(doc.issuedDate)
+                )}</div>`
+              : "",
+            doc.publishedDate
+              ? `  <div class="text-[12px] text-slate-500">Phát hành: ${helpers.escapeHtml(
+                  helpers.formatDate(doc.publishedDate)
+                )}</div>`
+              : "",
         "</td>",
-        `<td class="py-2 px-3">${helpers.escapeHtml(
-          doc.recipients || "�"
+            `<td class="py-2 px-3">${helpers.escapeHtml(
+          doc.recipients || "—"
         )}</td>`,
         '<td class="py-2 px-3">',
         doc.urgencyLabel
@@ -1008,13 +1008,13 @@
         '        <line x1="16.65" y1="16.65" x2="21" y2="21"></line>',
         "      </svg>",
         "    </button>",
-        '    <button class="btn-icon" title="Nh?t k?" data-action="log" type="button">',
+        '    <button class="btn-icon" title="Nhật ký phát hành" data-action="log" type="button">',
         '      <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-slate-500" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">',
         '        <path d="M4 4h16v16H4z"></path>',
         '        <path d="M8 4v4h8V4"></path>',
         "      </svg>",
         "    </button>",
-        '    <button class="btn-icon" title="T?i xu?ng" data-action="dl" type="button">',
+        '    <button class="btn-icon" title="Tải xuống" data-action="dl" type="button">',
         '      <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-slate-500" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">',
         '        <path d="M12 5v14"></path>',
         '        <path d="m19 12-7 7-7-7"></path>',
@@ -1030,12 +1030,12 @@
 
     function renderLoading() {
       tableBody.innerHTML =
-        '<tr><td colspan="7" class="py-6 text-center text-[13px] text-slate-500">�ang t?i d? li?u...</td></tr>';
+        '<tr><td colspan="7" class="py-6 text-center text-[13px] text-slate-500">Đang tải dữ liệu...</td></tr>';
     }
 
     function renderEmptyRow() {
       tableBody.innerHTML =
-        '<tr><td colspan="7" class="py-6 text-center text-[13px] text-slate-500">Kh�ng c� v�n b?n ph� h?p v?i b? l?c.</td></tr>';
+        '<tr><td colspan="7" class="py-6 text-center text-[13px] text-slate-500">Không có văn bản phù hợp với bộ lọc.</td></tr>';
     }
 
     function renderErrorRow(message) {

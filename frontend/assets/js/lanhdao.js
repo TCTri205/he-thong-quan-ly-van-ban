@@ -1067,7 +1067,7 @@ function renderRows(list) {
           const statusClass = outboundStatusClass(doc.statusKey);
 
           const publishedInfo = doc.publishedDate
-            ? `        <div class="text-[12px] text-slate-500">Ph�t h�nh: ${helpers.escapeHtml(
+            ? `        <div class="text-[12px] text-slate-500">Phát hành: ${helpers.escapeHtml(
                 helpers.formatDate(doc.publishedDate)
               )}</div>`
             : "";
@@ -1076,22 +1076,22 @@ function renderRows(list) {
             '<td class="py-2 pr-3">',
             `  <a href="${detailHref}" class="text-blue-700 hover:underline inline-flex items-center gap-2" data-open-detail="1">`,
             '    <span class="badge-dot bg-blue-600"></span>',
-            `    ${helpers.escapeHtml(doc.title || "V�n b?n")}`,
+            `    ${helpers.escapeHtml(doc.title || "Văn bản")}`,
             "  </a>",
             "</td>",
             `<td class="py-2 px-3">${helpers.escapeHtml(
-              doc.number || "�"
+              doc.number || "—"
             )}</td>`,
             '<td class="py-2 px-3">',
             doc.issuedDate
-              ? `  <div>Ng�y k?: ${helpers.escapeHtml(
+              ? `  <div>Ngày ký: ${helpers.escapeHtml(
                   helpers.formatDate(doc.issuedDate)
                 )}</div>`
               : "",
             publishedInfo,
             "</td>",
             `<td class="py-2 px-3">${helpers.escapeHtml(
-              doc.recipients || "�"
+              doc.recipients || "—"
             )}</td>`,
             `<td class="py-2 px-3"><span class="inline-flex items-center rounded-full px-2 py-0.5 text-[12px] font-semibold ${urgencyClass}">${helpers.escapeHtml(
               doc.urgencyLabel || ""
@@ -1107,13 +1107,13 @@ function renderRows(list) {
             '        <line x1="16.65" y1="16.65" x2="21" y2="21"></line>',
             "      </svg>",
             "    </button>",
-            '    <button class="btn-icon" title="Nh?t k?" data-action="log" type="button">',
+            '    <button class="btn-icon" title="Nhật ký" data-action="log" type="button">',
             '      <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-slate-500" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">',
             '        <path d="M4 4h16v16H4z"></path>',
             '        <path d="M8 4v4h8V4"></path>',
             "      </svg>",
             "    </button>",
-            '    <button class="btn-icon" title="T?i xu?ng" data-action="dl" type="button">',
+            '    <button class="btn-icon" title="Tải xuống" data-action="dl" type="button">',
             '      <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-slate-500" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">',
             '        <path d="M12 5v14"></path>',
             '        <path d="m19 12-7 7-7-7"></path>',
@@ -1313,12 +1313,12 @@ function renderRows(list) {
 
         function renderLoading() {
           tableBody.innerHTML =
-            '<tr><td colspan="7" class="py-6 text-center text-[13px] text-slate-500">�ang t?i d? li?u...</td></tr>';
+            '<tr><td colspan="7" class="py-6 text-center text-[13px] text-slate-500">Đang tải dữ liệu...</td></tr>';
         }
 
         function renderEmpty() {
           tableBody.innerHTML =
-            '<tr><td colspan="7" class="py-6 text-center text-[13px] text-slate-500">Kh�ng c� v�n b?n ph� h?p v?i b? l?c.</td></tr>';
+            '<tr><td colspan="7" class="py-6 text-center text-[13px] text-slate-500">Không có văn bản phù hợp với bộ lọc.</td></tr>';
           updateKPIs([]);
         }
 
